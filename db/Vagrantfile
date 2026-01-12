@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+﻿# -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 # =============================================================================
@@ -341,7 +341,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "ttl=1"
       ]
 
-    # VirtualBox provider
+    # VirtualBox provider configuration for MariaDB
     mariadb.vm.provider "virtualbox" do |vb|
       vb.name = "iact-mariadb"
       vb.memory = 2048
@@ -357,10 +357,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--audio", "none"]
       vb.customize ["modifyvm", :id, "--usb", "off"]
       vb.customize ["modifyvm", :id, "--usbehci", "off"]
-      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
       vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-      vb.customize ["modifyvm", :id, "--nictype2", "82540EM"]
-      vb.customize ["modifyvm", :id, "--nictype2", "82540EM"]
+
+      # Red y Conectividad (Crucial para VirtualBox 7.x)
+      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+      vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
+      vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
     end
 
     # Provisioning - MariaDB VM
@@ -464,7 +466,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "ttl=1"
       ]
 
-    # VirtualBox provider
+    # VirtualBox provider configuration for PostgreSQL
     postgresql.vm.provider "virtualbox" do |vb|
       vb.name = "iact-postgres"
       vb.memory = 2048
@@ -480,9 +482,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--audio", "none"]
       vb.customize ["modifyvm", :id, "--usb", "off"]
       vb.customize ["modifyvm", :id, "--usbehci", "off"]
-      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
       vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-      vb.customize ["modifyvm", :id, "--nictype2", "82540EM"]
+
+      # Red y Conectividad (Cambiado de 82540EM a virtio y añadido cableconnected2)
+      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+      vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
+      vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
     end
 
     # Provisioning - PostgreSQL VM
@@ -593,7 +598,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "ttl=1"
       ]
 
-    # VirtualBox provider
+    # VirtualBox provider configuration for Adminer
     adminer.vm.provider "virtualbox" do |vb|
       vb.name = "iact-adminer"
       vb.memory = 1024
@@ -609,9 +614,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--audio", "none"]
       vb.customize ["modifyvm", :id, "--usb", "off"]
       vb.customize ["modifyvm", :id, "--usbehci", "off"]
-      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
       vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-      vb.customize ["modifyvm", :id, "--nictype2", "82540EM"]
+
+      # Red y Conectividad (Cambiado de 82540EM a virtio y añadido cableconnected2)
+      vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+      vb.customize ["modifyvm", :id, "--cableconnected2", "on"]
+      vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
     end
 
     # Provisioning - Adminer VM
