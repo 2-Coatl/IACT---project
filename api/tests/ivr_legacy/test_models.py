@@ -1,4 +1,4 @@
-"""Tests para los modelos de ivr_legacy."""
+"""Tests para los modelos de ivr."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import pytest
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from callcentersite.apps.ivr_legacy.models import IVRCall, IVRClient
+from callcentersite.apps.ivr.models import IVRCall, IVRClient
 
 
 @pytest.mark.django_db(databases=["default", "ivr_readonly"])
@@ -41,7 +41,7 @@ class TestIVRCallModel:
         """Test configuración del modelo (managed=False, db_table, etc.)."""
         assert IVRCall._meta.managed is False
         assert IVRCall._meta.db_table == "calls"
-        assert IVRCall._meta.app_label == "ivr_legacy"
+        assert IVRCall._meta.app_label == "ivr"
 
     def test_ivr_call_primary_key(self):
         """Test que call_id es la primary key."""
@@ -103,7 +103,7 @@ class TestIVRClientModel:
         """Test configuración del modelo (managed=False, db_table, etc.)."""
         assert IVRClient._meta.managed is False
         assert IVRClient._meta.db_table == "clients"
-        assert IVRClient._meta.app_label == "ivr_legacy"
+        assert IVRClient._meta.app_label == "ivr"
 
     def test_ivr_client_primary_key(self):
         """Test que client_id es la primary key."""

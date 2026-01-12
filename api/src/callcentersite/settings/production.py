@@ -16,7 +16,7 @@ DATABASES = {
     },
     "ivr_readonly": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DJANGO_IVR_NAME", "ivr_legacy"),
+        "NAME": os.getenv("DJANGO_IVR_NAME", "ivr"),
         "USER": os.getenv("DJANGO_IVR_USER", "readonly_user"),
         "PASSWORD": os.getenv("DJANGO_IVR_PASSWORD", ""),
         "HOST": os.getenv("DJANGO_IVR_HOST", "ivr-db"),

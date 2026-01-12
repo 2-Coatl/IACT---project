@@ -8,17 +8,17 @@ from typing import Any, Optional
 class IVRReadOnlyRouter:
     """Enruta operaciones de base de datos protegiendo el origen IVR."""
 
-    ivr_apps = {"ivr_legacy"}
+    ivr_apps = {"ivr"}
 
     def db_for_read(self, model: Any, **hints: Any) -> Optional[str]:
         app_label = getattr(getattr(model, "_meta", None), "app_label", "")
-        if app_label.startswith("ivr_legacy"):
+        if app_label.startswith("ivr"):
             return "ivr_readonly"
         return "default"
 
     def db_for_write(self, model: Any, **hints: Any) -> Optional[str]:
         app_label = getattr(getattr(model, "_meta", None), "app_label", "")
-        if app_label.startswith("ivr_legacy"):
+        if app_label.startswith("ivr"):
             label = getattr(getattr(model, "_meta", None), "label", app_label)
             raise ValueError(
                 "CRITICAL RESTRICTION VIOLATED: Attempted write operation on IVR "
@@ -38,6 +38,6 @@ class IVRReadOnlyRouter:
     ) -> bool:
         if db == "ivr_readonly":
             return False
-        if app_label.startswith("ivr_legacy"):
+        if app_label.startswith("ivr"):
             return False
         return True

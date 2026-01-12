@@ -1,1 +1,1 @@
-"""Tests para la app ivr_legacy."""
+"""Tests para la app ivr."""

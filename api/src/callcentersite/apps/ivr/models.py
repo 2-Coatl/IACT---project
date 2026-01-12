@@ -16,7 +16,7 @@ class IVRCall(models.Model):
     class Meta:
         managed = False
         db_table = "calls"
-        app_label = "ivr_legacy"
+        app_label = "ivr"
 
 
 class IVRClient(models.Model):
@@ -28,4 +28,4 @@ class IVRClient(models.Model):
     class Meta:
         managed = False
         db_table = "clients"
-        app_label = "ivr_legacy"
+        app_label = "ivr"

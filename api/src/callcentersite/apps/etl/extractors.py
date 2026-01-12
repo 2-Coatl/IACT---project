@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from callcentersite.apps.ivr_legacy.adapters import IVRDataAdapter
+from callcentersite.apps.ivr.adapters import IVRDataAdapter
 
 
 class IVRDataExtractor:

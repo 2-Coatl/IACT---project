@@ -1,4 +1,4 @@
-"""Tests de integración para ivr_legacy con base de datos legacy."""
+"""Tests de integración para ivr con base de datos legacy."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from django.utils import timezone
 from django.db import connection, connections
 from unittest.mock import Mock, patch
 
-from callcentersite.apps.ivr_legacy.adapters import IVRDataAdapter
-from callcentersite.apps.ivr_legacy.models import IVRCall, IVRClient
+from callcentersite.apps.ivr.adapters import IVRDataAdapter
+from callcentersite.apps.ivr.models import IVRCall, IVRClient
 
 
 @pytest.mark.django_db(databases=["default", "ivr_readonly"])
@@ -88,7 +88,7 @@ class TestIVRDataAdapterIntegration:
         assert client.full_name is not None
         assert len(client.full_name) > 0
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_get_calls_handles_empty_results(self, mock_ivr_call_objects, adapter):
         """Test get_calls maneja correctamente resultados vacíos."""
         start_date = timezone.now() - timedelta(days=1)
@@ -105,7 +105,7 @@ class TestIVRDataAdapterIntegration:
         assert calls is not None
         assert len(calls) == 0
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRClient.objects")
+    @patch("callcentersite.apps.ivr.models.IVRClient.objects")
     def test_get_client_raises_does_not_exist(self, mock_ivr_client_objects, adapter):
         """Test get_client levanta excepción si cliente no existe."""
         from django.core.exceptions import ObjectDoesNotExist

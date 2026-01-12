@@ -1,4 +1,4 @@
-"""Tests para queries y el adapter de ivr_legacy."""
+"""Tests para queries y el adapter de ivr."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from unittest.mock import Mock, patch
 
-from callcentersite.apps.ivr_legacy.adapters import IVRDataAdapter
-from callcentersite.apps.ivr_legacy.models import IVRCall, IVRClient
+from callcentersite.apps.ivr.adapters import IVRDataAdapter
+from callcentersite.apps.ivr.models import IVRCall, IVRClient
 
 
 @pytest.mark.django_db(databases=["default", "ivr_readonly"])
@@ -24,7 +24,7 @@ class TestIVRDataAdapter:
         """Test que el adapter se puede instanciar."""
         assert isinstance(adapter, IVRDataAdapter)
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_get_calls_with_date_range(self, mock_ivr_call_objects, adapter):
         """Test get_calls filtra por rango de fechas correctamente."""
         start_date = timezone.now() - timedelta(days=7)
@@ -45,7 +45,7 @@ class TestIVRDataAdapter:
             call_date__range=(start_date, end_date)
         )
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_get_calls_uses_ivr_readonly_database(self, mock_ivr_call_objects, adapter):
         """Test que get_calls usa la base de datos ivr_readonly."""
         start_date = timezone.now() - timedelta(days=1)
@@ -60,7 +60,7 @@ class TestIVRDataAdapter:
         # Verificar que se llamó con la base de datos correcta
         mock_ivr_call_objects.using.assert_called_with("ivr_readonly")
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRClient.objects")
+    @patch("callcentersite.apps.ivr.models.IVRClient.objects")
     def test_get_client_by_id(self, mock_ivr_client_objects, adapter):
         """Test get_client obtiene cliente por ID."""
         client_id = "CLIENT-TEST-001"
@@ -81,7 +81,7 @@ class TestIVRDataAdapter:
         mock_using.get.assert_called_once_with(client_id=client_id)
         assert result.client_id == client_id
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRClient.objects")
+    @patch("callcentersite.apps.ivr.models.IVRClient.objects")
     def test_get_client_uses_ivr_readonly_database(self, mock_ivr_client_objects, adapter):
         """Test que get_client usa la base de datos ivr_readonly."""
         client_id = "CLIENT-TEST-002"
@@ -95,7 +95,7 @@ class TestIVRDataAdapter:
         # Verificar que se llamó con la base de datos correcta
         mock_ivr_client_objects.using.assert_called_with("ivr_readonly")
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_get_calls_returns_queryset(self, mock_ivr_call_objects, adapter):
         """Test que get_calls retorna un QuerySet."""
         start_date = timezone.now() - timedelta(days=1)
@@ -116,7 +116,7 @@ class TestIVRDataAdapter:
 class TestIVRCallQueries:
     """Tests para queries sobre el modelo IVRCall."""
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_filter_calls_by_date_range(self, mock_ivr_call_objects):
         """Test filtrar llamadas por rango de fechas."""
         start_date = datetime(2025, 1, 1, tzinfo=timezone.utc)
@@ -134,7 +134,7 @@ class TestIVRCallQueries:
         # Verificar
         mock_ivr_call_objects.using.assert_called_with("ivr_readonly")
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_filter_calls_by_client_id(self, mock_ivr_call_objects):
         """Test filtrar llamadas por client_id."""
         client_id = "CLIENT-001"
@@ -147,7 +147,7 @@ class TestIVRCallQueries:
 
         mock_using.filter.assert_called_with(client_id=client_id)
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRCall.objects")
+    @patch("callcentersite.apps.ivr.models.IVRCall.objects")
     def test_filter_calls_by_duration(self, mock_ivr_call_objects):
         """Test filtrar llamadas por duración."""
         min_duration = 60  # 1 minuto
@@ -165,7 +165,7 @@ class TestIVRCallQueries:
 class TestIVRClientQueries:
     """Tests para queries sobre el modelo IVRClient."""
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRClient.objects")
+    @patch("callcentersite.apps.ivr.models.IVRClient.objects")
     def test_get_client_by_id(self, mock_ivr_client_objects):
         """Test obtener cliente por ID."""
         client_id = "CLIENT-001"
@@ -178,7 +178,7 @@ class TestIVRClientQueries:
 
         mock_using.get.assert_called_with(client_id=client_id)
 
-    @patch("callcentersite.apps.ivr_legacy.models.IVRClient.objects")
+    @patch("callcentersite.apps.ivr.models.IVRClient.objects")
     def test_filter_clients_by_name(self, mock_ivr_client_objects):
         """Test filtrar clientes por nombre (búsqueda parcial)."""
         search_term = "Juan"

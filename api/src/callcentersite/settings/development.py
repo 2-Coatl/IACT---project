@@ -34,7 +34,7 @@ DATABASES = {
     "ivr_readonly": {
         # Nota: Asegúrate de tener instalado mysql-connector-python o cambia a django.db.backends.mysql
         "ENGINE": "mysql.connector.django",
-        "NAME": "ivr_legacy",
+        "NAME": "ivr",
         "USER": "root",
         "PASSWORD": "rootpass123",
         "HOST": "192.168.56.10",

@@ -229,7 +229,7 @@ class TestVagrantMariaDBConnection:
         assert config["HOST"] == "127.0.0.1"
         assert config["PORT"] == "13306"
         assert config["USER"] == "django_user"
-        assert config["NAME"] == "ivr_legacy"
+        assert config["NAME"] == "ivr"
 
 
 @pytest.mark.skipif(
@@ -347,10 +347,10 @@ class TestDatabaseReadiness:
         conn = connections["ivr_readonly"]
 
         with conn.cursor() as cursor:
-            cursor.execute("SHOW DATABASES LIKE 'ivr_legacy';")
+            cursor.execute("SHOW DATABASES LIKE 'ivr';")
             result = cursor.fetchone()
 
-        assert result is not None, "Base de datos ivr_legacy no existe"
+        assert result is not None, "Base de datos ivr no existe"
 
     def test_postgresql_extensions_available(self):
         """Verifica extensiones de PostgreSQL disponibles."""

@@ -3,7 +3,7 @@
 import pytest
 
 
-@pytest.mark.parametrize("app_label", ["ivr_legacy", "ivr_legacy.sub"])
+@pytest.mark.parametrize("app_label", ["ivr", "ivr.sub"])
 def test_router_previene_escrituras_en_ivr(app_label):
     from callcentersite.database_router import IVRReadOnlyRouter
 
