@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
-from callcentersite.apps.permissions.models import (
+from callcentersite.apps.access.models import (
     Funcion,
     Capacidad,
     FuncionCapacidad,

@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("permissions", "0001_initial"),
+        ("access", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -27,29 +27,29 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="capacidad",
-            index=models.Index(fields=["accion"], name="permissions_accion_24f4cf_idx"),
+            index=models.Index(fields=["accion"], name="access_accion_24f4cf_idx"),
         ),
         migrations.AddIndex(
             model_name="capacidad",
-            index=models.Index(fields=["recurso"], name="permissions_recurso_abe8c2_idx"),
+            index=models.Index(fields=["recurso"], name="access_recurso_abe8c2_idx"),
         ),
         migrations.AddIndex(
             model_name="capacidad",
             index=models.Index(
-                fields=["nivel_sensibilidad"], name="permissions_nivel_s_ff7fae_idx"
+                fields=["nivel_sensibilidad"], name="access_nivel_s_ff7fae_idx"
             ),
         ),
         migrations.AddIndex(
             model_name="funcion",
-            index=models.Index(fields=["dominio"], name="permissions_dominio_083540_idx"),
+            index=models.Index(fields=["dominio"], name="access_dominio_083540_idx"),
         ),
         migrations.AddIndex(
             model_name="funcion",
-            index=models.Index(fields=["activa"], name="permissions_activa_74df68_idx"),
+            index=models.Index(fields=["activa"], name="access_activa_74df68_idx"),
         ),
         migrations.AddIndex(
             model_name="funcion",
-            index=models.Index(fields=["categoria"], name="permissions_categor_b8d2d9_idx"),
+            index=models.Index(fields=["categoria"], name="access_categor_b8d2d9_idx"),
         ),
         migrations.AddField(
             model_name="funcioncapacidad",
@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="funciones",
-                to="permissions.capacidad",
+                to="access.capacidad",
             ),
         ),
         migrations.AddField(
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="capacidades",
-                to="permissions.funcion",
+                to="access.funcion",
             ),
         ),
         migrations.AddField(
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="grupos",
-                to="permissions.capacidad",
+                to="access.capacidad",
             ),
         ),
         migrations.AddField(
@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="capacidades",
-                to="permissions.grupopermisos",
+                to="access.grupopermisos",
             ),
         ),
         migrations.AddField(
@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="permisos_excepcionales",
-                to="permissions.capacidad",
+                to="access.capacidad",
             ),
         ),
         migrations.AddField(
@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="usuarios",
-                to="permissions.grupopermisos",
+                to="access.grupopermisos",
             ),
         ),
         migrations.AddField(
@@ -145,15 +145,15 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="auditoriapermiso",
-            index=models.Index(fields=["usuario"], name="permissions_usuario_e89522_idx"),
+            index=models.Index(fields=["usuario"], name="access_usuario_e89522_idx"),
         ),
         migrations.AddIndex(
             model_name="auditoriapermiso",
-            index=models.Index(fields=["timestamp"], name="permissions_timesta_4255f4_idx"),
+            index=models.Index(fields=["timestamp"], name="access_timesta_4255f4_idx"),
         ),
         migrations.AddIndex(
             model_name="auditoriapermiso",
-            index=models.Index(fields=["accion_realizada"], name="permissions_accion__0cd91d_idx"),
+            index=models.Index(fields=["accion_realizada"], name="access_accion__0cd91d_idx"),
         ),
         migrations.AlterUniqueTogether(
             name="funcioncapacidad",
@@ -165,7 +165,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="permisoexcepcional",
-            index=models.Index(fields=["usuario", "activo"], name="permissions_usuario_a3375e_idx"),
+            index=models.Index(fields=["usuario", "activo"], name="access_usuario_a3375e_idx"),
         ),
         migrations.AlterUniqueTogether(
             name="usuariogrupo",

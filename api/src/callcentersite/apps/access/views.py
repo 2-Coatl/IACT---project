@@ -9,13 +9,13 @@ from __future__ import annotations
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.access import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from callcentersite.apps.permissions.models import (
+from callcentersite.apps.access.models import (
     Funcion,
     Capacidad,
     FuncionCapacidad,
@@ -25,7 +25,7 @@ from callcentersite.apps.permissions.models import (
     PermisoExcepcional,
     AuditoriaPermiso,
 )
-from callcentersite.apps.permissions.serializers import (
+from callcentersite.apps.access.serializers import (
     FuncionSerializer,
     CapacidadSerializer,
     FuncionCapacidadSerializer,
@@ -38,7 +38,7 @@ from callcentersite.apps.permissions.serializers import (
     PermisoExcepcionalCreateSerializer,
     AuditoriaPermisoSerializer,
 )
-from callcentersite.apps.permissions.services import PermisoService
+from callcentersite.apps.access.services import PermisoService
 
 
 class FuncionViewSet(viewsets.ModelViewSet):
@@ -116,7 +116,7 @@ class GrupoPermisosViewSet(viewsets.ModelViewSet):
         """
         Endpoint para obtener capacidades de un grupo.
 
-        GET /api/permissions/grupos/{id}/capacidades/
+        GET /api/access/grupos/{id}/capacidades/
         """
         grupo = self.get_object()
         grupo_caps = grupo.grupo_capacidades.select_related('capacidad').all()
@@ -133,7 +133,7 @@ class GrupoPermisosViewSet(viewsets.ModelViewSet):
         """
         Agrega capacidad a grupo.
 
-        POST /api/permissions/grupos/{id}/agregar_capacidad/
+        POST /api/access/grupos/{id}/agregar_capacidad/
         Body: {"capacidad_id": 123}
         """
         grupo = self.get_object()
@@ -210,7 +210,7 @@ class UsuarioGrupoViewSet(viewsets.ModelViewSet):
         """
         Desactiva asignacion de usuario a grupo.
 
-        POST /api/permissions/usuarios-grupos/{id}/desactivar/
+        POST /api/access/usuarios-grupos/{id}/desactivar/
         """
         asignacion = self.get_object()
         asignacion.activo = False
@@ -260,7 +260,7 @@ class MisCapacidadesView(APIView):
     """
     Endpoint personalizado para obtener capacidades del usuario actual.
 
-    GET /api/permissions/mis-capacidades/
+    GET /api/access/mis-capacidades/
     """
 
     permission_classes = [IsAuthenticated]
@@ -282,7 +282,7 @@ class MisFuncionesView(APIView):
     """
     Endpoint personalizado para obtener funciones accesibles del usuario.
 
-    GET /api/permissions/mis-funciones/
+    GET /api/access/mis-funciones/
     """
 
     permission_classes = [IsAuthenticated]
@@ -304,7 +304,7 @@ class VerificarPermisoView(APIView):
     """
     Endpoint para verificar si usuario tiene una capacidad especifica.
 
-    POST /api/permissions/verificar-permiso/
+    POST /api/access/verificar-permiso/
     Body: {"capacidad": "sistema.operaciones.llamadas.ver"}
     """
 

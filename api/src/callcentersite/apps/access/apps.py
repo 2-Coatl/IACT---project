@@ -1,5 +1,5 @@
 """
-Configuracion de la app permissions.
+Configuracion de la app access.
 
 Sistema de Permisos Granular - Prioridad 1
 """
@@ -7,11 +7,11 @@ Sistema de Permisos Granular - Prioridad 1
 from django.apps import AppConfig
 
 
-class PermissionsConfig(AppConfig):
-    """Configuracion de la app permissions."""
+class AccessConfig(AppConfig):
+    """Configuracion de la app access."""
 
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'callcentersite.apps.permissions'
+    name = 'callcentersite.apps.access'
     verbose_name = 'Sistema de Permisos Granular'
 
     def ready(self):

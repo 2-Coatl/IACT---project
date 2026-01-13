@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Auditoria de Permiso",
                 "verbose_name_plural": "Auditorias de Permisos",
-                "db_table": "permissions_auditoria_permisos",
+                "db_table": "access_auditoria_permisos",
                 "ordering": ["-timestamp"],
             },
         ),
@@ -133,7 +133,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Capacidad",
                 "verbose_name_plural": "Capacidades",
-                "db_table": "permissions_capacidades",
+                "db_table": "access_capacidades",
                 "ordering": ["nombre_completo"],
             },
         ),
@@ -194,7 +194,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Funcion",
                 "verbose_name_plural": "Funciones",
-                "db_table": "permissions_funciones",
+                "db_table": "access_funciones",
                 "ordering": ["orden_menu", "nombre"],
             },
         ),
@@ -224,7 +224,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Funcion-Capacidad",
                 "verbose_name_plural": "Funcion-Capacidades",
-                "db_table": "permissions_funcion_capacidades",
+                "db_table": "access_funcion_capacidades",
             },
         ),
         migrations.CreateModel(
@@ -241,7 +241,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Grupo-Capacidad",
                 "verbose_name_plural": "Grupo-Capacidades",
-                "db_table": "permissions_grupo_capacidades",
+                "db_table": "access_grupo_capacidades",
             },
         ),
         migrations.CreateModel(
@@ -295,7 +295,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Grupo de Permisos",
                 "verbose_name_plural": "Grupos de Permisos",
-                "db_table": "permissions_grupos_permisos",
+                "db_table": "access_grupos_permisos",
                 "ordering": ["nombre_display"],
             },
         ),
@@ -340,7 +340,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Permiso Excepcional",
                 "verbose_name_plural": "Permisos Excepcionales",
-                "db_table": "permissions_permisos_excepcionales",
+                "db_table": "access_permisos_excepcionales",
             },
         ),
         migrations.CreateModel(
@@ -372,7 +372,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Usuario-Grupo",
                 "verbose_name_plural": "Usuarios-Grupos",
-                "db_table": "permissions_usuarios_grupos",
+                "db_table": "access_usuarios_grupos",
             },
         ),
     ]

@@ -12,7 +12,7 @@ Uso:
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from callcentersite.apps.permissions.models import (
+from callcentersite.apps.access.models import (
     Funcion,
     Capacidad,
     FuncionCapacidad,
