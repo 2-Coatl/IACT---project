@@ -1,4 +1,4 @@
-"""
+﻿"""
 Decoradores para verificación de permisos granulares.
 
 Uso:
@@ -313,7 +313,10 @@ def require_any_permission(
             _mark_request_for_middleware_audit(request, capacidad_ref)
 
             # 3. Obtener todas las capacidades del usuario (más eficiente que N queries)
+	    # En este punto, esto se tiene que pasar a funcion
             capacidades_usuario = _obtener_capacidades_usuario_sql(user.id)
+
+
 
             # 4. Verificar si tiene al menos una
             tiene_alguno = any(cap in capacidades_usuario for cap in capacidades)

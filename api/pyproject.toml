@@ -8,130 +8,60 @@ version = "0.1.0"
 description = "CallCenter Django API Application"
 requires-python = ">=3.12"
 readme = "readme.md"
-authors = [
-    {name = "CallCenter Team"}
-]
+authors = [{name = "CallCenter Team"}]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Framework :: Django :: 4.2",
-    "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.12",
+"Development Status :: 3 - Alpha",
+"Framework :: Django :: 4.2",
+"Intended Audience :: Developers",
+"Programming Language :: Python :: 3.12",
 ]
-
-# **************** INICIO DE CAMBIOS POR MIGRACIÓN A SRC/ ****************
 
 [tool.setuptools.packages.find]
-# Indica a Setuptools que busque los paquetes instalables dentro de la carpeta 'src'
 where = ["src"]
-# Lista los paquetes principales que deben ser instalados
 include = ["callcentersite", "data_centralization", "dora_metrics"]
 
 [tool.django-stubs]
-# Se actualiza el path de los settings para incluir 'src'
 django_settings_module = "src.callcentersite.settings.development"
 
 [tool.pytest.ini_options]
-# Se actualiza el path de los settings para Pytest
 DJANGO_SETTINGS_MODULE = "src.callcentersite.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 testpaths = ["."]
-addopts = "-v --strict-markers --tb=short"
+addopts = "-v --strict-markers --tb=short --cov=. --cov-report=term-missing --cov-report=html --cov-branch --nomigrations"
+markers = [
+"unit: Unit tests",
+"integration: Integration tests",
+"slow: Slow running tests",
+"django_db: Tests that require database access",
+]
 
 [tool.coverage.run]
-# Se indica a coverage que la fuente del código es la carpeta 'src'
 source = ["src"]
 omit = [
-    "*/migrations/*",
-    "*/tests/*",
-    "*/test_*.py",
-    "*/__pycache__/*",
-    "manage.py",
-    "*/wsgi.py",
-    "*/asgi.py",
+"*/migrations/*",
+"*/tests/*",
+"*/test_*.py",
+"*/__pycache__/*",
+"manage.py",
+"*/wsgi.py",
+"*/asgi.py",
 ]
 branch = true
-
-# **************** FIN DE CAMBIOS POR MIGRACIÓN A SRC/ ****************
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-exclude = [
-    "migrations",
-    ".venv",
-    ".git",
-    "__pycache__",
-    ".mypy_cache",
-    ".pytest_cache",
-    "*.egg-info",
-]
+extend-exclude = ["migrations", ".venv", ".git", "__pycache__", ".mypy_cache", ".pytest_cache", "*.egg-info"]
 
 [tool.ruff.lint]
-select = [
-    "E",     # pycodestyle errors
-    "W",     # pycodestyle warnings
-    "F",     # pyflakes
-    "I",     # isort
-    "C",     # flake8-comprehensions
-    "B",     # flake8-bugbear
-    "UP",    # pyupgrade
-    "N",     # pep8-naming
-    "YTT",   # flake8-2020
-    "ASYNC", # flake8-async
-    "S",     # flake8-bandit (security)
-    "BLE",   # flake8-blind-except
-    "FBT",   # flake8-boolean-trap
-    "A",     # flake8-builtins
-    "COM",   # flake8-commas
-    "C4",    # flake8-comprehensions
-    "DTZ",   # flake8-datetimez
-    "T10",   # flake8-debugger
-    "DJ",    # flake8-django
-    "EM",    # flake8-errmsg
-    "ISC",   # flake8-implicit-str-concat
-    "ICN",   # flake8-import-conventions
-    "G",     # flake8-logging-format
-    "PIE",   # flake8-pie
-    "T20",   # flake8-print
-    "PYI",   # flake8-pyi
-    "PT",    # flake8-pytest-style
-    "Q",     # flake8-quotes
-    "RSE",   # flake8-raise
-    "RET",   # flake8-return
-    "SLF",   # flake8-self
-    "SIM",   # flake8-simplify
-    "TID",   # flake8-tidy-imports
-    "ARG",   # flake8-unused-arguments
-    "PTH",   # flake8-use-pathlib
-    "ERA",   # eradicate
-    "PL",    # pylint
-    "TRY",   # tryceratops
-    "RUF",   # ruff-specific rules
-]
-ignore = [
-    "E501",    # line too long (handled by formatter)
-    "B008",    # do not perform function calls in argument defaults (Django uses this)
-    "DJ001",   # avoid nullable CharField/TextField (legacy code)
-    "S101",    # use of assert (OK in tests)
-    "S105",    # hardcoded password (false positives)
-    "S106",    # hardcoded password (false positives)
-    "PLR0913", # too many arguments
-    "PLR2004", # magic value in comparison
-    "TRY003",  # avoid long messages outside exception class
-]
+select = ["E", "W", "F", "I", "C", "B", "UP", "N", "YTT", "ASYNC", "S", "BLE", "FBT", "A", "COM", "C4", "DTZ", "T10", "DJ", "EM", "ISC", "ICN", "G", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TID", "ARG", "PTH", "ERA", "PL", "TRY", "RUF"]
+ignore = ["E501", "B008", "DJ001", "S101", "S105", "S106", "PLR0913", "PLR2004", "TRY003"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = [
-    "S101",    # assert allowed in tests
-    "PLR2004", # magic values OK in tests
-    "ARG",     # unused arguments in fixtures
-]
+"tests/**/*.py" = ["S101", "PLR2004", "ARG"]
 "**/migrations/*.py" = ["ALL"]
-"manage.py" = ["T201"]  # print allowed in manage.py
-"settings/**/*.py" = [
-    "S105",    # hardcoded passwords in settings
-    "F405",    # may be undefined from star imports
-]
+"manage.py" = ["T201"]
+"settings/**/*.py" = ["S105", "F405"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["callcentersite"]
@@ -148,20 +78,19 @@ line-ending = "auto"
 
 [tool.black]
 line-length = 100
-target-version = ['py312']
+target-version = ["py312"]
 include = '\.pyi?$'
 extend-exclude = '''
 /(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-  | migrations
+\.eggs
+| \.git
+| \.hg
+| \.mypy_cache
+| \.tox
+| \.venv
+| build
+| dist
+| migrations
 )/
 '''
 
@@ -183,8 +112,9 @@ warn_unreachable = true
 strict_optional = true
 strict_equality = true
 check_untyped_defs = true
-disallow_untyped_defs = false  # Gradual typing - enable later
-disallow_any_unimported = false
+disallow_untyped_defs = false
+disallow_any_unimport = false
+imported = false
 disallow_any_generics = false
 disallow_subclassing_any = false
 ignore_missing_imports = true
@@ -235,7 +165,7 @@ exclude_lines = [
     "def __repr__",
     "raise AssertionError",
     "raise NotImplementedError",
-    "if __name__ == .__main__.:",
+    "if __name__ == '__main__':",
     "if TYPE_CHECKING:",
     "@abstractmethod",
 ]
