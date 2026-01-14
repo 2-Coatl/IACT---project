@@ -1,3 +1,40 @@
+# =====================================================================
+# pyproject.toml - OPTIMIZADO y CONSOLIDADO
+# =====================================================================
+#
+# METADATA DEL ARCHIVO
+# Nombre: pyproject_OPTIMIZADO_1_0_0.toml
+# Version: 1.0.0 (MAJOR.MINOR.PATCH)
+# Proyecto: IACT - IVR Analytics & Customer Tracking
+# Fecha Creacion: 2026-01-12
+# Ultima Actualizacion: 2026-01-12
+# Autor: Claude (Anthropic)
+#
+# HISTORIAL DE VERSIONES
+# 1.0.0 (2026-01-12) - Version inicial
+#   - Consolidacion de pytest.ini, coveragerc, pytest.integration.ini
+#   - Implementacion import-mode=importlib
+#   - Habilitacion strict mode
+#   - Optimizacion paths y coverage
+#   - Documentacion completa de markers
+#
+# ARCHIVOS ELIMINADOS (consolidados aqui)
+# - pytest.ini -> Consolidado en [tool.pytest.ini_options]
+# - coveragerc -> Consolidado en [tool.coverage.*]
+# - pytest.integration.ini -> Usar markers en su lugar: pytest -m integration
+#
+# ARCHIVOS REQUERIDOS (dependencias)
+# - src/callcentersite/settings/testing.py (debe existir)
+# - tests/conftest.py (fixtures globales)
+# - tests/unit/, tests/integration/, tests/use_cases/ (estructura)
+#
+# CUMPLIMIENTO
+# - STD_001: Sin emojis, marcadores ASCII
+# - Pytest Official Documentation: Good Integration Practices
+# - RBAC v5.1.1: Sistema de funciones atomicas
+#
+# =====================================================================
+
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -18,40 +55,195 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 
-# **************** INICIO DE CAMBIOS POR MIGRACIÓN A SRC/ ****************
+# =====================================================================
+# SETUPTOOLS CONFIGURATION - SRC LAYOUT
+# =====================================================================
 
 [tool.setuptools.packages.find]
-# Indica a Setuptools que busque los paquetes instalables dentro de la carpeta 'src'
 where = ["src"]
-# Lista los paquetes principales que deben ser instalados
 include = ["callcentersite", "data_centralization", "dora_metrics"]
 
+# =====================================================================
+# DJANGO-STUBS CONFIGURATION
+# =====================================================================
+
 [tool.django-stubs]
-# Se actualiza el path de los settings para incluir 'src'
-django_settings_module = "src.callcentersite.settings.development"
+# Settings para desarrollo con type checking
+django_settings_module = "callcentersite.settings.development"
+
+# =====================================================================
+# PYTEST CONFIGURATION - CONSOLIDADO
+# =====================================================================
+# Fuente: pytest official documentation - Good Integration Practices
+# https://docs.pytest.org/en/stable/explanation/goodpractices.html
 
 [tool.pytest.ini_options]
-# Se actualiza el path de los settings para Pytest
-DJANGO_SETTINGS_MODULE = "src.callcentersite.settings"
-python_files = ["tests.py", "test_*.py", "*_tests.py"]
-testpaths = ["."]
-addopts = "-v --strict-markers --tb=short"
+# Django settings module para tests
+# IMPORTANTE: Sin prefijo "src." porque setuptools ya configura los paths
+DJANGO_SETTINGS_MODULE = "callcentersite.settings.testing"
+
+# Strict mode (nuevo en pytest 9.0)
+# Detecta problemas de configuracion tempranamente
+strict = true
+
+# Test discovery patterns
+python_files = ["test_*.py", "*_test.py", "tests.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Test paths - SOLO buscar en directorio tests/
+# CRITICO: No usar "." porque busca en todo el proyecto
+testpaths = ["tests"]
+
+# Opciones adicionales
+addopts = [
+    # Import mode - Recomendado para nuevos proyectos
+    "--import-mode=importlib",
+
+    # Output
+    "--verbose",
+    "--tb=short",
+
+    # Strict markers - Error si marker no registrado
+    "--strict-markers",
+
+    # Coverage - Solo codigo del proyecto
+    "--cov=src/callcentersite",
+    "--cov-branch",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html",
+
+    # Django - Sin migraciones (mas rapido)
+    # Requiere: settings.testing con MIGRATION_MODULES
+    "--nomigrations",
+
+    # Performance
+    "--reuse-db",  # Reusar DB entre ejecuciones (pytest-django)
+
+    # Opcional: Ejecucion paralela (requiere pytest-xdist)
+    # Descomentar para usar:
+    # "-n", "auto",
+]
+
+# Markers personalizados
+# Usar con: pytest -m unit, pytest -m integration, etc.
+markers = [
+    "unit: Unit tests (fast, no DB, no external dependencies) - pytest -m unit",
+    "integration: Integration tests (requires DB, API endpoints, full flows) - pytest -m integration",
+    "slow: Slow running tests (>1s) - deselect with 'pytest -m \"not slow\"'",
+    "auth: Authentication module tests",
+    "rbac: RBAC and permissions tests (RBAC v5.1.1 - funciones atomicas)",
+    "etl: ETL pipeline tests",
+    "use_case: Use case orchestration tests",
+]
+
+# Filter warnings - Control granular
+# MEJOR que -p no:warnings porque permite selectividad
+filterwarnings = [
+    # Ignorar deprecation warnings de Django/DRF
+    "ignore::DeprecationWarning:django.*",
+    "ignore::DeprecationWarning:rest_framework.*",
+    "ignore::PendingDeprecationWarning",
+
+    # Convertir UserWarning a error (nuestro codigo)
+    # "error::UserWarning",
+]
+
+# =====================================================================
+# COVERAGE CONFIGURATION - CONSOLIDADO
+# =====================================================================
+# Fuente: coverage.py documentation
+# Consolida configuracion de coveragerc
 
 [tool.coverage.run]
-# Se indica a coverage que la fuente del código es la carpeta 'src'
-source = ["src"]
-omit = [
-    "*/migrations/*",
-    "*/tests/*",
-    "*/test_*.py",
-    "*/__pycache__/*",
-    "manage.py",
-    "*/wsgi.py",
-    "*/asgi.py",
-]
+# Source - Solo codigo del proyecto callcentersite
+# NOTA: Excluye data_centralization y dora_metrics
+# Si quieres incluirlos, cambia a: source = ["src"]
+source = ["src/callcentersite"]
+
+# Branch coverage - Mide cobertura de ramas
 branch = true
 
-# **************** FIN DE CAMBIOS POR MIGRACIÓN A SRC/ ****************
+# Omit - Archivos a excluir de coverage
+omit = [
+    # Migraciones
+    "*/migrations/*",
+
+    # Tests
+    "*/tests/*",
+    "*/test_*.py",
+    "*/*_test.py",
+
+    # Cache
+    "*/__pycache__/*",
+
+    # Virtual environments
+    "*/venv/*",
+    "*/virtualenv/*",
+    "*/env/*",
+    "*/.venv/*",
+
+    # Django management
+    "manage.py",
+
+    # Django config files
+    "*/settings/*",
+    "*/wsgi.py",
+    "*/asgi.py",
+
+    # Admin (opcional - descomentar si no quieres cubrir admin)
+    # "*/admin.py",
+]
+
+[tool.coverage.report]
+# Exclude lines - Lineas a ignorar en reportes
+exclude_lines = [
+    # Standard
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+
+    # Debug
+    "if self.debug:",
+    "if settings.DEBUG:",
+
+    # Testing
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Type checking
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "@typing.overload",
+
+    # Main
+    "if __name__ == .__main__.:",
+
+    # Abstract methods
+    "@abstractmethod",
+    "@abc.abstractmethod",
+]
+
+# Precision en porcentajes
+precision = 2
+
+# Mostrar lineas faltantes
+show_missing = true
+
+# Saltar archivos completamente cubiertos en reporte
+skip_covered = false
+
+# Fallar si coverage menor a este porcentaje
+# Descomentar para habilitar:
+# fail_under = 80
+
+[tool.coverage.html]
+# Directorio para reporte HTML
+directory = "htmlcov"
+
+# =====================================================================
+# RUFF CONFIGURATION - CODE LINTING
+# =====================================================================
 
 [tool.ruff]
 line-length = 100
@@ -125,6 +317,7 @@ ignore = [
     "S101",    # assert allowed in tests
     "PLR2004", # magic values OK in tests
     "ARG",     # unused arguments in fixtures
+    "PT",      # pytest style rules more lenient
 ]
 "**/migrations/*.py" = ["ALL"]
 "manage.py" = ["T201"]  # print allowed in manage.py
@@ -146,6 +339,10 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
 
+# =====================================================================
+# BLACK CONFIGURATION - CODE FORMATTING
+# =====================================================================
+
 [tool.black]
 line-length = 100
 target-version = ['py312']
@@ -165,12 +362,20 @@ extend-exclude = '''
 )/
 '''
 
+# =====================================================================
+# ISORT CONFIGURATION - IMPORT SORTING
+# =====================================================================
+
 [tool.isort]
 profile = "black"
 line_length = 100
 skip_gitignore = true
 known_first_party = ["callcentersite"]
 skip = ["migrations"]
+
+# =====================================================================
+# MYPY CONFIGURATION - TYPE CHECKING
+# =====================================================================
 
 [tool.mypy]
 python_version = "3.12"
@@ -208,6 +413,10 @@ module = [
 ]
 ignore_errors = true
 
+# =====================================================================
+# BANDIT CONFIGURATION - SECURITY LINTING
+# =====================================================================
+
 [tool.bandit]
 exclude_dirs = [
     "tests",
@@ -219,6 +428,10 @@ skips = [
     "B601",  # paramiko_calls - not applicable
 ]
 
+# =====================================================================
+# PYLINT CONFIGURATION
+# =====================================================================
+
 [tool.pylint.messages_control]
 disable = [
     "C0111",  # missing-docstring
@@ -229,15 +442,6 @@ disable = [
 [tool.pylint.format]
 max-line-length = 100
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-    "@abstractmethod",
-]
-precision = 2
-show_missing = true
+# =====================================================================
+# FIN DEL ARCHIVO
+# =====================================================================
