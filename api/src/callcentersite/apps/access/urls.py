@@ -8,7 +8,7 @@ REF: ADR-012-sistema-permisos-sin-roles-jerarquicos.md
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from callcentersite.apps.permissions import views
+from callcentersite.apps.access import views
 
 
 # Router para ViewSets

@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from django.db.models import Q
 from django.utils import timezone
 
-from callcentersite.apps.permissions.models import (
+from callcentersite.apps.access.models import (
     Capacidad,
     Funcion,
     GrupoCapacidad,
@@ -241,7 +241,7 @@ class PermisoService:
         ).values_list("id", flat=True)
 
         # Obtener funciones que tienen esas capacidades
-        from callcentersite.apps.permissions.models import FuncionCapacidad
+        from callcentersite.apps.access.models import FuncionCapacidad
 
         funciones_ids = FuncionCapacidad.objects.filter(
             capacidad_id__in=capacidades_objs

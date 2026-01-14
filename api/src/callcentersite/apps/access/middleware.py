@@ -12,7 +12,7 @@ from typing import Callable, TYPE_CHECKING
 
 from django.http import JsonResponse
 
-from callcentersite.apps.permissions.services import PermisoService
+from callcentersite.apps.access.services import PermisoService
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse

@@ -65,7 +65,7 @@ class Funcion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'permissions_funciones'
+        db_table = 'access_funciones'
         verbose_name = 'Funcion'
         verbose_name_plural = 'Funciones'
         ordering = ['orden_menu', 'nombre']
@@ -138,7 +138,7 @@ class Capacidad(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'permissions_capacidades'
+        db_table = 'access_capacidades'
         verbose_name = 'Capacidad'
         verbose_name_plural = 'Capacidades'
         ordering = ['nombre_completo']
@@ -180,7 +180,7 @@ class FuncionCapacidad(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'permissions_funcion_capacidades'
+        db_table = 'access_funcion_capacidades'
         verbose_name = 'Funcion-Capacidad'
         verbose_name_plural = 'Funcion-Capacidades'
         unique_together = [['funcion', 'capacidad']]
@@ -249,7 +249,7 @@ class GrupoPermisos(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'permissions_grupos_permisos'
+        db_table = 'access_grupos_permisos'
         verbose_name = 'Grupo de Permisos'
         verbose_name_plural = 'Grupos de Permisos'
         ordering = ['nombre_display']
@@ -278,7 +278,7 @@ class GrupoCapacidad(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'permissions_grupo_capacidades'
+        db_table = 'access_grupo_capacidades'
         verbose_name = 'Grupo-Capacidad'
         verbose_name_plural = 'Grupo-Capacidades'
         unique_together = [['grupo', 'capacidad']]
@@ -329,7 +329,7 @@ class UsuarioGrupo(models.Model):
     )
 
     class Meta:
-        db_table = 'permissions_usuarios_grupos'
+        db_table = 'access_usuarios_grupos'
         verbose_name = 'Usuario-Grupo'
         verbose_name_plural = 'Usuarios-Grupos'
         unique_together = [['usuario', 'grupo']]
@@ -403,7 +403,7 @@ class PermisoExcepcional(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'permissions_permisos_excepcionales'
+        db_table = 'access_permisos_excepcionales'
         verbose_name = 'Permiso Excepcional'
         verbose_name_plural = 'Permisos Excepcionales'
         indexes = [
@@ -487,7 +487,7 @@ class AuditoriaPermiso(models.Model):
     )
 
     class Meta:
-        db_table = 'permissions_auditoria_permisos'
+        db_table = 'access_auditoria_permisos'
         verbose_name = 'Auditoria de Permiso'
         verbose_name_plural = 'Auditorias de Permisos'
         ordering = ['-timestamp']
