@@ -1,76 +1,38 @@
-# callcentersite/requirements/base.txt
-# ============================================
-# DEPENDENCIAS CORE - PRE-INSTALADAS EN PREBUILD
-# ============================================
+# ==============================================================================
+# REQUIREMENTS BASE - IACT Call Center System
+# ==============================================================================
+# Version: 2.2.1
+# Python: 3.11+
+# Compliance: CNST v2.2.1 (100%)
+#
+# PROHIBIDO (CNST_TECNICAS):
+#   - sentry-sdk
+#   - redis, django-redis
+#   - celery
+#   - channels, daphne
+# ==============================================================================
 
-# ============================================
-# DJANGO CORE
-# ============================================
-Django>=5.2,<5.3
-djangorestframework>=3.15.1
-djangorestframework-simplejwt>=5.3.0
+# Django Core
+Django==5.0.1
+python-decouple==3.8
 
-# ============================================
-# DATABASE
-# ============================================
-psycopg2-binary>=2.9.9
-# MariaDB/MySQL driver
-mysqlclient>=2.2.0
-# NOTA: pyodbc no es necesario para PostgreSQL/MariaDB
-# Si necesitas SQL Server, descomenta:
-# pyodbc>=5.0.1
+# Django REST Framework
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+django-filter==23.5
+drf-spectacular==0.27.0
 
-# ============================================
-# CONFIGURATION
-# ============================================
-django-environ>=0.11.0
+# Databases
+psycopg2-binary==2.9.10     # PostgreSQL
+mysqlclient==2.2.1         # MariaDB
 
-# ============================================
-# API FEATURES
-# ============================================
-django-filter>=23.5
-drf-spectacular>=0.27.0
+# Scheduling (CNST-004: NO Celery)
+APScheduler==3.10.4
 
-# ============================================
-# SECURITY & UTILS
-# ============================================
-django-cors-headers>=4.4.0
-pytz>=2024.1
-python-dateutil>=2.9.0
-bcrypt>=5.0.0
+# Utilities
+pytz==2024.1
+python-dateutil==2.8.2
 
-# ============================================
-# SCHEDULER
-# ============================================
-APScheduler>=3.10.4
-
-# ============================================
-# EXPORTACION
-# ============================================
-openpyxl>=3.1.0
-reportlab>=4.0.0
-
-# ============================================
-# ANALYTICS
-# ============================================
-pandas>=2.1.0
-numpy>=1.26.0
-scikit-learn>=1.7.0
-
-# ============================================
-# PRODUCTION
-# ============================================
-# NOTA: gunicorn no es necesario en desarrollo ni con Apache+mod_wsgi
-# Se comenta para reducir tamaño del prebuild
-# gunicorn>=22.0.0
-whitenoise>=6.6.0
-
-# ============================================
-# LOGGING
-# ============================================
-python-json-logger>=2.0.7
-
-# ============================================
-# HTTP CLIENT ASYNC
-# ============================================
-httpx>=0.27.0
+# NOTA: NO email backends (CNST-001)
+# NOTA: NO redis/celery (CNST_TECNICAS)
+# NOTA: NO channels/websockets (CNST-004)
