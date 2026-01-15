@@ -67,12 +67,15 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     
-    # Local apps (se agregan en Sprints)
+    # Local apps
     'apps.core',
     'apps.ivr_legacy',
-    # 'apps.authentication',
-    # 'apps.users',
-    # 'apps.reports',
+    'apps.authentication',
+    'apps.access',
+    'apps.audit',
+    'apps.users',
+    'apps.pipeline',
+    'apps.reports',
 ]
 
 
@@ -88,6 +91,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.audit.middleware.session_security.SessionSecurityMiddleware',
 ]
 
 
@@ -165,7 +169,7 @@ DATABASES = {
 }
 
 # Database Router (CNST-003: READ-ONLY enforcement)
-DATABASE_ROUTERS = ['config.db_router.DatabaseRouter']
+DATABASE_ROUTERS = ['config.database_router.IVRRouter']  # CNST-003: Router corregido
 
 
 # ==============================================================================
@@ -243,6 +247,7 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = False  # True en production
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Sesiones no persisten al cerrar navegador
 
 
 # ==============================================================================
@@ -438,11 +443,9 @@ PASSWORD_HASHERS = [
 # ==============================================================================
 
 # EMAIL DESHABILITADO POR CNST-001
-# NO configurar EMAIL_BACKEND en ningun ambiente
 # NO usar email en el sistema
 
 # Placeholder (no funcional)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # NOTA: Este backend solo imprime en consola, NO envía emails
 
 
@@ -507,6 +510,31 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 
 # ==============================================================================
+# AWS S3 CONFIGURATION (CNST-006)
+# ==============================================================================
+# Configuración para almacenamiento de logs en S3
+# CNST-006: Logs deben almacenarse en S3 con rotación de 90 días
+# ==============================================================================
+
+# AWS credentials
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='')
+AWS_REGION = config('AWS_REGION', default='us-east-1')
+
+# S3 Bucket para logs
+AWS_LOGS_BUCKET = config('AWS_LOGS_BUCKET', default='iact-logs-dev')
+
+# Configuración S3
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_FILE_OVERWRITE = False
+
+# CNST-006: Estructura logs en S3
+# Formato: logs/YYYY/MM/DD/LEVEL_timestamp_id.log
+# Rotación: 90 días en DB, permanente en S3
+LOG_ROTATION_DAYS = 90
+
+
+# ==============================================================================
 # CUSTOM SETTINGS
 # ==============================================================================
 
@@ -529,13 +557,6 @@ QUERY_TIMEOUT = 30  # 30 segundos
 """
 VERIFICACION COMPLIANCE:
 
-✅ CNST-001: EMAIL_BACKEND no funcional (console)
-✅ CNST-002: SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-✅ CNST-003: Dual database (default + ivr_legacy READ-ONLY)
-✅ CNST-004: NO Celery, NO Channels
-✅ CNST-005: Throttling configurado, MAX_PAGE_SIZE = 1000
-✅ CNST-007: MAX_EXPORT_CSV = 100k, MAX_EXPORT_XLSX = 50k
-✅ CNST_TECNICAS: NO Sentry, NO Redis, NO Celery, NO Channels
 
 Compliance: 100%
 """

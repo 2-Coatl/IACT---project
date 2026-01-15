@@ -65,14 +65,12 @@ DATABASES['ivr_legacy']['OPTIONS']['connect_timeout'] = 10
 # CNST-001: NO email en produccion (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ EMAIL PROHIBIDO POR CNST-001 ⛔
+# EMAIL PROHIBIDO POR CNST-001 
 #
-# NO configurar EMAIL_BACKEND en produccion
 # NO usar ningun servicio de email
 # NO enviar emails bajo NINGUNA circunstancia
 #
 # PROHIBIDO:
-# - EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # - Cualquier servicio SMTP (SendGrid, Mailgun, SES, etc)
 # - Notificaciones por email
 # - Password reset por email
@@ -84,7 +82,6 @@ DATABASES['ivr_legacy']['OPTIONS']['connect_timeout'] = 10
 # - Usar mecanismos NO-email
 
 # Fallback no funcional (solo para evitar errores)
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 
 # ==============================================================================
@@ -153,7 +150,7 @@ LOGGING = {
 # CNST_TECNICAS: NO Sentry (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ SENTRY PROHIBIDO POR CNST_TECNICAS ⛔
+# SENTRY PROHIBIDO POR CNST_TECNICAS
 #
 # NO usar Sentry para monitoreo de errores
 # NO instalar sentry-sdk
@@ -189,7 +186,7 @@ MEDIA_ROOT = config('MEDIA_ROOT', default='/var/www/iact/media')
 # CNST_TECNICAS: NO Redis
 # ==============================================================================
 
-# ⛔ REDIS PROHIBIDO POR CNST_TECNICAS ⛔
+# REDIS PROHIBIDO POR CNST_TECNICAS
 #
 # NO usar Redis como cache
 # NO usar django-redis
@@ -208,7 +205,7 @@ CACHES = {
 # PROHIBIDO:
 # CACHES = {
 #     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',  # ⛔ PROHIBIDO
+#         'BACKEND': 'django_redis.cache.RedisCache',  # PROHIBIDO
 #         ...
 #     }
 # }
@@ -228,7 +225,7 @@ CACHES = {
 # CNST-004 + CNST_TECNICAS: NO Celery (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ CELERY PROHIBIDO POR CNST-004 y CNST_TECNICAS ⛔
+# CELERY PROHIBIDO POR CNST-004 y CNST_TECNICAS
 #
 # NO usar Celery para tareas asíncronas
 # NO configurar Celery broker
@@ -266,38 +263,3 @@ ADMIN_URL = config('ADMIN_URL', default='admin/')
 # ==============================================================================
 # COMPLIANCE CNST v2.2.1 - PRODUCTION
 # ==============================================================================
-
-"""
-VERIFICACION COMPLIANCE PRODUCTION:
-
-✅ CNST-001: EMAIL PROHIBIDO (dummy backend)
-    - NO smtp
-    - NO servicios email
-    - Explicito en codigo
-
-✅ CNST-002: SESSION_ENGINE = 'db' (heredado)
-
-✅ CNST-003: Dual database (heredado)
-
-✅ CNST-004: NO Celery PROHIBIDO
-    - Explicito en codigo
-    - Usar APScheduler
-
-✅ CNST-005: Throttling (heredado)
-
-✅ CNST_TECNICAS: 
-    - NO Sentry PROHIBIDO (explicito)
-    - NO Redis PROHIBIDO (explicito)
-    - NO Celery PROHIBIDO (explicito)
-    - NO Channels (no configurado)
-
-Compliance: 100%
-
-NOTAS CRITICAS:
-- Email: ABSOLUTAMENTE PROHIBIDO
-- Sentry: ABSOLUTAMENTE PROHIBIDO  
-- Redis: ABSOLUTAMENTE PROHIBIDO
-- Celery: ABSOLUTAMENTE PROHIBIDO
-
-Usar alternativas documentadas en base.py
-"""

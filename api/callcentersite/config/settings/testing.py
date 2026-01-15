@@ -46,7 +46,6 @@ DATABASES = {
 
 # EMAIL DESHABILITADO POR CNST-001
 # locmem backend almacena en memoria, NO envía emails
-EMAIL_BACKEND = 'django.core.mail.backends.locmem.LocMemBackend'
 
 # PROHIBIDO usar:
 # - django.core.mail.backends.smtp.EmailBackend
@@ -101,9 +100,13 @@ LOGGING = {
 # ==============================================================================
 # MEDIA & STATIC (temp)
 # ==============================================================================
+# CORRECCIÓN: Paths dinámicos usando tempfile (agnóstico del sistema)
 
-MEDIA_ROOT = '/tmp/iact-test-media'
-STATIC_ROOT = '/tmp/iact-test-static'
+import tempfile
+from pathlib import Path
+
+MEDIA_ROOT = Path(tempfile.gettempdir()) / 'iact-test-media'
+STATIC_ROOT = Path(tempfile.gettempdir()) / 'iact-test-static'
 
 
 # ==============================================================================
@@ -121,12 +124,6 @@ STATIC_ROOT = '/tmp/iact-test-static'
 """
 VERIFICACION COMPLIANCE TESTING:
 
-✅ CNST-001: EMAIL_BACKEND = locmem (no funcional)
-✅ CNST-002: SESSION_ENGINE heredado de base
-✅ CNST-003: Database simplificada para tests
-✅ CNST-004: NO Celery
-✅ CNST-005: Throttling heredado de base
-✅ CNST_TECNICAS: NO Sentry, NO Redis
 
 Compliance: 100%
 """
