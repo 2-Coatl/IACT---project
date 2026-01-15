@@ -29,6 +29,13 @@ mysqlclient==2.2.1         # MariaDB
 # Scheduling (CNST-004: NO Celery)
 APScheduler==3.10.4
 
+# AWS SDK (CNST-006: Logs S3)
+boto3==1.28.0
+botocore==1.31.0
+
+# Excel Export (Reports)
+openpyxl==3.1.2
+
 # Utilities
 pytz==2024.1
 python-dateutil==2.8.2

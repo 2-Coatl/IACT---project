@@ -61,7 +61,6 @@ INSTALLED_APPS += [
 
 # EMAIL DESHABILITADO POR CNST-001
 # Console backend solo imprime, NO envía emails
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # PROHIBIDO usar:
 # - django.core.mail.backends.smtp.EmailBackend
@@ -121,15 +120,3 @@ SECURE_SSL_REDIRECT = False
 # COMPLIANCE CNST v2.2.1 - DEVELOPMENT
 # ==============================================================================
 
-"""
-VERIFICACION COMPLIANCE DEVELOPMENT:
-
-✅ CNST-001: EMAIL_BACKEND = console (no funcional)
-✅ CNST-002: SESSION_ENGINE heredado de base
-✅ CNST-003: Dual database heredado de base
-✅ CNST-004: NO Celery, NO Channels
-✅ CNST-005: Throttling heredado de base
-✅ CNST_TECNICAS: NO Sentry, NO Redis
-
-Compliance: 100%
-"""
