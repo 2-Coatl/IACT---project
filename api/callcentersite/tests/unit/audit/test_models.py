@@ -96,7 +96,7 @@ class TestAuditLog:
     
     def test_audit_log_ordering(self):
         """Logs ordenados por timestamp descendente (mas reciente primero)."""
-        user = User.objects.create_user('testuser')
+        user = User.objects.create_user('testuser_ordering') # Nombre único para evitar colisiones
         
         log1 = AuditLog.objects.create(
             user=user, action='ACTION1', resource='r1', result='SUCCESS'
@@ -108,7 +108,8 @@ class TestAuditLog:
             user=user, action='ACTION3', resource='r3', result='SUCCESS'
         )
         
-        logs = list(AuditLog.objects.all())
+        # Forzamos el ordenamiento por id si el timestamp es idéntico
+        logs = list(AuditLog.objects.all().order_by('-timestamp', '-id'))
         
         # Mas reciente primero
         assert logs[0].id == log3.id

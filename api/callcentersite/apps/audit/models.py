@@ -76,9 +76,10 @@ class AuditLog(models.Model):
         db_table = 'audit_logs'
         verbose_name = 'Log Auditoria'
         verbose_name_plural = 'Logs Auditoria'
-        ordering = ['-timestamp']
+        # Usamos -id como segundo criterio para desempatar tiempos idénticos
+        ordering = ['-timestamp', '-id'] 
         indexes = [
-            models.Index(fields=['-timestamp']),
+            models.Index(fields=['-timestamp', '-id']), # Ajusta el índice también
             models.Index(fields=['user', '-timestamp']),
             models.Index(fields=['action', '-timestamp']),
         ]

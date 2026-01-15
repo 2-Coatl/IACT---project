@@ -17,7 +17,9 @@ class UserViewSet(viewsets.ModelViewSet):
     CNST-005: Permisos IsAuthenticated.
     """
     
-    queryset = User.objects.all()
+    # Se agrega .order_by('username') para cumplir con el orden alfabético
+    # y evitar el UnorderedObjectListWarning en la paginación.
+    queryset = User.objects.all().order_by('username')
     permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
