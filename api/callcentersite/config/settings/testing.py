@@ -101,9 +101,13 @@ LOGGING = {
 # ==============================================================================
 # MEDIA & STATIC (temp)
 # ==============================================================================
+# CORRECCIÓN: Paths dinámicos usando tempfile (agnóstico del sistema)
 
-MEDIA_ROOT = '/tmp/iact-test-media'
-STATIC_ROOT = '/tmp/iact-test-static'
+import tempfile
+from pathlib import Path
+
+MEDIA_ROOT = Path(tempfile.gettempdir()) / 'iact-test-media'
+STATIC_ROOT = Path(tempfile.gettempdir()) / 'iact-test-static'
 
 
 # ==============================================================================
