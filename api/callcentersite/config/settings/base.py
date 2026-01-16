@@ -67,16 +67,24 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     
-    # Local apps
+    # Local apps (se agregan en Sprints)
     'apps.core',
     'apps.ivr_legacy',
-    'apps.authentication',
-    'apps.access',
-    'apps.audit',
-    'apps.users',
-    'apps.pipeline',
-    'apps.reports',
+    'apps.authentication',  # Sprint 2
+    'apps.access',  # Sprint 2
+    'apps.audit',  # Sprint 2
+    'apps.users',  # Sprint 3
+    'apps.pipeline',  # Sprint 3
+    'apps.reports',  # Sprint 4 🆕
 ]
+
+
+# ==============================================================================
+# AUTHENTICATION
+# ==============================================================================
+
+# Custom User Model
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # ==============================================================================
@@ -91,7 +99,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.audit.middleware.session_security.SessionSecurityMiddleware',
+    'apps.audit.middleware.session_security.SessionSecurityMiddleware',  # Sprint 2
 ]
 
 
@@ -225,6 +233,14 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Avatar settings
+ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif']
+MAX_AVATAR_SIZE = 2 * 1024 * 1024  # 2 MB
+
+# File upload settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 # ==============================================================================
@@ -557,6 +573,12 @@ QUERY_TIMEOUT = 30  # 30 segundos
 """
 VERIFICACION COMPLIANCE:
 
+✅ CNST-002: SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+✅ CNST-003: Dual database (default + ivr_legacy READ-ONLY)
+✅ CNST-004: NO Celery, NO Channels
+✅ CNST-005: Throttling configurado, MAX_PAGE_SIZE = 1000
+✅ CNST-007: MAX_EXPORT_CSV = 100k, MAX_EXPORT_XLSX = 50k
+✅ CNST_TECNICAS: NO Sentry, NO Redis, NO Celery, NO Channels
 
 Compliance: 100%
 """

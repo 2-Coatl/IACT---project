@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class AuditLog(models.Model):
@@ -76,10 +78,9 @@ class AuditLog(models.Model):
         db_table = 'audit_logs'
         verbose_name = 'Log Auditoria'
         verbose_name_plural = 'Logs Auditoria'
-        # Usamos -id como segundo criterio para desempatar tiempos idénticos
-        ordering = ['-timestamp', '-id'] 
+        ordering = ['-timestamp']
         indexes = [
-            models.Index(fields=['-timestamp', '-id']), # Ajusta el índice también
+            models.Index(fields=['-timestamp']),
             models.Index(fields=['user', '-timestamp']),
             models.Index(fields=['action', '-timestamp']),
         ]

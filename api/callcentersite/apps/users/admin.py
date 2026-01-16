@@ -1,5 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from apps.access.models import UserFunctionAssignment
 
@@ -66,6 +68,5 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('-date_joined',)
 
 
-# Re-registrar User con admin personalizado
-admin.site.unregister(User)
+# Registrar User con admin personalizado
 admin.site.register(User, UserAdmin)
