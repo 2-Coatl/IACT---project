@@ -1,11 +1,11 @@
 # Sprint 4 - Resumen de Implementación
 
-## ✅ COMPLETADO
+##  COMPLETADO
 
 ### 1. **App Reports Creada**
-- ✅ Directorio `apps/reports/` existe
-- ✅ Registrada en `INSTALLED_APPS`
-- ✅ URLs configuradas en `config/urls.py`
+-  Directorio `apps/reports/` existe
+-  Registrada en `INSTALLED_APPS`
+-  URLs configuradas en `config/urls.py`
 
 ### 2. **Models (CNST-007 Compliant)**
 ```python
@@ -288,12 +288,12 @@ pip install mysqlclient
 
 ---
 
-## ✅ CONCLUSIÓN
+##  CONCLUSIÓN
 
 **Sprint 4 API está 90% completo:**
-- ✅ Models, Serializers, Services, Permissions, Views, URLs
-- ✅ CNST-007 compliance (validaciones en 3 capas)
-- ✅ Exportación CSV/Excel (local, sin S3)
+-  Models, Serializers, Services, Permissions, Views, URLs
+-  CNST-007 compliance (validaciones en 3 capas)
+-  Exportación CSV/Excel (local, sin S3)
 - 🚧 Falta: Migraciones, Tests, Admin, Navegación, Fixtures
 
 **Sin bloqueos críticos**, se puede continuar con tests o completar navegación.

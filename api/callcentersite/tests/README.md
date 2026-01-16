@@ -28,10 +28,10 @@ callcentersite/
 ### Tests en `apps/*/tests/` (Tests Unitarios App-específicos)
 
 Coloca aquí tests que:
-- ✅ Son específicos de UNA sola app
-- ✅ Prueban modelos, serializers, services de esa app
-- ✅ No requieren múltiples apps funcionando juntas
-- ✅ Son rápidos y aislados
+-  Son específicos de UNA sola app
+-  Prueban modelos, serializers, services de esa app
+-  No requieren múltiples apps funcionando juntas
+-  Son rápidos y aislados
 
 **Ejemplos:**
 ```python
@@ -49,10 +49,10 @@ def test_module_access_service():
 ### Tests en `tests/` (Tests Centralizados)
 
 Coloca aquí tests que:
-- ✅ Cruzan múltiples apps
-- ✅ Tests de integración
-- ✅ Tests API/endpoints completos
-- ✅ Tests E2E (flujos completos)
+-  Cruzan múltiples apps
+-  Tests de integración
+-  Tests API/endpoints completos
+-  Tests E2E (flujos completos)
 
 **Ejemplos:**
 ```python
@@ -198,7 +198,7 @@ pytest -vv  # Extra verbose
 
 ---
 
-## ✅ Checklist: ¿Dónde va mi test?
+##  Checklist: ¿Dónde va mi test?
 
 **Si tu test...**
 
@@ -240,13 +240,13 @@ pytest -vv  # Extra verbose
 
 ## 🎯 Mejores Prácticas
 
-1. ✅ Tests deben ser **independientes** (no depender de orden)
-2. ✅ Usar `@pytest.mark.django_db` para tests con DB
-3. ✅ Fixtures sobre setup/teardown manual
-4. ✅ Nombres descriptivos (`test_user_cannot_delete_other_users`)
-5. ✅ Un concepto por test (no múltiples asserts no relacionados)
-6. ✅ Usar markers para organizar
-7. ✅ Tests rápidos (unitarios) vs lentos (integración)
+1.  Tests deben ser **independientes** (no depender de orden)
+2.  Usar `@pytest.mark.django_db` para tests con DB
+3.  Fixtures sobre setup/teardown manual
+4.  Nombres descriptivos (`test_user_cannot_delete_other_users`)
+5.  Un concepto por test (no múltiples asserts no relacionados)
+6.  Usar markers para organizar
+7.  Tests rápidos (unitarios) vs lentos (integración)
 
 ---
 

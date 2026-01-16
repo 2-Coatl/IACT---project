@@ -123,11 +123,11 @@ SECURE_SSL_REDIRECT = False
 """
 VERIFICACION COMPLIANCE DEVELOPMENT:
 
-✅ CNST-002: SESSION_ENGINE heredado de base
-✅ CNST-003: Dual database heredado de base
-✅ CNST-004: NO Celery, NO Channels
-✅ CNST-005: Throttling heredado de base
-✅ CNST_TECNICAS: NO Sentry, NO Redis
+ CNST-002: SESSION_ENGINE heredado de base
+ CNST-003: Dual database heredado de base
+ CNST-004: NO Celery, NO Channels
+ CNST-005: Throttling heredado de base
+ CNST_TECNICAS: NO Sentry, NO Redis
 
 Compliance: 100%
 """

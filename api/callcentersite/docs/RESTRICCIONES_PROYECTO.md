@@ -6,7 +6,7 @@
 
 ---
 
-## ⚠️ IMPORTANTE: LEER PRIMERO
+## IMPORTANTE: LEER PRIMERO
 
 Este proyecto tiene restricciones específicas que DEBEN respetarse en toda implementación, diseño y análisis.
 
@@ -16,95 +16,95 @@ Este proyecto tiene restricciones específicas que DEBEN respetarse en toda impl
 
 ### NO se usa NINGÚN servicio cloud:
 ```
-❌ AWS (S3, Lambda, RDS, CloudWatch, SNS, SES, etc.)
-❌ Azure
-❌ Google Cloud Platform
-❌ Heroku
-❌ DigitalOcean
-❌ Cualquier hosting cloud
+AWS (S3, Lambda, RDS, CloudWatch, SNS, SES, etc.)
+Azure
+Google Cloud Platform
+Heroku
+DigitalOcean
+Cualquier hosting cloud
 ```
 
 ### NO se usa NINGÚN servicio SaaS externo:
 ```
-❌ Sentry (error tracking)
-❌ Datadog (monitoring)
-❌ New Relic
-❌ LogRocket
-❌ Bugsnag
-❌ Rollbar
-❌ CloudFlare
-❌ CDN externos
-❌ Servicios de email (SendGrid, Mailgun, etc.)
-❌ Servicios de SMS (Twilio, etc.)
-❌ Analytics externos (Google Analytics, Mixpanel, etc.)
+Sentry (error tracking)
+Datadog (monitoring)
+New Relic
+LogRocket
+Bugsnag
+Rollbar
+CloudFlare
+CDN externos
+Servicios de email (SendGrid, Mailgun, etc.)
+Servicios de SMS (Twilio, etc.)
+Analytics externos (Google Analytics, Mixpanel, etc.)
 ```
 
 ### NO se usa Redis/Caché externo:
 ```
-❌ Redis
-❌ Memcached
-❌ Redis Cloud
-❌ ElastiCache
+Redis
+Memcached
+Redis Cloud
+ElastiCache
 ```
 
 ### NO se usan colas de mensajes:
 ```
-❌ Celery
-❌ RabbitMQ
-❌ Amazon SQS
-❌ Redis Queue
-❌ Cualquier sistema de colas
+Celery
+RabbitMQ
+Amazon SQS
+Redis Queue
+Cualquier sistema de colas
 ```
 
 ### NO se envían comunicaciones externas:
 ```
-❌ Emails
-❌ SMS
-❌ Push notifications
-❌ Webhooks
-❌ Llamadas a APIs externas
+Emails
+SMS
+Push notifications
+Webhooks
+Llamadas a APIs externas
 ```
 
 ---
 
-## ✅ LO QUE SÍ SE USA (TODO LOCAL)
+##  LO QUE SÍ SE USA (TODO LOCAL)
 
 ### Infraestructura on-premise:
 ```
-✅ Servidor local (Ubuntu/Debian/CentOS)
-✅ Red local / VPN
-✅ Acceso solo desde intranet
-✅ PostgreSQL local
-✅ MariaDB local (IVR legacy - solo lectura)
+ Servidor local (Ubuntu/Debian/CentOS)
+ Red local / VPN
+ Acceso solo desde intranet
+ PostgreSQL local
+ MariaDB local (IVR legacy - solo lectura)
 ```
 
 ### Stack tecnológico:
 ```
-✅ Python 3.11+
-✅ Django 4.2+
-✅ Django REST Framework
-✅ JWT Authentication
-✅ PostgreSQL (local)
-✅ Nginx (local)
-✅ Gunicorn / uWSGI
-✅ Supervisor / systemd
+ Python 3.11+
+ Django 4.2+
+ Django REST Framework
+ JWT Authentication
+ PostgreSQL (local)
+ Nginx (local)
+ Gunicorn / uWSGI
+ Supervisor / systemd
 ```
 
 ### Almacenamiento:
 ```
-✅ Disco local para media files
-✅ Disco local para logs
-✅ Disco local/red local para backups
-✅ FileField / ImageField (local storage)
+ Disco local para media files
+ Disco local para logs
+ Disco local/red local para backups
+ FileField / ImageField (local storage)
 ```
 
 ### Logging y monitoreo:
 ```
-✅ Django logging a archivos locales
-✅ RotatingFileHandler
-✅ logrotate
-✅ Dashboard interno de monitoreo
-✅ Scripts bash para monitoreo
+ Django logging a archivos locales
+ RotatingFileHandler
+ logrotate
+ Dashboard interno de monitoreo
+ Scripts bash para monitoreo
 ```
 
 ---
@@ -113,44 +113,44 @@ Este proyecto tiene restricciones específicas que DEBEN respetarse en toda impl
 
 ### Tipo de sistema:
 ```
-✅ Sistema INTERNO de call center
-✅ Solo usuarios empleados (no clientes)
-✅ Acceso desde intranet/VPN
-✅ Datos confidenciales (no pueden salir)
+ Sistema INTERNO de call center
+ Solo usuarios empleados (no clientes)
+ Acceso desde intranet/VPN
+ Datos confidenciales (no pueden salir)
 ```
 
 ### Usuarios:
 ```
-✅ Usuarios internos (empleados)
-✅ Autenticación username/password
-✅ Permisos RBAC granular (44 funciones)
-✅ Gestión por administradores
-❌ NO hay registro público
-❌ NO hay usuarios externos
+ Usuarios internos (empleados)
+ Autenticación username/password
+ Permisos RBAC granular (44 funciones)
+ Gestión por administradores
+NO hay registro público
+NO hay usuarios externos
 ```
 
 ### Funcionalidades:
 ```
-✅ Navegación dinámica RBAC
-✅ Gestión de usuarios (admin)
-✅ Auditoría en BD local
-✅ Reportes generados MANUALMENTE
-✅ Exportación CSV/Excel/PDF
-✅ Dashboards en tiempo real
-✅ Consultas a BD legacy (MariaDB)
+ Navegación dinámica RBAC
+ Gestión de usuarios (admin)
+ Auditoría en BD local
+ Reportes generados MANUALMENTE
+ Exportación CSV/Excel/PDF
+ Dashboards en tiempo real
+ Consultas a BD legacy (MariaDB)
 ```
 
 ### NO tiene:
 ```
-❌ Programación de tareas (cron/celery)
-❌ Envío automático de emails
-❌ Notificaciones push
-❌ Procesamiento asíncrono
-❌ Caché Redis
-❌ Queue de trabajos
-❌ Integración con APIs externas
-❌ 2FA con SMS
-❌ Registro público
+Programación de tareas (cron/celery)
+Envío automático de emails
+Notificaciones push
+Procesamiento asíncrono
+Caché Redis
+Queue de trabajos
+Integración con APIs externas
+2FA con SMS
+Registro público
 ```
 
 ---
@@ -263,23 +263,23 @@ MariaDB (local, read-only)
 
 ### Configuración:
 ```
-✅ JWT authentication (local)
-✅ HTTPS (certificado local/auto-firmado)
-✅ CORS configurado (solo IPs internas)
-✅ CSRF protection
-✅ SQL injection protection (Django ORM)
-✅ XSS protection
-✅ Password hashing (Django default)
-✅ Session management (BD local)
+ JWT authentication (local)
+ HTTPS (certificado local/auto-firmado)
+ CORS configurado (solo IPs internas)
+ CSRF protection
+ SQL injection protection (Django ORM)
+ XSS protection
+ Password hashing (Django default)
+ Session management (BD local)
 ```
 
 ### NO se implementa:
 ```
-❌ OAuth (Google, GitHub, etc.)
-❌ SAML
-❌ 2FA con SMS/email
-❌ Rate limiting externo (Cloudflare)
-❌ WAF externo
+OAuth (Google, GitHub, etc.)
+SAML
+2FA con SMS/email
+Rate limiting externo (Cloudflare)
+WAF externo
 ```
 
 ---
@@ -300,21 +300,21 @@ Servidor local/on-premise:
 
 ### NO se usa:
 ```
-❌ Docker Hub
-❌ AWS ECR
-❌ Kubernetes cloud
-❌ PaaS (Heroku, etc.)
-❌ Serverless
-❌ CI/CD cloud (GitHub Actions con deploy a cloud)
+Docker Hub
+AWS ECR
+Kubernetes cloud
+PaaS (Heroku, etc.)
+Serverless
+CI/CD cloud (GitHub Actions con deploy a cloud)
 ```
 
 ### SÍ se puede usar (local):
 ```
-✅ Docker (local)
-✅ docker-compose (local)
-✅ GitLab CI/CD (self-hosted)
-✅ Jenkins (local)
-✅ CI/CD que deploya a servidor local
+ Docker (local)
+ docker-compose (local)
+ GitLab CI/CD (self-hosted)
+ Jenkins (local)
+ CI/CD que deploya a servidor local
 ```
 
 ---
@@ -342,18 +342,18 @@ GET /api/v1/monitoring/health/
 
 ### NO se usa:
 ```
-❌ Sentry
-❌ Datadog
-❌ CloudWatch
-❌ New Relic
-❌ Servicios externos de monitoring
+Sentry
+Datadog
+CloudWatch
+New Relic
+Servicios externos de monitoring
 ```
 
 ---
 
 ## 📦 DEPENDENCIAS (requirements.txt)
 
-### ✅ PERMITIDAS:
+###  PERMITIDAS:
 ```
 Django>=4.2
 djangorestframework>=3.14
@@ -373,7 +373,7 @@ faker>=20.0.0
 gunicorn>=21.0.0
 ```
 
-### ❌ PROHIBIDAS:
+### PROHIBIDAS:
 ```
 celery                    # NO async
 redis                     # NO cache
@@ -390,7 +390,7 @@ twilio                    # NO SMS
 
 ## 🎯 CASOS DE USO VÁLIDOS
 
-### ✅ CORRECTO:
+###  CORRECTO:
 ```
 1. Usuario login → JWT → Navegación RBAC
 2. Admin crea usuario → Asigna funciones
@@ -400,7 +400,7 @@ twilio                    # NO SMS
 6. Cron local hace backup a disco local
 ```
 
-### ❌ INCORRECTO:
+### INCORRECTO:
 ```
 1. Sistema envía email cuando reporte está listo
 2. Celery procesa reporte en background
@@ -416,51 +416,51 @@ twilio                    # NO SMS
 
 Antes de implementar cualquier feature, verificar:
 
-- [ ] ¿Usa servicios cloud? → ❌ NO PERMITIDO
-- [ ] ¿Envía emails/SMS? → ❌ NO PERMITIDO
-- [ ] ¿Usa Redis/Celery? → ❌ NO PERMITIDO
-- [ ] ¿Llama APIs externas? → ❌ NO PERMITIDO
-- [ ] ¿Guarda en S3? → ❌ NO PERMITIDO
-- [ ] ¿Usa Sentry/monitoring externo? → ❌ NO PERMITIDO
-- [ ] ¿Todo es local/on-premise? → ✅ REQUERIDO
-- [ ] ¿Logs van a archivos locales? → ✅ REQUERIDO
-- [ ] ¿Archivos en disco local? → ✅ REQUERIDO
-- [ ] ¿BD local? → ✅ REQUERIDO
+- [ ] ¿Usa servicios cloud? → NO PERMITIDO
+- [ ] ¿Envía emails/SMS? → NO PERMITIDO
+- [ ] ¿Usa Redis/Celery? → NO PERMITIDO
+- [ ] ¿Llama APIs externas? → NO PERMITIDO
+- [ ] ¿Guarda en S3? → NO PERMITIDO
+- [ ] ¿Usa Sentry/monitoring externo? → NO PERMITIDO
+- [ ] ¿Todo es local/on-premise? →  REQUERIDO
+- [ ] ¿Logs van a archivos locales? →  REQUERIDO
+- [ ] ¿Archivos en disco local? →  REQUERIDO
+- [ ] ¿BD local? →  REQUERIDO
 
 ---
 
 ## 🔍 PREGUNTAS FRECUENTES
 
 **P: ¿Puedo usar Celery para reportes grandes?**  
-R: ❌ NO. Reportes se procesan síncronamente, el usuario espera.
+R: NO. Reportes se procesan síncronamente, el usuario espera.
 
 **P: ¿Puedo usar S3 para guardar archivos?**  
-R: ❌ NO. Archivos en disco local (/var/www/iact/media/).
+R: NO. Archivos en disco local (/var/www/iact/media/).
 
 **P: ¿Puedo usar Sentry para logging?**  
-R: ❌ NO. Django logging a archivos locales.
+R: NO. Django logging a archivos locales.
 
 **P: ¿Puedo enviar email de recuperación?**  
-R: ❌ NO. Admin resetea manualmente o preguntas de seguridad.
+R: NO. Admin resetea manualmente o preguntas de seguridad.
 
 **P: ¿Puedo usar Redis para caché?**  
-R: ❌ NO. Sin caché externo, consultas directas a BD.
+R: NO. Sin caché externo, consultas directas a BD.
 
 **P: ¿Puedo programar reportes con cron?**  
-R: ❌ NO. Usuario genera manualmente cuando necesita.
+R: NO. Usuario genera manualmente cuando necesita.
 
 **P: ¿Puedo usar Docker?**  
-R: ✅ SÍ, pero deploy local (no Docker Hub cloud).
+R:  SÍ, pero deploy local (no Docker Hub cloud).
 
 **P: ¿Puedo usar PostgreSQL en AWS RDS?**  
-R: ❌ NO. PostgreSQL local en el servidor.
+R: NO. PostgreSQL local en el servidor.
 
 **P: ¿Puedo usar GitHub Actions para CI/CD?**  
-R: ✅ SÍ, si deploya a servidor local. ❌ NO si deploya a cloud.
+R:  SÍ, si deploya a servidor local. NO si deploya a cloud.
 
 ---
 
-## ✅ ARQUITECTURA APROBADA
+##  ARQUITECTURA APROBADA
 
 ```
 ┌─────────────────────────────────────────┐
@@ -491,10 +491,10 @@ R: ✅ SÍ, si deploya a servidor local. ❌ NO si deploya a cloud.
 │  │                                 │  │
 │  └─────────────────────────────────┘  │
 │                                        │
-│  ❌ SIN conexión a internet            │
-│  ❌ SIN servicios cloud                │
-│  ❌ SIN APIs externas                  │
-│  ✅ TODO local y autocontenido         │
+│  SIN conexión a internet            │
+│  SIN servicios cloud                │
+│  SIN APIs externas                  │
+│   TODO local y autocontenido         │
 └────────────────────────────────────────┘
 ```
 
@@ -503,15 +503,15 @@ R: ✅ SÍ, si deploya a servidor local. ❌ NO si deploya a cloud.
 ## 📌 RESUMEN
 
 **Sistema COMPLETAMENTE local/on-premise:**
-- ✅ Sin dependencias cloud
-- ✅ Sin servicios externos
-- ✅ Sin emails/SMS
-- ✅ Sin async (celery)
-- ✅ Sin caché (redis)
-- ✅ Todo en disco local
-- ✅ Logs locales
-- ✅ Backups locales
-- ✅ Monitoreo propio
+-  Sin dependencias cloud
+-  Sin servicios externos
+-  Sin emails/SMS
+-  Sin async (celery)
+-  Sin caché (redis)
+-  Todo en disco local
+-  Logs locales
+-  Backups locales
+-  Monitoreo propio
 
 **ESTA ES LA REGLA #1 DEL PROYECTO**
 

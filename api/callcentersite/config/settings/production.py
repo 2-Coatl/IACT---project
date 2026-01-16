@@ -267,22 +267,22 @@ ADMIN_URL = config('ADMIN_URL', default='admin/')
 """
 VERIFICACION COMPLIANCE PRODUCTION:
 
-✅ CNST-001: EMAIL PROHIBIDO (dummy backend)
+ CNST-001: EMAIL PROHIBIDO (dummy backend)
     - NO smtp
     - NO servicios email
     - Explicito en codigo
 
-✅ CNST-002: SESSION_ENGINE = 'db' (heredado)
+ CNST-002: SESSION_ENGINE = 'db' (heredado)
 
-✅ CNST-003: Dual database (heredado)
+ CNST-003: Dual database (heredado)
 
-✅ CNST-004: NO Celery PROHIBIDO
+ CNST-004: NO Celery PROHIBIDO
     - Explicito en codigo
     - Usar APScheduler
 
-✅ CNST-005: Throttling (heredado)
+ CNST-005: Throttling (heredado)
 
-✅ CNST_TECNICAS: 
+ CNST_TECNICAS: 
     - NO Sentry PROHIBIDO (explicito)
     - NO Redis PROHIBIDO (explicito)
     - NO Celery PROHIBIDO (explicito)

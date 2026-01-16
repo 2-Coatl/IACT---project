@@ -24,8 +24,8 @@ pip list | grep -E "(Django|Pillow|openpyxl|reportlab|pytest|mysqlclient)"
 pip install Pillow openpyxl pandas reportlab mysqlclient pytest-cov factory-boy
 
 # NO instalar:
-# ❌ celery (no se usa)
-# ❌ redis (no se usa)
+# celery (no se usa)
+# redis (no se usa)
 
 # Actualizar requirements.txt
 pip freeze > requirements.txt
@@ -202,7 +202,7 @@ class Command(BaseCommand):
             )
             
         self.stdout.write(
-            self.style.SUCCESS(f'✅ Pobladas {len(functions)} funciones')
+            self.style.SUCCESS(f' Pobladas {len(functions)} funciones')
         )
 ```
 
@@ -254,7 +254,7 @@ class Command(BaseCommand):
                     )
         
         self.stdout.write(
-            self.style.SUCCESS(f'✅ Módulos poblados')
+            self.style.SUCCESS(f' Módulos poblados')
         )
 ```
 
@@ -538,7 +538,7 @@ python manage.py migrate
 
 ---
 
-## SPRINT 3: REPORTS FUNCIONALES (DÍAS 5-6) ✅ CORREGIDO
+## SPRINT 3: REPORTS FUNCIONALES (DÍAS 5-6)  CORREGIDO
 
 ### DÍA 5: APIs Reports generación manual (6h)
 - POST /api/v1/reports/generate/ (generación síncrona)
@@ -555,7 +555,7 @@ python manage.py migrate
 
 ---
 
-## SPRINT 4: CALIDAD & DEPLOY (DÍAS 7-8) ✅ CORREGIDO
+## SPRINT 4: CALIDAD & DEPLOY (DÍAS 7-8)  CORREGIDO
 
 ### DÍA 7: Tests & Coverage (6h)
 - Integration tests
@@ -578,10 +578,10 @@ python manage.py migrate
 Sprint 0:  0.5 días  (Preparación)
 Sprint 1:  2   días  (Fundación)
 Sprint 2:  2   días  (CRUD)
-Sprint 3:  2   días  (Reports - SIN scheduling) ✅ CORREGIDO
-Sprint 4:  2   días  (Calidad) ✅ CORREGIDO
+Sprint 3:  2   días  (Reports - SIN scheduling)  CORREGIDO
+Sprint 4:  2   días  (Calidad)  CORREGIDO
 ────────────────────
-TOTAL:     8.5 días  ✅ CORREGIDO
+TOTAL:     8.5 días   CORREGIDO
 ```
 
 ### HITOS:
@@ -592,8 +592,8 @@ TOTAL:     8.5 días  ✅ CORREGIDO
 ✓ Día 2:   RBAC completo
 ✓ Día 3:   Users & Core CRUD
 ✓ Día 4:   Modelos Reports
-✓ Día 6:   Reports funcionales (manual) ✅ CORREGIDO
-✓ Día 8:   Production ready ✅ CORREGIDO
+✓ Día 6:   Reports funcionales (manual)  CORREGIDO
+✓ Día 8:   Production ready  CORREGIDO
 ```
 
 ### MÉTRICAS DE ÉXITO:

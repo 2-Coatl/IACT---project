@@ -281,7 +281,7 @@ DEPENDENCIAS (Pillow, etc.)
    ↓
 5. [API1] APIs RBAC              (8h)    ALTO
    ↓
-6. Sistema básico funcional      ✅
+6. Sistema básico funcional      
 
 TOTAL RUTA CRÍTICA: 14.5 horas (~2 días)
 ```
@@ -304,38 +304,38 @@ Rama A:                          Rama B:
 ### Para que funcione RBAC completo:
 ```
 NECESITA:
-✅ [M0] Migraciones access
-✅ [M1] Migrate
-✅ [CMD1] populate_functions
-✅ [API1] APIs RBAC completas
-⚠️ Navegación ya implementada (MenuBuilder)
+ [M0] Migraciones access
+ [M1] Migrate
+ [CMD1] populate_functions
+ [API1] APIs RBAC completas
+Navegación ya implementada (MenuBuilder)
 ```
 
 ### Para que funcionen Reports:
 ```
 NECESITA:
-❌ [M0] Migraciones reports
-❌ [D0] Pillow, openpyxl, reportlab
-❌ [MODEL1] Modelos Reports
-❌ [SER1] Serializers Reports
-❌ [API3] APIs Reports
+[M0] Migraciones reports
+[D0] Pillow, openpyxl, reportlab
+[MODEL1] Modelos Reports
+[SER1] Serializers Reports
+[API3] APIs Reports
 ```
 
 ### Para que funcione gestión Users:
 ```
 NECESITA:
-⚠️ [M0] Migraciones users (avatar)
-✅ [D0] Pillow (para avatar)
-⚠️ [API2] APIs Users completas
-✅ Avatar/Profile ya implementados
+[M0] Migraciones users (avatar)
+ [D0] Pillow (para avatar)
+[API2] APIs Users completas
+ Avatar/Profile ya implementados
 ```
 
 ### Para deploy:
 ```
 NECESITA:
-❌ [TEST1] Tests completos
-❌ [INFRA1] Docker + CI/CD
-⚠️ [DOC1] Documentación
+[TEST1] Tests completos
+[INFRA1] Docker + CI/CD
+[DOC1] Documentación
 ```
 
 ---
@@ -399,28 +399,28 @@ Horas: 19h
 
 ### ALTO:
 ```
-❌ Migraciones fallan por conflictos
+Migraciones fallan por conflictos
    Mitigación: Hacer backup antes de migrar
    
-❌ Dependencias con versiones incompatibles
+Dependencias con versiones incompatibles
    Mitigación: Usar requirements.txt con versiones fijas
    
-❌ RBAC muy complejo, retrasa desarrollo
+RBAC muy complejo, retrasa desarrollo
    Mitigación: Implementar versión simplificada primero
 ```
 
 ### MEDIO:
 ```
-⚠️ Reports toman más tiempo del estimado
+Reports toman más tiempo del estimado
    Mitigación: Implementar exportación básica primero
    
-⚠️ Tests descubren bugs en navegación
+Tests descubren bugs en navegación
    Mitigación: Priorizar tests críticos
 ```
 
 ### BAJO:
 ```
-⚠️ Docker no funciona en primer intento
+Docker no funciona en primer intento
    Mitigación: Dejar para última fase
 ```
 

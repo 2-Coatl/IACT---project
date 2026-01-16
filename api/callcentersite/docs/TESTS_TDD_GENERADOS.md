@@ -34,33 +34,33 @@ Total: ~142 tests unitarios
 **Archivo:** `apps/core/tests/test_navigation_builders.py`
 
 **Tests MenuValidator:**
-- ✅ Validación de IDs numéricos válidos/inválidos
-- ✅ Validación de IDs nivel 1 (1-99)
-- ✅ Validación de IDs nivel 2 (100-899)
-- ✅ Validación de estructura de menú
-- ✅ Validación de campos requeridos
-- ✅ Validación de iconos físicos
-- ✅ Detección de IDs fuera de rango
+-  Validación de IDs numéricos válidos/inválidos
+-  Validación de IDs nivel 1 (1-99)
+-  Validación de IDs nivel 2 (100-899)
+-  Validación de estructura de menú
+-  Validación de campos requeridos
+-  Validación de iconos físicos
+-  Detección de IDs fuera de rango
 
 **Tests MenuBuilder:**
-- ✅ Construcción de menú filtrado por permisos RBAC
-- ✅ Menú sin permisos (vacío)
-- ✅ Menú con todos los permisos
-- ✅ Filtrado por required_functions
-- ✅ Personalización de {{user.avatar_url}}
-- ✅ Personalización de {{user.username}}
-- ✅ Carga de múltiples metadata
-- ✅ Ordenamiento de menús
+-  Construcción de menú filtrado por permisos RBAC
+-  Menú sin permisos (vacío)
+-  Menú con todos los permisos
+-  Filtrado por required_functions
+-  Personalización de {{user.avatar_url}}
+-  Personalización de {{user.username}}
+-  Carga de múltiples metadata
+-  Ordenamiento de menús
 
 **Tests MenuSerializer:**
-- ✅ Serialización nivel 1
-- ✅ Serialización con endpoint
-- ✅ Serialización con submenús
-- ✅ Eliminación de campos internos
+-  Serialización nivel 1
+-  Serialización con endpoint
+-  Serialización con submenús
+-  Eliminación de campos internos
 
 **Tests de Integración:**
-- ✅ Construcción con múltiples apps
-- ✅ Ordenamiento correcto
+-  Construcción con múltiples apps
+-  Ordenamiento correcto
 
 ---
 
@@ -69,19 +69,19 @@ Total: ~142 tests unitarios
 **Archivo:** `apps/core/tests/test_navigation_views.py`
 
 **Tests user_menu_view:**
-- ✅ Requiere autenticación
-- ✅ Retorna menú del usuario
-- ✅ Retorna menú vacío (sin permisos)
-- ✅ Manejo de errores en MenuBuilder
-- ✅ Serialización correcta
-- ✅ URL pattern correcto
-- ✅ Respuesta JSON
-- ✅ Usuario sin nombre completo
-- ✅ Estructura de respuesta (menu + user)
+-  Requiere autenticación
+-  Retorna menú del usuario
+-  Retorna menú vacío (sin permisos)
+-  Manejo de errores en MenuBuilder
+-  Serialización correcta
+-  URL pattern correcto
+-  Respuesta JSON
+-  Usuario sin nombre completo
+-  Estructura de respuesta (menu + user)
 
 **Tests URLs:**
-- ✅ app_name correcto
-- ✅ URLs resuelven correctamente
+-  app_name correcto
+-  URLs resuelven correctamente
 
 ---
 
@@ -90,40 +90,40 @@ Total: ~142 tests unitarios
 **Archivo:** `apps/users/tests/test_user_model.py`
 
 **Tests Campos:**
-- ✅ Crear usuario con avatar
-- ✅ Crear usuario con phone
-- ✅ Crear usuario con position
-- ✅ Crear usuario con employee_id
-- ✅ employee_id único
-- ✅ __str__ con/sin nombre completo
+-  Crear usuario con avatar
+-  Crear usuario con phone
+-  Crear usuario con position
+-  Crear usuario con employee_id
+-  employee_id único
+-  __str__ con/sin nombre completo
 
 **Tests Avatar:**
-- ✅ get_avatar_url() con avatar
-- ✅ get_avatar_url() sin avatar (default)
-- ✅ delete_avatar() exitoso
-- ✅ delete_avatar() sin avatar
-- ✅ user_avatar_path() correcto
-- ✅ Preservación de extensión
+-  get_avatar_url() con avatar
+-  get_avatar_url() sin avatar (default)
+-  delete_avatar() exitoso
+-  delete_avatar() sin avatar
+-  user_avatar_path() correcto
+-  Preservación de extensión
 
 **Tests RBAC:**
-- ✅ get_functions() retorna lista
-- ✅ get_functions() vacío para usuario nuevo
-- ✅ has_function() True/False
-- ✅ has_any_function() True/False
-- ✅ has_all_functions() True/False
-- ✅ has_all_functions() con lista vacía
+-  get_functions() retorna lista
+-  get_functions() vacío para usuario nuevo
+-  has_function() True/False
+-  has_any_function() True/False
+-  has_all_functions() True/False
+-  has_all_functions() con lista vacía
 
 **Tests Meta:**
-- ✅ db_table correcto
-- ✅ verbose_name correcto
-- ✅ Ordenamiento por username
-- ✅ Índices en username, email, employee_id
+-  db_table correcto
+-  verbose_name correcto
+-  Ordenamiento por username
+-  Índices en username, email, employee_id
 
 **Tests get_full_name:**
-- ✅ Con first_name y last_name
-- ✅ Solo first_name
-- ✅ Vacío retorna username
-- ✅ Espacios retorna username
+-  Con first_name y last_name
+-  Solo first_name
+-  Vacío retorna username
+-  Espacios retorna username
 
 ---
 
@@ -132,26 +132,26 @@ Total: ~142 tests unitarios
 **Archivo:** `apps/users/tests/test_avatar_api.py`
 
 **Tests Upload Avatar:**
-- ✅ Requiere autenticación
-- ✅ Upload exitoso
-- ✅ Sin archivo enviado (error)
-- ✅ Extensión inválida (error)
-- ✅ Archivo muy grande (error)
-- ✅ Reemplaza avatar anterior
-- ✅ Upload JPG
-- ✅ Upload PNG
-- ✅ Upload GIF
+-  Requiere autenticación
+-  Upload exitoso
+-  Sin archivo enviado (error)
+-  Extensión inválida (error)
+-  Archivo muy grande (error)
+-  Reemplaza avatar anterior
+-  Upload JPG
+-  Upload PNG
+-  Upload GIF
 
 **Tests Delete Avatar:**
-- ✅ Requiere autenticación
-- ✅ Delete exitoso
-- ✅ Sin avatar para eliminar
-- ✅ Manejo de errores
-- ✅ Retorna URL default
+-  Requiere autenticación
+-  Delete exitoso
+-  Sin avatar para eliminar
+-  Manejo de errores
+-  Retorna URL default
 
 **Tests URLs:**
-- ✅ URLs resuelven correctamente
-- ✅ URLs diferentes
+-  URLs resuelven correctamente
+-  URLs diferentes
 
 ---
 
@@ -160,29 +160,29 @@ Total: ~142 tests unitarios
 **Archivo:** `apps/users/tests/test_profile_api.py`
 
 **Tests Get Profile:**
-- ✅ Requiere autenticación
-- ✅ Retorna perfil completo
-- ✅ Incluye avatar_url
-- ✅ Incluye funciones RBAC
-- ✅ Usuario mínimo (solo username)
-- ✅ Incluye created_at
-- ✅ Manejo de errores
+-  Requiere autenticación
+-  Retorna perfil completo
+-  Incluye avatar_url
+-  Incluye funciones RBAC
+-  Usuario mínimo (solo username)
+-  Incluye created_at
+-  Manejo de errores
 
 **Tests Update Profile:**
-- ✅ Requiere autenticación
-- ✅ Actualizar first_name
-- ✅ Actualizar last_name
-- ✅ Actualizar phone
-- ✅ Actualizar position
-- ✅ Actualizar múltiples campos
-- ✅ Sin campos enviados
-- ✅ Ignora campos no permitidos
-- ✅ Retorna perfil actualizado
-- ✅ Manejo de errores
+-  Requiere autenticación
+-  Actualizar first_name
+-  Actualizar last_name
+-  Actualizar phone
+-  Actualizar position
+-  Actualizar múltiples campos
+-  Sin campos enviados
+-  Ignora campos no permitidos
+-  Retorna perfil actualizado
+-  Manejo de errores
 
 **Tests URLs:**
-- ✅ URLs resuelven correctamente
-- ✅ URLs diferentes
+-  URLs resuelven correctamente
+-  URLs diferentes
 
 ---
 
@@ -349,7 +349,7 @@ open htmlcov/index.html
 
 ---
 
-**Estado:** ✅ TESTS COMPLETOS Y LISTOS PARA EJECUTAR
+**Estado:**  TESTS COMPLETOS Y LISTOS PARA EJECUTAR
 
 **Ubicación:** /tmp/iact-project/callcentersite/apps/*/tests/
 

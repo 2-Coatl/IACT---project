@@ -4,7 +4,7 @@ Sistema Analytics Call Center con Django REST Framework.
 
 ## Compliance CNST v2.2.1
 
-✅ **100% Compliant**
+ **100% Compliant**
 - CNST-001: NO email
 - CNST-002: SESSION_ENGINE='db'
 - CNST-003: Dual database (READ-ONLY ivr_legacy)

@@ -573,12 +573,12 @@ QUERY_TIMEOUT = 30  # 30 segundos
 """
 VERIFICACION COMPLIANCE:
 
-✅ CNST-002: SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-✅ CNST-003: Dual database (default + ivr_legacy READ-ONLY)
-✅ CNST-004: NO Celery, NO Channels
-✅ CNST-005: Throttling configurado, MAX_PAGE_SIZE = 1000
-✅ CNST-007: MAX_EXPORT_CSV = 100k, MAX_EXPORT_XLSX = 50k
-✅ CNST_TECNICAS: NO Sentry, NO Redis, NO Celery, NO Channels
+ CNST-002: SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+ CNST-003: Dual database (default + ivr_legacy READ-ONLY)
+ CNST-004: NO Celery, NO Channels
+ CNST-005: Throttling configurado, MAX_PAGE_SIZE = 1000
+ CNST-007: MAX_EXPORT_CSV = 100k, MAX_EXPORT_XLSX = 50k
+ CNST_TECNICAS: NO Sentry, NO Redis, NO Celery, NO Channels
 
 Compliance: 100%
 """
