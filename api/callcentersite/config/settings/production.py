@@ -65,7 +65,7 @@ DATABASES['ivr_legacy']['OPTIONS']['connect_timeout'] = 10
 # CNST-001: NO email en produccion (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ EMAIL PROHIBIDO POR CNST-001 ⛔
+# EMAIL PROHIBIDO POR CNST-001 
 #
 # NO usar ningun servicio de email
 # NO enviar emails bajo NINGUNA circunstancia
@@ -150,7 +150,7 @@ LOGGING = {
 # CNST_TECNICAS: NO Sentry (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ SENTRY PROHIBIDO POR CNST_TECNICAS ⛔
+# SENTRY PROHIBIDO POR CNST_TECNICAS 
 #
 # NO usar Sentry para monitoreo de errores
 # NO instalar sentry-sdk
@@ -186,7 +186,7 @@ MEDIA_ROOT = config('MEDIA_ROOT', default='/var/www/iact/media')
 # CNST_TECNICAS: NO Redis
 # ==============================================================================
 
-# ⛔ REDIS PROHIBIDO POR CNST_TECNICAS ⛔
+# REDIS PROHIBIDO POR CNST_TECNICAS 
 #
 # NO usar Redis como cache
 # NO usar django-redis
@@ -205,7 +205,7 @@ CACHES = {
 # PROHIBIDO:
 # CACHES = {
 #     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',  # ⛔ PROHIBIDO
+#         'BACKEND': 'django_redis.cache.RedisCache',  # PROHIBIDO
 #         ...
 #     }
 # }
@@ -225,7 +225,7 @@ CACHES = {
 # CNST-004 + CNST_TECNICAS: NO Celery (PROHIBIDO)
 # ==============================================================================
 
-# ⛔ CELERY PROHIBIDO POR CNST-004 y CNST_TECNICAS ⛔
+# CELERY PROHIBIDO POR CNST-004 y CNST_TECNICAS 
 #
 # NO usar Celery para tareas asíncronas
 # NO configurar Celery broker
