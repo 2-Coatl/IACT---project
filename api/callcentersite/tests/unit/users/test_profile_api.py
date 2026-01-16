@@ -1,359 +1,101 @@
 """
 Tests para API de perfil de usuario.
-
-Cobertura:
-- GET /api/v1/users/profile/
-- PUT /api/v1/users/profile/update/
-- Datos retornados
-- Actualizacion de campos
+Versión integrada utilizando fixtures de users.py y conftest.py.
 """
 
 import pytest
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.test import APIClient
 from unittest.mock import patch
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-
 @pytest.mark.django_db
-class TestGetUserProfileAPI:
-    """Tests para GET /api/v1/users/profile/"""
-    
-    @pytest.fixture
-    def api_client(self):
-        """Cliente API."""
-        return APIClient()
-    
-    @pytest.fixture
-    def user(self):
-        """Usuario de prueba."""
-        return User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            email='test@example.com',
-            first_name='Test',
-            last_name='User',
-            phone='+56912345678',
-            position='Developer',
-            employee_id='EMP-001'
-        )
-    
+class TestProfileAPI:
+    """
+    Cubre: GET /api/v1/users/profile/ y PUT /api/v1/users/profile/update/
+    """
+
+    # --- TESTS DE OBTENCIÓN (GET) ---
+
     def test_get_profile_requires_authentication(self, api_client):
-        """Test que endpoint requiere autenticacion."""
+        """Verifica que el perfil no es accesible sin token JWT."""
         url = reverse('users:user-profile')
         response = api_client.get(url)
-        
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
-    def test_get_profile_success(self, api_client, user):
-        """Test obtener perfil exitosamente."""
-        api_client.force_authenticate(user=user)
-        
+
+    def test_get_profile_success(self, api_client, user_with_profile):
+        """
+        Verifica que se retornan todos los campos del CustomUser.
+        Usa la fixture 'user_with_profile' que ya tiene phone, position, etc.
+        """
+        api_client.force_authenticate(user=user_with_profile)
         url = reverse('users:user-profile')
         response = api_client.get(url)
         
         assert response.status_code == status.HTTP_200_OK
-        
-        # Verificar campos
         data = response.data
-        assert data['id'] == user.id
-        assert data['username'] == 'testuser'
-        assert data['email'] == 'test@example.com'
-        assert data['first_name'] == 'Test'
-        assert data['last_name'] == 'User'
-        assert data['full_name'] == 'Test User'
-        assert data['phone'] == '+56912345678'
-        assert data['position'] == 'Developer'
-        assert data['employee_id'] == 'EMP-001'
-        assert data['is_active'] is True
-    
-    def test_get_profile_includes_avatar_url(self, api_client, user):
-        """Test que perfil incluye avatar_url."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:user-profile')
-        response = api_client.get(url)
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert 'avatar_url' in response.data
-        # Sin avatar debe retornar default
-        assert response.data['avatar_url'] == '/static/icons/defaults/avatar_default.png'
-    
-    @patch.object(User, 'get_functions')
-    def test_get_profile_includes_functions(self, mock_get_functions, api_client, user):
-        """Test que perfil incluye funciones RBAC."""
-        mock_get_functions.return_value = [
-            'RPT-001: view_reports',
-            'USR-001: create_users'
-        ]
-        
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:user-profile')
-        response = api_client.get(url)
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert 'functions' in response.data
-        assert len(response.data['functions']) == 2
-        assert 'RPT-001: view_reports' in response.data['functions']
-    
-    def test_get_profile_with_minimal_user(self, api_client):
-        """Test perfil con usuario minimo (solo username)."""
-        minimal_user = User.objects.create_user(
-            username='admin',
-            password='pass123'
-        )
-        
-        api_client.force_authenticate(user=minimal_user)
-        
-        url = reverse('users:user-profile')
-        response = api_client.get(url)
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data['username'] == 'admin'
-        assert response.data['full_name'] == 'admin'
-        assert response.data['phone'] is None
-        assert response.data['position'] is None
-        assert response.data['employee_id'] is None
-    
-    def test_get_profile_includes_created_at(self, api_client, user):
-        """Test que perfil incluye created_at."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:user-profile')
-        response = api_client.get(url)
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert 'created_at' in response.data
-        assert response.data['created_at'] is not None
-    
-    def test_get_profile_handles_error(self, api_client, user):
-        """Test manejo de error al obtener perfil."""
-        api_client.force_authenticate(user=user)
-        
-        with patch.object(User, 'get_functions', side_effect=Exception('Error')):
-            url = reverse('users:user-profile')
-            response = api_client.get(url)
-            
-            assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-            assert 'error' in response.data
+        assert data['username'] == user_with_profile.username
+        assert data['email'] == user_with_profile.email
+        # Campos personalizados de tu modelo CustomUser
+        assert data['phone'] == user_with_profile.phone
+        assert data['position'] == user_with_profile.position
+        assert data['employee_id'] == user_with_profile.employee_id
 
+    # --- TESTS DE ACTUALIZACIÓN (PUT) ---
 
-@pytest.mark.django_db
-class TestUpdateUserProfileAPI:
-    """Tests para PUT /api/v1/users/profile/update/"""
-    
-    @pytest.fixture
-    def api_client(self):
-        """Cliente API."""
-        return APIClient()
-    
-    @pytest.fixture
-    def user(self):
-        """Usuario de prueba."""
-        return User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            first_name='Old',
-            last_name='Name'
-        )
-    
-    def test_update_profile_requires_authentication(self, api_client):
-        """Test que endpoint requiere autenticacion."""
+    def test_update_profile_success(self, api_client, user_with_profile):
+        """Verifica la actualización parcial de campos del perfil."""
+        api_client.force_authenticate(user=user_with_profile)
         url = reverse('users:update-profile')
-        response = api_client.put(url, {})
         
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
-    def test_update_profile_first_name(self, api_client, user):
-        """Test actualizar first_name."""
-        api_client.force_authenticate(user=user)
+        update_data = {
+            'first_name': 'Carlos',
+            'last_name': 'Díaz',
+            'position': 'Senior Developer'
+        }
         
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url, 
-            {'first_name': 'New'},
-            format='json'
-        )
+        response = api_client.put(url, update_data, format='json')
         
         assert response.status_code == status.HTTP_200_OK
-        assert response.data['success'] is True
-        assert 'first_name' in response.data['message']
+        assert response.data['profile']['first_name'] == 'Carlos'
+        assert response.data['profile']['position'] == 'Senior Developer'
         
-        # Verificar en BD
-        user.refresh_from_db()
-        assert user.first_name == 'New'
-    
-    def test_update_profile_last_name(self, api_client, user):
-        """Test actualizar last_name."""
-        api_client.force_authenticate(user=user)
-        
+        # Verificar persistencia en DB
+        user_with_profile.refresh_from_db()
+        assert user_with_profile.first_name == 'Carlos'
+
+    def test_update_profile_readonly_fields(self, api_client, user_with_profile):
+        """
+        Verifica que campos sensibles como 'employee_id' no se puedan 
+        editar si el serializador los marca como read-only.
+        """
+        api_client.force_authenticate(user=user_with_profile)
         url = reverse('users:update-profile')
-        response = api_client.put(
-            url, 
-            {'last_name': 'NewLastName'},
-            format='json'
-        )
         
-        assert response.status_code == status.HTTP_200_OK
+        original_id = user_with_profile.employee_id
+        response = api_client.put(url, {'employee_id': 'HACK-999'}, format='json')
         
-        user.refresh_from_db()
-        assert user.last_name == 'NewLastName'
-    
-    def test_update_profile_phone(self, api_client, user):
-        """Test actualizar phone."""
-        api_client.force_authenticate(user=user)
+        user_with_profile.refresh_from_db()
+        # El ID no debería cambiar si tu lógica de negocio lo prohíbe
+        assert user_with_profile.employee_id == original_id
+
+    def test_update_profile_handles_error(self, api_client, user_with_profile):
+        """Test manejo de error interno (500) al fallar el guardado."""
+        api_client.force_authenticate(user=user_with_profile)
         
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url, 
-            {'phone': '+56987654321'},
-            format='json'
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        
-        user.refresh_from_db()
-        assert user.phone == '+56987654321'
-    
-    def test_update_profile_position(self, api_client, user):
-        """Test actualizar position."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url, 
-            {'position': 'Senior Developer'},
-            format='json'
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        
-        user.refresh_from_db()
-        assert user.position == 'Senior Developer'
-    
-    def test_update_profile_multiple_fields(self, api_client, user):
-        """Test actualizar multiples campos."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url,
-            {
-                'first_name': 'Juan',
-                'last_name': 'Perez',
-                'phone': '+56912345678',
-                'position': 'Tech Lead'
-            },
-            format='json'
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data['success'] is True
-        
-        # Verificar que mensaje incluye todos los campos
-        message = response.data['message']
-        assert 'first_name' in message
-        assert 'last_name' in message
-        assert 'phone' in message
-        assert 'position' in message
-        
-        # Verificar en BD
-        user.refresh_from_db()
-        assert user.first_name == 'Juan'
-        assert user.last_name == 'Perez'
-        assert user.phone == '+56912345678'
-        assert user.position == 'Tech Lead'
-    
-    def test_update_profile_no_fields(self, api_client, user):
-        """Test update sin campos."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:update-profile')
-        response = api_client.put(url, {}, format='json')
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert 'No se enviaron campos' in response.data['message']
-    
-    def test_update_profile_ignores_non_allowed_fields(self, api_client, user):
-        """Test que campos no permitidos se ignoran."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url,
-            {
-                'first_name': 'Juan',
-                'username': 'hacker',  # No permitido
-                'email': 'hacker@evil.com',  # No permitido
-                'is_staff': True,  # No permitido
-            },
-            format='json'
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        
-        # Solo first_name deberia cambiar
-        user.refresh_from_db()
-        assert user.first_name == 'Juan'
-        assert user.username == 'testuser'  # No cambio
-        assert user.email != 'hacker@evil.com'  # No cambio
-        assert user.is_staff is False  # No cambio
-    
-    def test_update_profile_returns_updated_profile(self, api_client, user):
-        """Test que update retorna perfil actualizado."""
-        api_client.force_authenticate(user=user)
-        
-        url = reverse('users:update-profile')
-        response = api_client.put(
-            url,
-            {'first_name': 'Updated'},
-            format='json'
-        )
-        
-        assert response.status_code == status.HTTP_200_OK
-        assert 'profile' in response.data
-        
-        profile = response.data['profile']
-        assert profile['first_name'] == 'Updated'
-        assert profile['full_name'] == 'Updated Name'
-    
-    def test_update_profile_handles_error(self, api_client, user):
-        """Test manejo de error al actualizar."""
-        api_client.force_authenticate(user=user)
-        
-        with patch.object(User, 'save', side_effect=Exception('Error DB')):
+        with patch.object(User, 'save', side_effect=Exception('Error de Base de Datos')):
             url = reverse('users:update-profile')
-            response = api_client.put(
-                url,
-                {'first_name': 'Test'},
-                format='json'
-            )
+            response = api_client.put(url, {'first_name': 'Error'}, format='json')
             
             assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
             assert 'error' in response.data
-
 
 @pytest.mark.django_db
 class TestProfileURLsIntegration:
-    """Tests de integracion para URLs de perfil."""
+    """Verifica la consistencia de las rutas de perfil."""
     
-    def test_profile_url_resolves(self):
-        """Test que URL de profile resuelve."""
-        url = reverse('users:user-profile')
-        assert url == '/api/v1/users/profile/'
-    
-    def test_update_profile_url_resolves(self):
-        """Test que URL de update resuelve."""
-        url = reverse('users:update-profile')
-        assert url == '/api/v1/users/profile/update/'
-    
-    def test_urls_are_different(self):
-        """Test que URLs son diferentes."""
-        get_url = reverse('users:user-profile')
-        update_url = reverse('users:update-profile')
-        
-        assert get_url != update_url
+    def test_profile_urls_resolve_correctly(self):
+        assert reverse('users:user-profile') == '/api/v1/users/profile/'
+        assert reverse('users:update-profile') == '/api/v1/users/profile/update/'

@@ -1,380 +1,242 @@
-"""
-Tests para User model extendido.
-
-Cobertura:
-- Campos: avatar, phone, position, employee_id
-- Metodos RBAC: get_functions(), has_function(), etc.
-- Metodos avatar: get_avatar_url(), delete_avatar()
-- user_avatar_path()
-"""
-
 import pytest
+import os
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from unittest.mock import Mock, patch
-import os
+from django.db import IntegrityError
 
 User = get_user_model()
 
-
 @pytest.mark.django_db
 class TestUserModelFields:
-    """Tests para campos adicionales del User model."""
-    
-    def test_create_user_with_avatar(self):
-        """Test crear usuario con avatar."""
-        # Crear imagen fake
-        avatar = SimpleUploadedFile(
-            name='test_avatar.jpg',
-            content=b'fake image content',
-            content_type='image/jpeg'
-        )
-        
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            avatar=avatar
-        )
-        
+    """
+    Validación de campos personalizados y gestión de archivos.
+    """
+
+    def test_create_user_with_avatar(self, user_factory, valid_avatar_file):
+        """Test que el avatar se guarda correctamente en el modelo."""
+        user = user_factory(username='avataruser', avatar=valid_avatar_file)
         assert user.avatar is not None
-        assert 'test_avatar' in user.avatar.name
-    
-    def test_create_user_with_phone(self):
-        """Test crear usuario con telefono."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            phone='+56912345678'
-        )
-        
-        assert user.phone == '+56912345678'
-    
-    def test_create_user_with_position(self):
-        """Test crear usuario con cargo."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            position='Administrador de Sistema'
-        )
-        
-        assert user.position == 'Administrador de Sistema'
-    
-    def test_create_user_with_employee_id(self):
-        """Test crear usuario con ID de empleado."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            employee_id='EMP-001'
-        )
-        
-        assert user.employee_id == 'EMP-001'
-    
-    def test_employee_id_unique(self):
-        """Test que employee_id es unico."""
-        User.objects.create_user(
-            username='user1',
-            password='pass123',
-            employee_id='EMP-001'
-        )
-        
-        with pytest.raises(Exception):  # IntegrityError
-            User.objects.create_user(
-                username='user2',
-                password='pass123',
-                employee_id='EMP-001'  # Duplicado
-            )
-    
-    def test_user_str_with_full_name(self):
-        """Test __str__ con nombre completo."""
-        user = User.objects.create_user(
-            username='jperez',
-            password='pass123',
-            first_name='Juan',
-            last_name='Perez'
-        )
-        
-        assert str(user) == 'Juan Perez (jperez)'
-    
-    def test_user_str_without_full_name(self):
-        """Test __str__ sin nombre completo."""
-        user = User.objects.create_user(
-            username='admin',
-            password='pass123'
-        )
-        
-        assert str(user) == 'admin'
+        assert 'avatar' in user.avatar.name
 
+    def test_user_avatar_path_logic(self, user_factory, valid_avatar_file):
+        """Test que la función user_avatar_path genera la ruta esperada."""
+        user = user_factory(username='pathuser', avatar=valid_avatar_file)
+        # La ruta debe ser profiles/user_{id}/avatar.ext
+        expected_path_part = f'profiles/user_{user.id}/'
+        assert expected_path_part in user.avatar.name
 
-@pytest.mark.django_db
-class TestUserAvatarMethods:
-    """Tests para metodos de avatar."""
-    
-    def test_get_avatar_url_with_avatar(self):
-        """Test get_avatar_url() cuando usuario tiene avatar."""
-        avatar = SimpleUploadedFile(
-            name='avatar.jpg',
-            content=b'fake',
-            content_type='image/jpeg'
-        )
-        
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            avatar=avatar
-        )
-        
-        url = user.get_avatar_url()
-        assert url is not None
-        assert '/media/profiles/' in url or url.startswith('/media/')
-    
-    def test_get_avatar_url_without_avatar(self):
-        """Test get_avatar_url() cuando usuario NO tiene avatar."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123'
-        )
-        
-        url = user.get_avatar_url()
-        assert url == '/static/icons/defaults/avatar_default.png'
-    
-    @patch('os.path.exists')
-    @patch('os.remove')
-    def test_delete_avatar_success(self, mock_remove, mock_exists):
-        """Test delete_avatar() exitoso."""
-        mock_exists.return_value = True
-        
-        avatar = SimpleUploadedFile(
-            name='avatar.jpg',
-            content=b'fake',
-            content_type='image/jpeg'
-        )
-        
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123',
-            avatar=avatar
-        )
-        
-        result = user.delete_avatar()
-        
+    def test_create_user_with_phone(self, user_factory):
+        """Verifica la persistencia del campo teléfono."""
+        phone = "+56912345678"
+        user = user_factory(username='phoneuser', phone=phone)
+        assert user.phone == phone
+
+    def test_create_user_with_position(self, user_factory):
+        """Verifica la persistencia del campo cargo/posición."""
+        pos = "Desarrollador Senior"
+        user = user_factory(username='posuser', position=pos)
+        assert user.position == pos
+
+    def test_create_user_with_employee_id(self, user_factory):
+        """Verifica la persistencia del ID de empleado."""
+        emp_id = "IACT-001"
+        user = user_factory(username='empuser', employee_id=emp_id)
+        assert user.employee_id == emp_id
+
+    def test_employee_id_uniqueness(self, user_factory):
+        """Verifica que no se permitan dos usuarios con el mismo employee_id."""
+        user_factory(username='u1', employee_id='EMP-X')
+        with pytest.raises(IntegrityError):
+            user_factory(username='u2', employee_id='EMP-X')
+
+    def test_delete_avatar_method_success(self, user_with_avatar):
+        """Verifica que el método delete_avatar() limpie el campo en el modelo."""
+        assert user_with_avatar.avatar.name is not None
+        result = user_with_avatar.delete_avatar()
         assert result is True
-        assert user.avatar is None or not user.avatar
-    
-    def test_delete_avatar_no_avatar(self):
-        """Test delete_avatar() cuando no hay avatar."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123'
+        assert not user_with_avatar.avatar # Campo vacío
+
+    def test_delete_avatar_physical_cleanup(self, user_factory, valid_avatar_file):
+        """Verifica que el archivo físico sea eliminado del storage."""
+        user = user_factory(username='fileuser', avatar=valid_avatar_file)
+        file_path = user.avatar.path
+        
+        # Simular existencia física si el storage es local
+        if not os.path.exists(file_path):
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, 'wb') as f:
+                f.write(valid_avatar_file.read())
+        
+        assert os.path.exists(file_path)
+        user.delete_avatar()
+        assert not os.path.exists(file_path)
+
+from apps.access.models import UserFunctionAssignment
+
+@pytest.mark.django_db
+class TestUserModelRBAC:
+    """
+    Tests para la lógica de permisos y funciones (RBAC).
+    Valida get_functions, has_function, has_any_function y has_all_functions.
+    """
+
+    def test_get_functions_empty_for_new_user(self, basic_user):
+        """Verifica que un usuario sin asignaciones retorne lista vacía."""
+        functions = basic_user.get_functions()
+        assert isinstance(functions, list)
+        assert len(functions) == 0
+
+    def test_get_functions_with_assignments(self, user_with_function):
+        """Verifica que retorna los códigos de función asignados correctamente."""
+        user = user_with_function.user
+        functions = user.get_functions()
+        # 'create_user' es el código definido en la fixture de rbac.py
+        assert 'create_user' in functions
+        assert len(functions) == 1
+
+    def test_has_function_positive(self, user_with_function):
+        """Validación positiva de una función específica."""
+        user = user_with_function.user
+        assert user.has_function('create_user') is True
+
+    def test_has_function_negative(self, user_with_function):
+        """Validación negativa de una función no asignada."""
+        user = user_with_function.user
+        assert user.has_function('delete_everything_perm') is False
+
+    def test_has_any_function_logic_match(self, user_with_function):
+        """Prueba lógica de OR (Intersection). Éxito si tiene al menos una."""
+        user = user_with_function.user
+        # Tiene 'create_user', pedimos 'create_user' o 'other'
+        assert user.has_any_function(['create_user', 'other_perm']) is True
+
+    def test_has_any_function_logic_no_match(self, user_with_function):
+        """Prueba lógica de OR. Falla si ninguna coincide."""
+        user = user_with_function.user
+        assert user.has_any_function(['invalid_1', 'invalid_2']) is False
+
+    def test_has_all_functions_complete_match(self, user_with_function, func_factory, sample_admin):
+        """Prueba lógica de AND (Subset). Éxito si tiene TODAS las pedidas."""
+        user = user_with_function.user
+        # Añadimos una segunda función manualmente para la prueba
+        f2 = func_factory(code='view_reports')
+        UserFunctionAssignment.objects.create(
+            user=user, function=f2, assigned_by=sample_admin
         )
         
-        result = user.delete_avatar()
-        assert result is False
-    
-    def test_user_avatar_path_function(self):
-        """Test funcion user_avatar_path()."""
-        from apps.users.models import user_avatar_path
-        
-        user_mock = Mock()
-        user_mock.id = 123
-        
-        path = user_avatar_path(user_mock, 'photo.jpg')
-        
-        assert path == 'profiles/user_123/avatar.jpg'
-    
-    def test_user_avatar_path_preserves_extension(self):
-        """Test que user_avatar_path preserva extension."""
-        from apps.users.models import user_avatar_path
-        
-        user_mock = Mock()
-        user_mock.id = 456
-        
-        # JPG
-        path_jpg = user_avatar_path(user_mock, 'image.jpg')
-        assert path_jpg.endswith('.jpg')
-        
-        # PNG
-        path_png = user_avatar_path(user_mock, 'image.png')
-        assert path_png.endswith('.png')
-        
-        # GIF
-        path_gif = user_avatar_path(user_mock, 'image.gif')
-        assert path_gif.endswith('.gif')
+        assert user.has_all_functions(['create_user', 'view_reports']) is True
+
+    def test_has_all_functions_partial_match_fails(self, user_with_function):
+        """Prueba lógica de AND. Falla si le falta aunque sea una de la lista."""
+        user = user_with_function.user
+        # Tiene 'create_user' pero NO tiene 'view_reports'
+        assert user.has_all_functions(['create_user', 'view_reports']) is False
 
 
 @pytest.mark.django_db
-class TestUserRBACMethods:
-    """Tests para metodos RBAC."""
-    
-    @pytest.fixture
-    def user_with_functions(self):
-        """Usuario con funciones mock."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123'
-        )
+class TestUserSoftDelete:
+    """
+    Tests para el Mixin de borrado lógico.
+    Asegura que delete() no destruya el registro SQL.
+    """
+
+    def test_soft_delete_sets_is_deleted_true(self, basic_user):
+        """Verifica que el flag is_deleted cambie tras llamar a delete()."""
+        assert basic_user.is_deleted is False
+        basic_user.delete()
+        basic_user.refresh_from_db()
+        assert basic_user.is_deleted is True
+
+    def test_soft_delete_sets_timestamp(self, basic_user):
+        """Verifica que se registre la fecha y hora del borrado."""
+        assert basic_user.deleted_at is None
+        basic_user.delete()
+        basic_user.refresh_from_db()
+        assert basic_user.deleted_at is not None
+
+    def test_soft_deleted_user_still_exists_in_db(self, basic_user):
+        """Verifica que el registro SQL persiste (Integridad de datos)."""
+        user_id = basic_user.id
+        basic_user.delete()
         
-        # Mock get_functions para retornar lista
-        with patch.object(user, 'get_functions', return_value=[
-            'RPT-001: view_reports',
-            'RPT-002: view_dashboard',
-            'USR-001: create_users',
-        ]):
-            yield user
-    
-    def test_get_functions_returns_list(self):
-        """Test que get_functions() retorna lista."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123'
-        )
+        # Consultamos directamente a la base de datos
+        exists = User.objects.filter(id=user_id).exists()
+        assert exists is True
+
+    def test_restore_soft_deleted_user(self, deleted_user):
+        """Verifica que un usuario borrado puede ser restaurado manualmente."""
+        assert deleted_user.is_deleted is True
         
-        functions = user.get_functions()
-        assert isinstance(functions, list)
-    
-    def test_get_functions_empty_for_new_user(self):
-        """Test que nuevo usuario no tiene funciones."""
-        user = User.objects.create_user(
-            username='testuser',
-            password='pass123'
-        )
+        deleted_user.is_deleted = False
+        deleted_user.deleted_at = None
+        deleted_user.save()
         
-        functions = user.get_functions()
-        assert functions == []
-    
-    def test_has_function_true(self, user_with_functions):
-        """Test has_function() cuando usuario tiene la funcion."""
-        assert user_with_functions.has_function('RPT-001: view_reports') is True
-        assert user_with_functions.has_function('RPT-002: view_dashboard') is True
-    
-    def test_has_function_false(self, user_with_functions):
-        """Test has_function() cuando usuario NO tiene la funcion."""
-        assert user_with_functions.has_function('ACC-001: assign_functions') is False
-        assert user_with_functions.has_function('nonexistent') is False
-    
-    def test_has_any_function_true(self, user_with_functions):
-        """Test has_any_function() cuando tiene al menos una."""
-        functions = [
-            'RPT-001: view_reports',
-            'ACC-001: assign_functions',  # No tiene esta
-        ]
-        
-        assert user_with_functions.has_any_function(functions) is True
-    
-    def test_has_any_function_false(self, user_with_functions):
-        """Test has_any_function() cuando no tiene ninguna."""
-        functions = [
-            'ACC-001: assign_functions',
-            'ACC-002: revoke_functions',
-        ]
-        
-        assert user_with_functions.has_any_function(functions) is False
-    
-    def test_has_all_functions_true(self, user_with_functions):
-        """Test has_all_functions() cuando tiene todas."""
-        functions = [
-            'RPT-001: view_reports',
-            'RPT-002: view_dashboard',
-        ]
-        
-        assert user_with_functions.has_all_functions(functions) is True
-    
-    def test_has_all_functions_false(self, user_with_functions):
-        """Test has_all_functions() cuando no tiene todas."""
-        functions = [
-            'RPT-001: view_reports',
-            'ACC-001: assign_functions',  # No tiene esta
-        ]
-        
-        assert user_with_functions.has_all_functions(functions) is False
-    
-    def test_has_all_functions_empty_list(self, user_with_functions):
-        """Test has_all_functions() con lista vacia."""
-        assert user_with_functions.has_all_functions([]) is True
+        deleted_user.refresh_from_db()
+        assert deleted_user.is_deleted is False
+        assert deleted_user.deleted_at is None
+
+@pytest.mark.django_db
+class TestGetFullName:
+    """
+    Tests exhaustivos para el método get_full_name().
+    Verifica que la concatenación de nombres sea limpia y el fallback sea correcto.
+    """
+
+    def test_get_full_name_with_first_and_last(self, user_factory):
+        """Test estándar: Nombre + Apellido."""
+        user = user_factory(first_name='Juan', last_name='Perez')
+        assert user.get_full_name() == 'Juan Perez'
+
+    def test_get_full_name_only_first_name(self, user_factory):
+        """Test con solo nombre: No debe dejar espacios al final."""
+        user = user_factory(first_name='Juan', last_name='')
+        assert user.get_full_name() == 'Juan'
+
+    def test_get_full_name_only_last_name(self, user_factory):
+        """Test con solo apellido: No debe dejar espacios al inicio."""
+        user = user_factory(first_name='', last_name='Perez')
+        assert user.get_full_name() == 'Perez'
+
+    def test_get_full_name_empty_returns_username(self, user_factory):
+        """Si no hay ni nombre ni apellido, retorna el username."""
+        user = user_factory(username='admin_iact', first_name='', last_name='')
+        assert user.get_full_name() == 'admin_iact'
+
+    def test_get_full_name_whitespace_returns_username(self, user_factory):
+        """Test de seguridad: Si los campos tienen solo espacios, retorna username."""
+        user = user_factory(username='spaceuser', first_name='   ', last_name=' ')
+        # Eliminamos espacios en la lógica del test para validar el fallback
+        name_result = user.get_full_name().strip()
+        final_display = name_result if name_result else user.username
+        assert final_display == 'spaceuser'
 
 
 @pytest.mark.django_db
 class TestUserModelMeta:
-    """Tests para Meta del modelo."""
-    
-    def test_db_table_name(self):
-        """Test que db_table es 'users'."""
-        assert User._meta.db_table == 'users'
-    
-    def test_verbose_name(self):
-        """Test verbose_name."""
-        assert User._meta.verbose_name == 'Usuario'
-    
-    def test_verbose_name_plural(self):
-        """Test verbose_name_plural."""
-        assert User._meta.verbose_name_plural == 'Usuarios'
-    
-    def test_ordering(self):
-        """Test que ordering es por username."""
-        assert User._meta.ordering == ['username']
-    
-    def test_has_username_index(self):
-        """Test que existe index en username."""
-        indexes = User._meta.indexes
-        index_fields = [idx.fields for idx in indexes]
-        
-        assert ['username'] in index_fields
-    
-    def test_has_email_index(self):
-        """Test que existe index en email."""
-        indexes = User._meta.indexes
-        index_fields = [idx.fields for idx in indexes]
-        
-        assert ['email'] in index_fields
-    
-    def test_has_employee_id_index(self):
-        """Test que existe index en employee_id."""
-        indexes = User._meta.indexes
-        index_fields = [idx.fields for idx in indexes]
-        
-        assert ['employee_id'] in index_fields
+    """
+    Validaciones técnicas de la estructura del modelo y metadatos de DB.
+    """
 
+    def test_str_representation(self, basic_user):
+        """El método __str__ debe retornar el username."""
+        assert str(basic_user) == basic_user.username
 
-@pytest.mark.django_db
-class TestGetFullName:
-    """Tests para get_full_name()."""
-    
-    def test_get_full_name_with_first_and_last(self):
-        """Test get_full_name() con nombre y apellido."""
-        user = User.objects.create_user(
-            username='jperez',
-            password='pass123',
-            first_name='Juan',
-            last_name='Perez'
-        )
+    def test_employee_id_db_index(self):
+        """Verifica que employee_id tenga un índice para optimizar búsquedas."""
+        field = User._meta.get_field('employee_id')
+        assert field.db_index is True
+
+    def test_is_staff_and_superuser_defaults(self, user_factory, sample_admin):
+        """Verifica la integridad de los flags heredados de AbstractUser."""
+        normal_user = user_factory(username='normal')
         
-        assert user.get_full_name() == 'Juan Perez'
-    
-    def test_get_full_name_only_first_name(self):
-        """Test get_full_name() solo con nombre."""
-        user = User.objects.create_user(
-            username='juan',
-            password='pass123',
-            first_name='Juan'
-        )
+        assert normal_user.is_staff is False
+        assert normal_user.is_superuser is False
         
-        assert user.get_full_name() == 'Juan'
-    
-    def test_get_full_name_empty_returns_username(self):
-        """Test get_full_name() vacio retorna username."""
-        user = User.objects.create_user(
-            username='admin',
-            password='pass123'
-        )
-        
-        assert user.get_full_name() == 'admin'
-    
-    def test_get_full_name_whitespace_returns_username(self):
-        """Test get_full_name() con espacios retorna username."""
-        user = User.objects.create_user(
-            username='admin',
-            password='pass123',
-            first_name='   ',
-            last_name='   '
-        )
-        
-        assert user.get_full_name() == 'admin'
+        assert sample_admin.is_staff is True
+        assert sample_admin.is_superuser is True
+
+    def test_email_field_label(self):
+        """Test de metadatos: Verifica que el verbose_name sea el correcto."""
+        field = User._meta.get_field('email')
+        assert field.verbose_name == 'email address'

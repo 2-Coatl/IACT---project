@@ -1,39 +1,21 @@
 """
 Fixtures de usuarios para el modelo CustomUser.
-Este archivo centraliza la creación de usuarios para evitar duplicidad de código
-en tests de Modelos, APIs, Serializadores y Vistas.
+Optimizado para: Modelos, APIs de Perfil/Avatar, Serializadores y Vistas.
+Ubicación: tests/fixtures/users.py
 """
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-# Obtenemos el CustomUser definido en AUTH_USER_MODEL
+# Referencia dinámica al CustomUser (users.CustomUser)
 User = get_user_model()
-
-@pytest.fixture
-def user_factory(db):
-    """
-    Factory universal para crear usuarios con cualquier atributo.
-    Cubre: test_user_model.py y test_views.py (múltiples usuarios).
-    """
-    def _make_user(username='testuser', **kwargs):
-        if 'email' not in kwargs:
-            kwargs['email'] = f'{username}@example.com'
-        
-        password = kwargs.pop('password', 'testpass123')
-        
-        # .create_user funcionará con CustomUser y sus campos extra
-        user = User.objects.create_user(username=username, **kwargs)
-        user.set_password(password)
-        user.save()
-        return user
-    return _make_user
 
 @pytest.fixture
 def user_data():
     """
-    Datos planos para pruebas de serializadores.
-    Cubre: test_serializers.py.
+    Diccionario de datos planos.
+    Ideal para: Validar UserCreateSerializer sin guardar en DB.
+    Es util para los test de serializers
     """
     return {
         'username': 'newuser',
@@ -41,48 +23,70 @@ def user_data():
         'password': 'testpass123',
         'first_name': 'Test',
         'last_name': 'User',
+        'phone': '+56912345678',
+        'position': 'Developer',
+        'employee_id': 'IACT-001'
     }
 
 @pytest.fixture
+def user_factory(db):
+    """
+    Factory para crear instancias reales de CustomUser en la DB.
+    Permite evitar colisiones de username en tests que requieren múltiples usuarios.
+    """
+    def _make_user(username='testuser', **kwargs):
+        if 'email' not in kwargs:
+            kwargs['email'] = f'{username}@example.com'
+        
+        password = kwargs.pop('password', 'testpass123')
+        
+        # Al ser CustomUser, acepta los campos extra definidos en tu models.py
+        user = User.objects.create_user(username=username, **kwargs)
+        user.set_password(password)
+        user.save()
+        return user
+    return _make_user
+
+@pytest.fixture
 def basic_user(user_factory):
-    """Usuario estándar sin atributos adicionales."""
+    """Usuario estándar (instancia de base de datos)."""
     return user_factory(username='basicuser')
 
 @pytest.fixture
-def sample_admin(user_factory):
+def admin_user(db):
     """
-    Superusuario para pruebas de administración.
-    Reemplaza la creación manual en todos los archivos.
+    Superusuario administrador.
+    Nota: Mantiene la compatibilidad con tu lógica original.
     """
     return User.objects.create_superuser(
         username='admin',
         email='admin@example.com',
-        password='adminpass123'
+        password='admin123'
     )
 
 @pytest.fixture
 def user_with_profile(user_factory):
     """
-    Usuario con el perfil completo según el modelo CustomUser.
-    Cubre: test_profile_api.py.
+    Usuario con perfil completo.
+    Ideal para: tests de GET/PUT en la API de perfil.
     """
     return user_factory(
-        username='profileuser',
+        username='juan_perez',
         first_name='Juan',
         last_name='Perez',
         phone='+56912345678',
-        position='Developer',
-        employee_id='EMP-001'
+        position='Operador',
+        employee_id='EMP-100'
     )
 
 @pytest.fixture
 def valid_avatar_file():
     """
-    Archivo de imagen mínimo válido en memoria.
-    Cubre: test_avatar_api.py y test_user_model.py.
+    Archivo de imagen real mínimo en memoria.
+    Evita repetir la creación de SimpleUploadedFile en test_avatar_api.py.
     """
     return SimpleUploadedFile(
-        name='test_avatar.jpg',
+        name='avatar.jpg',
         content=(
             b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x05\x04\x04'
             b'\x00\x00\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44'
@@ -93,16 +97,15 @@ def valid_avatar_file():
 
 @pytest.fixture
 def user_with_avatar(user_factory, valid_avatar_file):
-    """
-    Usuario que ya tiene un avatar asignado.
-    Cubre: test_avatar_api.py.
-    """
+    """Usuario que ya tiene un avatar asignado y guardado en disco."""
     return user_factory(username='avataruser', avatar=valid_avatar_file)
 
 @pytest.fixture
-def other_user(user_factory):
+def deleted_user(user_factory):
     """
-    Segundo usuario para pruebas de permisos o listados.
-    Cubre: test_views.py.
+    Usuario con Soft Delete aplicado.
+    Ideal para: Probar que el Mixin de borrado lógico funciona.
     """
-    return user_factory(username='otheruser')
+    user = user_factory(username='deleteduser')
+    user.delete() # Llama al soft delete de SoftDeleteMixin
+    return user
