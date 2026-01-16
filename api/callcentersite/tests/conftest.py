@@ -1,95 +1,53 @@
 """
 Configuración pytest compartida.
-
-Fixtures disponibles para todos los tests.
+Fixtures globales disponibles para todos los módulos del proyecto.
 """
 import pytest
 from rest_framework.test import APIClient
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import RefreshToken
 
+# Importar fixtures adicionales de otros archivos para mantener este limpio
+# Asegúrate de que las rutas 'tests.fixtures.users' y 'tests.fixtures.rbac' existan
+pytest_plugins = [
+    'tests.fixtures.users',
+    'tests.fixtures.rbac',
+]
 
-# NOTA: django_db_setup removido - testing.py ya configura SQLite correctamente
-# El fixture causaba conflictos con pytest-django impidiendo la creación de tablas
-
+# --- Fixtures de Cliente API ---
 
 @pytest.fixture
 def api_client():
-    """
-    REST API client.
-    
-    Usage:
-        def test_endpoint(api_client):
-            response = api_client.get('/api/v1/calls/')
-            assert response.status_code == 200
-    """
+    """Cliente REST API básico sin autenticación."""
     return APIClient()
 
-
 @pytest.fixture
-def authenticated_client(db):
+def authenticated_client(db, sample_user):
     """
-    API client autenticado.
-    
-    Crea usuario y autentica automáticamente.
-    
-    Usage:
-        def test_protected(authenticated_client):
-            response = authenticated_client.get('/api/v1/calls/')
-            assert response.status_code == 200
+    API client autenticado con un usuario regular.
+    Reutiliza la fixture 'sample_user' para consistencia.
     """
-    from django.contrib.auth import get_user_model
-    from rest_framework_simplejwt.tokens import RefreshToken
-    
-    User = get_user_model()
-    user = User.objects.create_user(
-        email='test@example.com',
-        username='testuser',
-        password='testpass123'
-    )
-    
     client = APIClient()
-    refresh = RefreshToken.for_user(user)
+    refresh = RefreshToken.for_user(sample_user)
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
     return client
 
-
 @pytest.fixture
-def admin_client(db):
+def admin_client(db, sample_admin):
     """
     API client autenticado como superusuario.
-    
-    Usage:
-        def test_admin_endpoint(admin_client):
-            response = admin_client.get('/api/v1/admin/users/')
-            assert response.status_code == 200
+    Reutiliza la fixture 'sample_admin'.
     """
-    from django.contrib.auth import get_user_model
-    from rest_framework_simplejwt.tokens import RefreshToken
-    
-    User = get_user_model()
-    admin = User.objects.create_superuser(
-        email='admin@example.com',
-        username='admin',
-        password='adminpass123'
-    )
-    
     client = APIClient()
-    refresh = RefreshToken.for_user(admin)
+    refresh = RefreshToken.for_user(sample_admin)
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
     return client
 
+# --- Fixtures de Usuarios (Entidades Core) ---
 
 @pytest.fixture
 def sample_user(db):
-    """
-    Usuario de ejemplo para tests.
-    
-    Usage:
-        def test_user_model(sample_user):
-            assert sample_user.username == 'testuser'
-    """
-    from django.contrib.auth import get_user_model
+    """Usuario estándar para pruebas de permisos."""
     User = get_user_model()
     return User.objects.create_user(
         email='test@example.com',
@@ -97,17 +55,9 @@ def sample_user(db):
         password='testpass123'
     )
 
-
 @pytest.fixture
 def sample_admin(db):
-    """
-    Superusuario de ejemplo para tests.
-    
-    Usage:
-        def test_admin_permission(sample_admin):
-            assert sample_admin.is_superuser
-    """
-    from django.contrib.auth import get_user_model
+    """Superusuario para pruebas de administración."""
     User = get_user_model()
     return User.objects.create_superuser(
         email='admin@example.com',
@@ -115,43 +65,20 @@ def sample_admin(db):
         password='adminpass123'
     )
 
-
-@pytest.fixture
-def sample_date():
-    """
-    Fecha de ejemplo para tests.
-    
-    Siempre la misma para reproducibilidad.
-    """
-    from datetime import date
-    return date(2024, 1, 15)
-
+# --- Fixtures de Negocio (Core Models) ---
 
 @pytest.fixture
 def sample_center(db):
-    """
-    Centro de ejemplo para tests.
-    
-    Usage:
-        def test_center(sample_center):
-            assert sample_center.nombre == 'Centro Test'
-    """
+    """Centro de ejemplo."""
     from apps.core.models import Center
-    return Center.objects.create(
-        nombre='Centro Test',
-        codigo='CT01'
-    )
-
+    return Center.objects.get_or_create(
+        codigo='CT01',
+        defaults={'nombre': 'Centro Test'}
+    )[0]
 
 @pytest.fixture
 def sample_service(db, sample_center):
-    """
-    Servicio 800 de ejemplo para tests.
-    
-    Usage:
-        def test_service(sample_service):
-            assert sample_service.numero_800 == '800-123-4567'
-    """
+    """Servicio asociado a un centro."""
     from apps.core.models import Service
     return Service.objects.create(
         numero_800='800-123-4567',
@@ -160,9 +87,10 @@ def sample_service(db, sample_center):
         activo=True
     )
 
+# --- Helpers ---
 
-# Importar fixtures adicionales
-pytest_plugins = [
-    'tests.fixtures.users',
-    'tests.fixtures.rbac',
-]
+@pytest.fixture
+def sample_date():
+    """Fecha estática para evitar errores por cambios de zona horaria en tests."""
+    from datetime import date
+    return date(2024, 1, 15)

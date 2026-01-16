@@ -67,15 +67,15 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     
-    # Local apps (se agregan en Sprints)
+    # Local apps
     'apps.core',
     'apps.ivr_legacy',
-    'apps.authentication',  # Sprint 2
-    'apps.access',  # Sprint 2
-    'apps.audit',  # Sprint 2
-    'apps.users',  # Sprint 3
-    'apps.pipeline',  # Sprint 3
-    'apps.reports',  # Sprint 4 🆕
+    'apps.authentication',
+    'apps.access',
+    'apps.audit',
+    'apps.users',
+    'apps.pipeline',
+    'apps.reports',
 ]
 
 
