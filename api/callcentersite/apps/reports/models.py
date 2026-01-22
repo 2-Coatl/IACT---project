@@ -4,12 +4,17 @@ Modelos app reports.
 CNST-007: Límite 100,000 registros por exportación.
 """
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from apps.utils import SoftDeleteMixin
+
+User = get_user_model()
 
 
-class Report(models.Model):
+class Report(SoftDeleteMixin, models.Model):
     """
     Reporte generado en el sistema.
+    
+    Usa SoftDeleteMixin para delete lógico.
     
     Attributes:
         name: Nombre descriptivo del reporte
@@ -88,11 +93,13 @@ class Report(models.Model):
         return f"{self.name} ({self.get_report_type_display()})"
 
 
-class ExportJob(models.Model):
+class ExportJob(SoftDeleteMixin, models.Model):
     """
     Job de exportación de reporte.
     
     CNST-007: Límite 100,000 registros por exportación.
+    
+    Usa SoftDeleteMixin para delete lógico.
     
     Attributes:
         report: Reporte a exportar

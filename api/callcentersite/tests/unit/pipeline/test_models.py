@@ -45,10 +45,10 @@ class TestETLExecution:
             start_date=date(2026, 1, 3),
             end_date=date(2026, 1, 4),
         )
-        # Forzamos desempate por ID en el query del test
-        executions = list(ETLExecution.objects.all().order_by('-started_at', '-id'))
-
-        # Ahora sí, el más reciente (exec2) debe ser el primero
+        
+        executions = list(ETLExecution.objects.all())
+        
+        # Mas reciente primero
         assert executions[0].id == exec2.id
         assert executions[1].id == exec1.id
     

@@ -1,5 +1,6 @@
 from django.utils.deprecation import MiddlewareMixin
 from apps.audit.models import AuditLog
+from apps.utils import get_client_ip, get_user_agent, should_exclude_path
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -7,14 +8,17 @@ class SessionSecurityMiddleware(MiddlewareMixin):
     Middleware de seguridad de sesion.
     
     - Registra todas las peticiones API en auditoria
-    - Captura IP y User-Agent
+    - Captura IP y User-Agent usando utilidades compartidas
     - Excluye paths admin/static/schema
+    
+    Refactorizado para usar apps.core.utils.request:
+    - get_client_ip()
+    - get_user_agent()
+    - should_exclude_path()
     """
     
     EXCLUDED_PATHS = [
         '/admin/jsi18n/',
-        '/static/',
-        '/media/',
         '/api/schema/',
         '/__debug__/',
     ]
@@ -28,17 +32,17 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         - Path NO excluido
         - Metodo relevante (GET, POST, PUT, DELETE, PATCH)
         """
-        # Verificar si path debe ser excluido
-        if self._is_excluded_path(request.path):
+        # Verificar si path debe ser excluido (usa utility compartida)
+        if should_exclude_path(request.path, self.EXCLUDED_PATHS):
             return None
         
         # Solo registrar si hay usuario autenticado
         if not request.user or not request.user.is_authenticated:
             return None
         
-        # Capturar contexto
-        ip_address = self.get_client_ip(request)
-        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        # Capturar contexto (usa utilities compartidas)
+        ip_address = get_client_ip(request)
+        user_agent = get_user_agent(request)
         
         # Registrar en auditoria
         try:
@@ -59,38 +63,3 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             pass
         
         return None
-    
-    def _is_excluded_path(self, path):
-        """
-        Verificar si path esta excluido.
-        
-        Args:
-            path: Path de la peticion
-            
-        Returns:
-            bool: True si debe excluirse
-        """
-        for excluded in self.EXCLUDED_PATHS:
-            if path.startswith(excluded):
-                return True
-        return False
-    
-    def get_client_ip(self, request):
-        """
-        Obtener IP del cliente.
-        
-        Prioriza X-Forwarded-For (proxies/load balancers).
-        
-        Args:
-            request: HttpRequest
-            
-        Returns:
-            str: IP address o None
-        """
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            # Tomar la primera IP (cliente real)
-            ip = x_forwarded_for.split(',')[0].strip()
-            return ip
-        
-        return request.META.get('REMOTE_ADDR')

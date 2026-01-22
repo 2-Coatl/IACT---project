@@ -68,10 +68,9 @@ class ETLExecution(models.Model):
         db_table = 'etl_executions'
         verbose_name = 'Ejecucion ETL'
         verbose_name_plural = 'Ejecuciones ETL'
-        # Añadimos -id para desempatar tiempos idénticos
-        ordering = ['-started_at', '-id']
+        ordering = ['-started_at']
         indexes = [
-            models.Index(fields=['-started_at', '-id']), # Ajustamos el índice
+            models.Index(fields=['-started_at']),
             models.Index(fields=['status', '-started_at']),
         ]
     

@@ -36,10 +36,13 @@ urlpatterns = [
     
     # API endpoints (se agregan en Sprints)
     path('api/v1/', include('apps.core.urls')),
+    path('api/v1/navigation/', include('apps.core.navigation.urls')),  # Sistema de navegacion
     path('api/v1/auth/', include('apps.authentication.urls')),  # Sprint 2
+    path('api/v1/access/', include('apps.access.urls')),  # Sprint 2
+    path('api/v1/audit/', include('apps.audit.urls')),  # Sprint 2
     path('api/v1/users/', include('apps.users.urls')),  # Sprint 3
     path('api/v1/pipeline/', include('apps.pipeline.urls')),  # Sprint 3
-    path('api/v1/reports/', include('apps.reports.urls')),  # Sprint 4 🆕
+    path('api/v1/reports/', include('apps.reports.urls')),  # Sprint 4
 ]
 
 # Static/Media files (development)

@@ -1,14 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password, check_password
+from apps.utils import SoftDeleteMixin
+
+User = get_user_model()
 
 
-class SecurityQuestion(models.Model):
+class SecurityQuestion(SoftDeleteMixin, models.Model):
     """
     Pregunta de seguridad para recuperacion contraseña.
     
     CNST-001: NO usar email para recuperacion.
     Sistema de 3 preguntas de seguridad.
+    
+    Usa SoftDeleteMixin para delete lógico.
     """
     
     question = models.CharField(
@@ -35,11 +40,13 @@ class SecurityQuestion(models.Model):
         return self.question
 
 
-class UserSecurityAnswer(models.Model):
+class UserSecurityAnswer(SoftDeleteMixin, models.Model):
     """
     Respuesta de usuario a pregunta de seguridad.
     
     Las respuestas se almacenan hasheadas (como passwords).
+    
+    Usa SoftDeleteMixin para delete lógico.
     """
     
     user = models.ForeignKey(

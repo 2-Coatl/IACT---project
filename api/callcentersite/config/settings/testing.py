@@ -124,6 +124,11 @@ STATIC_ROOT = Path(tempfile.gettempdir()) / 'iact-test-static'
 """
 VERIFICACION COMPLIANCE TESTING:
 
+ CNST-002: SESSION_ENGINE heredado de base
+ CNST-003: Database simplificada para tests
+ CNST-004: NO Celery
+ CNST-005: Throttling heredado de base
+ CNST_TECNICAS: NO Sentry, NO Redis
 
 Compliance: 100%
 """

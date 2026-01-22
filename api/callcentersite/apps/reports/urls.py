@@ -1,16 +1,17 @@
 """
-URLs app reports.
+URLs para app reports.
+
+Endpoints REST API.
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-
-# Importar después de crear ViewSet
-# from .views import ReportViewSet
-
-router = DefaultRouter()
-# router.register(r'', ReportViewSet, basename='report')
+from .views import ReportViewSet, ExportJobViewSet
 
 app_name = 'reports'
+
+router = DefaultRouter()
+router.register(r'reports', ReportViewSet, basename='report')
+router.register(r'export-jobs', ExportJobViewSet, basename='export-job')
 
 urlpatterns = [
     path('', include(router.urls)),
