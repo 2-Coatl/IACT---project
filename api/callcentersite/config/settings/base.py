@@ -157,7 +157,7 @@ DATABASES = {
         'PORT': config('DB_PORT', default='5432'),
         'CONN_MAX_AGE': 600,
         'OPTIONS': {
-            'connect_timeout': 10,
+            'connect_timeout': 30,
         },
     },
     
