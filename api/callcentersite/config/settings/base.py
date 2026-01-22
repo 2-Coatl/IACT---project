@@ -151,9 +151,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME', default='iact_analytics'),
-        'USER': config('DB_USER', default='iact_user'),
-        'PASSWORD': config('DB_PASSWORD', default='iact_password_dev'),
-        'HOST': config('DB_HOST', default='localhost'),
+        'USER': config('DB_USER', default='django_user'),
+        'PASSWORD': config('DB_PASSWORD', default='django_pass'),
+        'HOST': config('DB_HOST', default='192.168.56.11'),
         'PORT': config('DB_PORT', default='5432'),
         'CONN_MAX_AGE': 600,
         'OPTIONS': {
@@ -165,9 +165,9 @@ DATABASES = {
     'ivr_legacy': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': config('IVR_DB_NAME', default='ivr_legacy'),
-        'USER': config('IVR_DB_USER', default='ivr_readonly'),
-        'PASSWORD': config('IVR_DB_PASSWORD', default='ivr_readonly_password'),
-        'HOST': config('IVR_DB_HOST', default='localhost'),
+        'USER': config('IVR_DB_USER', default='django_user'),
+        'PASSWORD': config('IVR_DB_PASSWORD', default='django_pass'),
+        'HOST': config('IVR_DB_HOST', default='192.168.56.10'),
         'PORT': config('IVR_DB_PORT', default='3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',

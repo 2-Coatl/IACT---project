@@ -32,12 +32,11 @@ USER_STATUS_PENDING = 'pending'
 
 # Funciones RBAC (referencia)
 # Definidas en apps/access/fixtures/functions.json
-USR_VIEW = 'USR_VIEW'       # Ver usuarios
-USR_EDIT = 'USR_EDIT'       # Editar usuarios
-USR_DELETE = 'USR_DELETE'   # Eliminar usuarios
-USR_PERMS = 'USR_PERMS'     # Gestionar permisos
-
-
+PERM_USERS_VIEW = 'users.view'       # Ver usuarios
+PERM_USERS_CREATE = 'users.create'   # Crear usuarios
+PERM_USERS_EDIT = 'users.edit'       # Editar usuarios
+PERM_USERS_DELETE = 'users.delete'   # Eliminar usuarios
+PERM_SESSIONS_VIEW = 'sessions.view' # Ver sesiones
 
 # ============================================================================
 # CHOICES (FASE 2 PARTE 1)

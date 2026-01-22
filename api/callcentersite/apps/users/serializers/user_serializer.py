@@ -321,6 +321,120 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    """
+    Serializer detallado para usuario con todas sus relaciones.
+
+    Serializer completo que incluye toda la información del usuario
+    y sus relaciones, incluyendo permisos y funciones asignadas.
+
+    Ideal para endpoints de detalle y profiles.
+
+    Fields:
+    - Info básica: id, username, email, nombres
+    - Contacto: phone
+    - Trabajo: position
+    - Avatar: avatar, avatar_url
+    - Estado: is_active, is_staff
+    - Fechas: date_joined, last_login
+    - Relaciones: permissions (readonly desde apps/access)
+
+    Example:
+        user = User.objects.get(id=1)
+        serializer = UserDetailSerializer(user)
+        data = serializer.data
+        # {
+        #     'id': 1,
+        #     'username': 'jdoe',
+        #     'email': 'jdoe@company.com',
+        #     'full_name': 'John Doe',
+        #     'phone': '+1234567890',
+        #     'position': 'AGENT',
+        #     'avatar': 'https://...',
+        #     'avatar_url': 'https://...',
+        #     'is_active': True,
+        #     'is_staff': False,
+        #     'date_joined': '2024-01-15T10:30:00Z',
+        #     'last_login': '2024-01-20T15:45:30Z',
+        #     'permissions': ['users.view', 'reports.view']
+        # }
+    """
+
+    full_name = serializers.CharField(
+        source='get_full_name',
+        read_only=True,
+        help_text='Nombre completo del usuario'
+    )
+
+    avatar_url = serializers.SerializerMethodField(
+        help_text='URL del avatar o default'
+    )
+
+    permissions = serializers.SerializerMethodField(
+        help_text='Permisos/funciones asignados (desde apps/access)'
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'full_name',
+            'phone',
+            'position',
+            'avatar',
+            'avatar_url',
+            'is_active',
+            'is_staff',
+            'date_joined',
+            'last_login',
+            'permissions',
+        ]
+        read_only_fields = [
+            'id',
+            'date_joined',
+            'last_login',
+            'permissions',
+        ]
+
+    def get_avatar_url(self, obj):
+        """
+        Obtiene URL del avatar.
+
+        Returns:
+            str: URL del avatar o None
+        """
+        if hasattr(obj, 'profile') and obj.profile:
+            return obj.profile.avatar_url
+        return None
+
+    def get_permissions(self, obj):
+        """
+        Obtiene permissions/funciones del usuario.
+
+        Lee de apps/access (NO gestiona).
+
+        Returns:
+            list: Códigos de funciones asignadas ['users.view', 'reports.edit']
+        """
+        try:
+            from apps.access.models import UserFunctionAssignment
+
+            assignments = UserFunctionAssignment.objects.filter(
+                user=obj,
+                is_active=True
+            ).select_related('function')
+
+            # Retornar códigos de funciones
+            return [a.function.code for a in assignments]
+        except Exception:
+            # Si apps/access no disponible, retornar vacío
+            return []
+
+
 # ============================================================================
 # RESUMEN USER SERIALIZERS
 #

@@ -51,6 +51,6 @@ class SessionHistoryAdmin(admin.ModelAdmin):
 class UserSettingsAdmin(admin.ModelAdmin):
     """Admin para UserSettings."""
     
-    list_display = ['user', 'language', 'theme', 'notifications_enabled']
+    list_display = ['user', 'language', 'notifications_enabled']
     search_fields = ['user__username']
-    list_filter = ['language', 'theme', 'notifications_enabled']
+    list_filter = ['language', 'notifications_enabled']
