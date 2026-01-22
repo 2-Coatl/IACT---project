@@ -1,0 +1,5994 @@
+openapi: 3.0.3
+info:
+  title: IACT Call Center API
+  version: 2.2.1
+  description: Sistema Analytics Call Center - API REST
+paths:
+  /api/v1/access/module-accesses/:
+    get:
+      operationId: v1_access_module_accesses_list
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - in: query
+        name: module
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: user
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserModuleAccessList'
+          description: ''
+    post:
+      operationId: v1_access_module_accesses_create
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModuleAccess'
+          description: ''
+  /api/v1/access/module-accesses/{id}/:
+    get:
+      operationId: v1_access_module_accesses_retrieve
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Acceso a Módulo.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModuleAccess'
+          description: ''
+    put:
+      operationId: v1_access_module_accesses_update
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Acceso a Módulo.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserModuleAccessRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModuleAccess'
+          description: ''
+    patch:
+      operationId: v1_access_module_accesses_partial_update
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Acceso a Módulo.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserModuleAccessRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserModuleAccessRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserModuleAccessRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModuleAccess'
+          description: ''
+    delete:
+      operationId: v1_access_module_accesses_destroy
+      description: |-
+        ViewSet para gestión de accesos a módulos.
+
+        Endpoints:
+        - GET /api/v1/access/module-accesses/ - Listar accesos
+        - POST /api/v1/access/module-accesses/ - Otorgar acceso
+        - DELETE /api/v1/access/module-accesses/{id}/ - Revocar acceso
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Acceso a Módulo.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/access/modules/:
+    get:
+      operationId: v1_access_modules_list
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: parent
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedModuleList'
+          description: ''
+    post:
+      operationId: v1_access_modules_create
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+  /api/v1/access/modules/{id}/:
+    get:
+      operationId: v1_access_modules_retrieve
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Módulo.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+    put:
+      operationId: v1_access_modules_update
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Módulo.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModuleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+    patch:
+      operationId: v1_access_modules_partial_update
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Módulo.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedModuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedModuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedModuleRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+    delete:
+      operationId: v1_access_modules_destroy
+      description: |-
+        ViewSet para gestión de módulos.
+
+        Endpoints:
+        - GET /api/v1/access/modules/ - Listar módulos
+        - POST /api/v1/access/modules/ - Crear módulo
+        - GET /api/v1/access/modules/{id}/ - Detalle módulo
+        - PUT/PATCH /api/v1/access/modules/{id}/ - Actualizar módulo
+        - DELETE /api/v1/access/modules/{id}/ - Eliminar módulo (soft delete)
+        - GET /api/v1/access/modules/tree/ - Obtener jerarquía completa
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Módulo.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/access/modules/roots/:
+    get:
+      operationId: v1_access_modules_roots_retrieve
+      description: |-
+        Obtener solo módulos raíz.
+
+        GET /api/v1/access/modules/roots/
+
+        Returns:
+            Lista de módulos raíz
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+  /api/v1/access/modules/tree/:
+    get:
+      operationId: v1_access_modules_tree_retrieve
+      description: |-
+        Obtener jerarquía completa de módulos.
+
+        GET /api/v1/access/modules/tree/
+
+        Returns:
+            Estructura de árbol de módulos
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+          description: ''
+  /api/v1/access/my-modules/:
+    get:
+      operationId: v1_access_my_modules_retrieve
+      description: |-
+        Obtener módulos del usuario autenticado.
+
+        Returns:
+            Árbol de módulos con hijos anidados
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/audit/logs/:
+    get:
+      operationId: v1_audit_logs_list
+      description: |-
+        ViewSet de solo lectura para AuditLog.
+
+        Endpoints:
+        - GET /api/v1/audit/logs/ - Listar logs
+        - GET /api/v1/audit/logs/{id}/ - Detalle de log
+
+        INMUTABLE (CNST-009): Solo permite GET, no POST/PUT/DELETE.
+
+        Filtros disponibles:
+        - user: ID de usuario
+        - action: Tipo de acción (LOGIN, CREATE, etc.)
+        - result: SUCCESS o FAILURE
+        - timestamp: Rango de fechas
+
+        Búsqueda:
+        - resource: Buscar en nombre de recurso
+
+        Ordenamiento:
+        - timestamp (default: -timestamp)
+      parameters:
+      - in: query
+        name: action
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: result
+        schema:
+          type: string
+          title: Resultado
+          enum:
+          - FAILURE
+          - SUCCESS
+        description: |-
+          * `SUCCESS` - Exito
+          * `FAILURE` - Fallo
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      - in: query
+        name: user
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogSummaryList'
+          description: ''
+  /api/v1/audit/logs/{id}/:
+    get:
+      operationId: v1_audit_logs_retrieve
+      description: |-
+        ViewSet de solo lectura para AuditLog.
+
+        Endpoints:
+        - GET /api/v1/audit/logs/ - Listar logs
+        - GET /api/v1/audit/logs/{id}/ - Detalle de log
+
+        INMUTABLE (CNST-009): Solo permite GET, no POST/PUT/DELETE.
+
+        Filtros disponibles:
+        - user: ID de usuario
+        - action: Tipo de acción (LOGIN, CREATE, etc.)
+        - result: SUCCESS o FAILURE
+        - timestamp: Rango de fechas
+
+        Búsqueda:
+        - resource: Buscar en nombre de recurso
+
+        Ordenamiento:
+        - timestamp (default: -timestamp)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Log Auditoria.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditLog'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: |-
+        Login JWT custom.
+
+        POST /api/v1/auth/login/
+        {
+            "username": "user",
+            "password": "pass"
+        }
+
+        Returns:
+            {
+                "access": "...",
+                "refresh": "...",
+                "username": "user",
+                "email": "user@example.com"
+            }
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/password-reset/:
+    post:
+      operationId: v1_auth_password_reset_create
+      description: |-
+        Reset password sin email.
+
+        POST /api/v1/auth/password-reset/
+        {
+            "username": "user",
+            "question1_answer": "azul",
+            "question2_answer": "cdmx",
+            "question3_answer": "perro",
+            "new_password": "newpass123"
+        }
+
+        CNST-001: NO usar email.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/refresh/:
+    post:
+      operationId: v1_auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/navigation/menu/:
+    get:
+      operationId: v1_navigation_menu_retrieve
+      description: |-
+        GET /api/navigation/menu/
+
+        Retorna menu personalizado del usuario segun sus permisos RBAC.
+        Todos los id_menu son numericos.
+
+        Headers:
+            Authorization: Bearer {token}
+
+        Response 200:
+            {
+                "menu": [
+                    {
+                        "id_menu": 5,
+                        "des_name": "Reportes",
+                        "icon": "/static/icons/menu/reports.png",
+                        "nivel": 1,
+                        "orden": 50,
+                        "submenus": [...]
+                    }
+                ],
+                "user": {
+                    "username": "jperez",
+                    "full_name": "Juan Perez"
+                }
+            }
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/calls/:
+    get:
+      operationId: v1_pipeline_calls_list
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCallRecordListList'
+          description: ''
+    post:
+      operationId: v1_pipeline_calls_create
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecord'
+          description: ''
+  /api/v1/pipeline/calls/{id}/:
+    get:
+      operationId: v1_pipeline_calls_retrieve
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecord'
+          description: ''
+    put:
+      operationId: v1_pipeline_calls_update
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CallRecordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecord'
+          description: ''
+    patch:
+      operationId: v1_pipeline_calls_partial_update
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCallRecordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCallRecordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCallRecordRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecord'
+          description: ''
+    delete:
+      operationId: v1_pipeline_calls_destroy
+      description: |-
+        ViewSet para CallRecord.
+
+        Endpoints:
+            GET    /call-records/          - Listar registros
+            POST   /call-records/          - Crear registro
+            GET    /call-records/{id}/     - Detalle registro
+            PUT    /call-records/{id}/     - Actualizar registro
+            PATCH  /call-records/{id}/     - Actualizar parcial
+            DELETE /call-records/{id}/     - Eliminar registro (soft delete)
+
+            POST   /call-records/bulk_create/  - Crear múltiples registros
+            GET    /call-records/stats/         - Estadísticas agregadas
+            GET    /call-records/daily_stats/   - Estadísticas diarias
+            GET    /call-records/top_callers/   - Top callers
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - HasServiceAccess (verifica acceso al servicio)
+
+        Filters:
+            - fecha (exact, gte, lte, range)
+            - year, month
+            - telefono (exact, icontains)
+            - servicio_800 (exact, icontains)
+            - total_llamadas (gte, lte)
+            - has_abandoned
+            - high_abandonment
+
+        QuerySet Filtering:
+            Los usuarios solo ven registros de servicios a los que tienen acceso.
+            Superusers ven todos.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pipeline/calls/bulk_create/:
+    post:
+      operationId: v1_pipeline_calls_bulk_create_create
+      description: |-
+        Crear múltiples registros en bulk.
+
+        POST /call-records/bulk_create/
+        Body: {'records': [{...}, {...}, ...]}
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/calls/daily_stats/:
+    get:
+      operationId: v1_pipeline_calls_daily_stats_retrieve
+      description: |-
+        Obtener estadísticas diarias.
+
+        GET /call-records/daily_stats/
+        Query params:
+            - fecha (YYYY-MM-DD, required)
+            - service_800 (optional)
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/calls/stats/:
+    get:
+      operationId: v1_pipeline_calls_stats_retrieve
+      description: |-
+        Obtener estadísticas agregadas de servicio.
+
+        GET /call-records/stats/
+        Query params:
+            - service_800 (required)
+            - start_date (YYYY-MM-DD, required)
+            - end_date (YYYY-MM-DD, required)
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/calls/top_callers/:
+    get:
+      operationId: v1_pipeline_calls_top_callers_retrieve
+      description: |-
+        Obtener top callers.
+
+        GET /call-records/top_callers/
+        Query params:
+            - service_800 (required)
+            - start_date (YYYY-MM-DD, required)
+            - end_date (YYYY-MM-DD, required)
+            - limit (int, optional, default=10)
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/centers/:
+    get:
+      operationId: v1_pipeline_centers_list
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      parameters:
+      - in: query
+        name: activo
+        schema:
+          type: boolean
+      - in: query
+        name: codigo
+        schema:
+          type: string
+      - in: query
+        name: codigo__icontains
+        schema:
+          type: string
+      - in: query
+        name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: nombre__icontains
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCenterListList'
+          description: ''
+    post:
+      operationId: v1_pipeline_centers_create
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+  /api/v1/pipeline/centers/{id}/:
+    get:
+      operationId: v1_pipeline_centers_retrieve
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CenterDetail'
+          description: ''
+    put:
+      operationId: v1_pipeline_centers_update
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+    patch:
+      operationId: v1_pipeline_centers_partial_update
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCenterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCenterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCenterRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+    delete:
+      operationId: v1_pipeline_centers_destroy
+      description: |-
+        ViewSet para Center.
+
+        Endpoints:
+            GET    /centers/          - Listar centros
+            POST   /centers/          - Crear centro
+            GET    /centers/{id}/     - Detalle centro
+            PUT    /centers/{id}/     - Actualizar centro
+            PATCH  /centers/{id}/     - Actualizar parcial
+            DELETE /centers/{id}/     - Eliminar centro (soft delete)
+
+            POST   /centers/{id}/deactivate/  - Desactivar centro
+            POST   /centers/{id}/activate/    - Activar centro
+            GET    /centers/{id}/stats/       - Estadísticas centro
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsCenterManager (POST/PUT/PATCH/DELETE)
+
+        Filters:
+            - codigo (exact, icontains)
+            - nombre (icontains)
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pipeline/centers/{id}/activate/:
+    post:
+      operationId: v1_pipeline_centers_activate_create
+      description: |-
+        Activar centro.
+
+        POST /centers/{id}/activate/
+
+        NOTA: Los servicios NO se activan automáticamente.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+  /api/v1/pipeline/centers/{id}/deactivate/:
+    post:
+      operationId: v1_pipeline_centers_deactivate_create
+      description: |-
+        Desactivar centro y todos sus servicios.
+
+        POST /centers/{id}/deactivate/
+
+        Returns:
+            {
+                'message': str,
+                'services_deactivated': int,
+                'user_accesses_affected': int
+            }
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CenterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+  /api/v1/pipeline/centers/{id}/stats/:
+    get:
+      operationId: v1_pipeline_centers_stats_retrieve
+      description: |-
+        Obtener estadísticas del centro.
+
+        GET /centers/{id}/stats/
+
+        Returns:
+            {
+                'total_services': int,
+                'active_services': int,
+                'inactive_services': int,
+                'total_users_with_access': int,
+                'is_active': bool
+            }
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Centro.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Center'
+          description: ''
+  /api/v1/pipeline/services/:
+    get:
+      operationId: v1_pipeline_services_list
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      parameters:
+      - in: query
+        name: activo
+        schema:
+          type: boolean
+      - in: query
+        name: center
+        schema:
+          type: integer
+      - in: query
+        name: center_codigo
+        schema:
+          type: string
+      - in: query
+        name: created_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: created_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: nombre__icontains
+        schema:
+          type: string
+      - in: query
+        name: numero_800
+        schema:
+          type: string
+      - in: query
+        name: numero_800__icontains
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedServiceListList'
+          description: ''
+    post:
+      operationId: v1_pipeline_services_create
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/v1/pipeline/services/{id}/:
+    get:
+      operationId: v1_pipeline_services_retrieve
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceDetail'
+          description: ''
+    put:
+      operationId: v1_pipeline_services_update
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    patch:
+      operationId: v1_pipeline_services_partial_update
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedServiceRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+    delete:
+      operationId: v1_pipeline_services_destroy
+      description: |-
+        ViewSet para Service.
+
+        Endpoints:
+            GET    /services/          - Listar servicios
+            POST   /services/          - Crear servicio
+            GET    /services/{id}/     - Detalle servicio
+            PUT    /services/{id}/     - Actualizar servicio
+            PATCH  /services/{id}/     - Actualizar parcial
+            DELETE /services/{id}/     - Eliminar servicio (soft delete)
+
+            POST   /services/{id}/deactivate/       - Desactivar servicio
+            POST   /services/{id}/activate/         - Activar servicio
+            POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
+            POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
+            POST   /services/{id}/revoke_access/    - Revocar acceso
+            GET    /services/{id}/users/            - Usuarios con acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+            - IsServiceManager (POST/PUT/PATCH/DELETE)
+            - CanGrantAccess (grant_access, bulk_grant_access)
+            - CanRevokeAccess (revoke_access)
+
+        Filters:
+            - numero_800 (exact, icontains)
+            - nombre (icontains)
+            - center (id)
+            - center_codigo
+            - activo
+            - search
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/pipeline/services/{id}/activate/:
+    post:
+      operationId: v1_pipeline_services_activate_create
+      description: |-
+        Activar servicio.
+
+        POST /services/{id}/activate/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/v1/pipeline/services/{id}/bulk_grant_access/:
+    post:
+      operationId: v1_pipeline_services_bulk_grant_access_create
+      description: |-
+        Otorgar acceso a múltiples usuarios.
+
+        POST /services/{id}/bulk_grant_access/
+        Body: {'user_ids': [int, ...], 'reason': str}
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkGrantAccessRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BulkGrantAccessRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BulkGrantAccessRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkGrantAccess'
+          description: ''
+  /api/v1/pipeline/services/{id}/deactivate/:
+    post:
+      operationId: v1_pipeline_services_deactivate_create
+      description: |-
+        Desactivar servicio.
+
+        POST /services/{id}/deactivate/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ServiceRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/v1/pipeline/services/{id}/grant_access/:
+    post:
+      operationId: v1_pipeline_services_grant_access_create
+      description: |-
+        Otorgar acceso a usuario.
+
+        POST /services/{id}/grant_access/
+        Body: {'user_id': int, 'reason': str}
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrantAccessRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GrantAccessRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GrantAccessRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrantAccess'
+          description: ''
+  /api/v1/pipeline/services/{id}/revoke_access/:
+    post:
+      operationId: v1_pipeline_services_revoke_access_create
+      description: |-
+        Revocar acceso de usuario.
+
+        POST /services/{id}/revoke_access/
+        Body: {'user_id': int}
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/services/{id}/users/:
+    get:
+      operationId: v1_pipeline_services_users_retrieve
+      description: |-
+        Listar usuarios con acceso al servicio.
+
+        GET /services/{id}/users/
+        Query params: ?include_inactive=true
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Servicio.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          description: ''
+  /api/v1/pipeline/status/:
+    get:
+      operationId: v1_pipeline_status_retrieve
+      description: |-
+        Status ultima ejecucion ETL.
+
+        CNST-004: Mostrar ultima actualizacion y proxima (NO real-time).
+
+        Returns:
+            {
+                "last_execution": {
+                    "started_at": "2026-01-15T10:00:00Z",
+                    "completed_at": "2026-01-15T10:15:00Z",
+                    "status": "SUCCESS",
+                    "records_extracted": 1500,
+                    "records_loaded": 1450
+                },
+                "next_execution": "2026-01-15T22:00:00Z"
+            }
+
+        Si no hay ejecuciones:
+            {
+                "last_execution": null,
+                "next_execution": null
+            }
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/pipeline/user-service-accesses/:
+    get:
+      operationId: v1_pipeline_user_service_accesses_list
+      description: |-
+        ViewSet para UserServiceAccess.
+
+        NOTA: Este ViewSet es ReadOnly.
+        Para crear/modificar accesos, usar ServiceViewSet actions:
+            - POST /services/{id}/grant_access/
+            - POST /services/{id}/bulk_grant_access/
+            - POST /services/{id}/revoke_access/
+
+        Endpoints:
+            GET    /user-service-accesses/      - Listar accesos
+            GET    /user-service-accesses/{id}/ - Detalle acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+
+        Filters:
+            - user (id)
+            - user_username (icontains)
+            - service (id)
+            - service_numero (icontains)
+            - is_active
+            - granted_at (gte, lte)
+      parameters:
+      - in: query
+        name: granted_at__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: granted_at__lte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: granted_by
+        schema:
+          type: integer
+      - in: query
+        name: granted_by_username
+        schema:
+          type: string
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      - in: query
+        name: service
+        schema:
+          type: integer
+      - in: query
+        name: service_numero
+        schema:
+          type: string
+      - in: query
+        name: user
+        schema:
+          type: integer
+      - in: query
+        name: user_username
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserServiceAccessList'
+          description: ''
+  /api/v1/pipeline/user-service-accesses/{id}/:
+    get:
+      operationId: v1_pipeline_user_service_accesses_retrieve
+      description: |-
+        ViewSet para UserServiceAccess.
+
+        NOTA: Este ViewSet es ReadOnly.
+        Para crear/modificar accesos, usar ServiceViewSet actions:
+            - POST /services/{id}/grant_access/
+            - POST /services/{id}/bulk_grant_access/
+            - POST /services/{id}/revoke_access/
+
+        Endpoints:
+            GET    /user-service-accesses/      - Listar accesos
+            GET    /user-service-accesses/{id}/ - Detalle acceso
+
+        Permissions:
+            - IsAuthenticated
+            - IsActiveUser
+
+        Filters:
+            - user (id)
+            - user_username (icontains)
+            - service (id)
+            - service_numero (icontains)
+            - is_active
+            - granted_at (gte, lte)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Acceso a Servicio.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserServiceAccess'
+          description: ''
+  /api/v1/reports/export-jobs/:
+    get:
+      operationId: v1_reports_export_jobs_list
+      description: |-
+        ViewSet para gestión de export jobs (solo lectura).
+
+        Endpoints:
+        - list: Listar jobs de exportación
+        - retrieve: Detalle de job
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - csv
+          - excel
+        description: |-
+          * `csv` - CSV
+          * `excel` - Excel
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - completed
+          - failed
+          - pending
+          - running
+        description: |-
+          * `pending` - Pendiente
+          * `running` - Ejecutando
+          * `completed` - Completado
+          * `failed` - Fallido
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExportJobList'
+          description: ''
+  /api/v1/reports/export-jobs/{id}/:
+    get:
+      operationId: v1_reports_export_jobs_retrieve
+      description: |-
+        ViewSet para gestión de export jobs (solo lectura).
+
+        Endpoints:
+        - list: Listar jobs de exportación
+        - retrieve: Detalle de job
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Export Job.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportJob'
+          description: ''
+  /api/v1/reports/reports/:
+    get:
+      operationId: v1_reports_reports_list
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: report_type
+        schema:
+          type: string
+          enum:
+          - audit
+          - calls
+          - users
+        description: |-
+          * `calls` - Llamadas
+          * `users` - Usuarios
+          * `audit` - Auditoría
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - completed
+          - failed
+          - pending
+          - processing
+        description: |-
+          * `pending` - Pendiente
+          * `processing` - Procesando
+          * `completed` - Completado
+          * `failed` - Fallido
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReportList'
+          description: ''
+    post:
+      operationId: v1_reports_reports_create
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReportCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReportCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCreate'
+          description: ''
+  /api/v1/reports/reports/{id}/:
+    get:
+      operationId: v1_reports_reports_retrieve
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+          description: ''
+    put:
+      operationId: v1_reports_reports_update
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+          description: ''
+    patch:
+      operationId: v1_reports_reports_partial_update
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReportRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReportRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+          description: ''
+    delete:
+      operationId: v1_reports_reports_destroy
+      description: |-
+        ViewSet para gestión de reportes.
+
+        Endpoints:
+        - list: Listar reportes del usuario
+        - create: Crear nuevo reporte
+        - retrieve: Detalle de reporte
+        - update: Actualizar reporte
+        - destroy: Eliminar reporte (soft delete)
+        - generate: Generar datos del reporte
+        - export: Exportar reporte a CSV/Excel
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/reports/reports/{id}/export/:
+    post:
+      operationId: v1_reports_reports_export_create
+      description: |-
+        Exportar reporte a CSV o Excel.
+
+        POST /api/v1/reports/{id}/export/
+        Body: {
+            "format": "csv" | "excel"
+        }
+
+        CNST-007: Valida límite de 100K registros.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+          description: ''
+  /api/v1/reports/reports/{id}/generate/:
+    post:
+      operationId: v1_reports_reports_generate_create
+      description: |-
+        Generar datos del reporte.
+
+        POST /api/v1/reports/{id}/generate/
+
+        Procesa datos según filtros y actualiza total_records.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Report.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+          description: ''
+  /api/v1/users/auth/change-password/:
+    post:
+      operationId: v1_users_auth_change_password_create
+      description: Cambia el password del usuario autenticado. Requiere old_password
+        y new_password.
+      summary: Cambiar password
+      tags:
+      - Autenticación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Password actualizado exitosamente
+        '400':
+          description: Password inválido
+  /api/v1/users/auth/login/:
+    post:
+      operationId: v1_users_auth_login_create
+      description: Autentica un usuario y crea una sesión. Retorna datos del usuario
+        y mensaje de éxito.
+      summary: Login de usuario
+      tags:
+      - Autenticación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              LoginExample:
+                value:
+                  username: jdoe
+                  password: SecurePass123
+                summary: Login Example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Login exitoso
+        '400':
+          description: Credenciales inválidas
+  /api/v1/users/auth/logout/:
+    post:
+      operationId: v1_users_auth_logout_create
+      description: Cierra la sesión del usuario autenticado. Actualiza SessionHistory.
+      summary: Logout de usuario
+      tags:
+      - Autenticación
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Logout exitoso
+  /api/v1/users/auth/password-reset/:
+    post:
+      operationId: v1_users_auth_password_reset_create
+      description: Envía un email con link para resetear password. Por seguridad,
+        siempre retorna éxito.
+      summary: Solicitar reset de password
+      tags:
+      - Autenticación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Email enviado
+  /api/v1/users/auth/password-reset-confirm/:
+    post:
+      operationId: v1_users_auth_password_reset_confirm_create
+      description: Confirma el reset de password con token del email. Actualiza el
+        password del usuario.
+      summary: Confirmar reset de password
+      tags:
+      - Autenticación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Password actualizado
+        '400':
+          description: Token inválido o expirado
+  /api/v1/users/profile/:
+    get:
+      operationId: v1_users_profile_retrieve
+      description: Retorna el perfil del usuario autenticado.
+      summary: Obtener perfil
+      tags:
+      - Perfil
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: v1_users_profile_partial_update
+      description: Actualiza bio y/o department del perfil del usuario autenticado.
+      summary: Actualizar perfil
+      tags:
+      - Perfil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/users/profile/avatar/:
+    post:
+      operationId: v1_users_profile_avatar_create
+      description: 'Sube una imagen de avatar. Formatos permitidos: jpg, png, gif.
+        Máximo 2MB.'
+      summary: Subir avatar
+      tags:
+      - Perfil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvatarUploadRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AvatarUploadRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvatarUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Avatar subido exitosamente
+        '400':
+          description: Formato o tamaño inválido
+    delete:
+      operationId: v1_users_profile_avatar_destroy
+      description: Elimina el avatar del usuario autenticado.
+      summary: Eliminar avatar
+      tags:
+      - Perfil
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Avatar eliminado exitosamente
+  /api/v1/users/sessions/:
+    get:
+      operationId: v1_users_sessions_list
+      description: Retorna historial de sesiones del usuario autenticado. Admin ve
+        todas si especifica user_id.
+      summary: Lista sesiones
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: Un término de búsqueda.
+        schema:
+          type: string
+      - in: query
+        name: user_id
+        schema:
+          type: integer
+        description: ID de usuario (solo admin)
+      tags:
+      - Sesiones
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSessionHistoryListList'
+          description: ''
+  /api/v1/users/sessions/{id}/:
+    get:
+      operationId: v1_users_sessions_retrieve
+      description: Retorna detalles de una sesión específica.
+      summary: Detalle de sesión
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Sesiones
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionHistory'
+          description: ''
+  /api/v1/users/settings/:
+    get:
+      operationId: v1_users_settings_retrieve
+      description: Retorna la configuración del usuario autenticado.
+      summary: Obtener configuración
+      tags:
+      - Configuración
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+          description: ''
+    patch:
+      operationId: v1_users_settings_partial_update
+      description: Actualiza la configuración del usuario autenticado.
+      summary: Actualizar configuración
+      tags:
+      - Configuración
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSettingsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSettingsRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSettingsRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
+          description: ''
+  /api/v1/users/users/:
+    get:
+      operationId: v1_users_users_list
+      description: Retorna lista de usuarios activos. Admin ve todos, usuarios normales
+        solo activos.
+      summary: Lista usuarios
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filtrar por usuarios activos (true) o inactivos (false)
+      - name: ordering
+        required: false
+        in: query
+        description: Qué campo usar para ordenar los resultados.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Un número de página dentro del conjunto de resultados paginado.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Buscar por username, email, first_name o last_name
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserListList'
+          description: ''
+    post:
+      operationId: v1_users_users_create
+      description: Crea un nuevo usuario. Requiere permiso USR_CREATE. Auto-crea profile
+        y settings.
+      summary: Crear usuario
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/v1/users/users/{id}/:
+    get:
+      operationId: v1_users_users_retrieve
+      description: Retorna detalles de un usuario específico. Incluye profile, settings
+        y funciones RBAC.
+      summary: Obtener usuario
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: v1_users_users_update
+      description: Actualiza todos los campos de un usuario. Requiere permiso USR_EDIT.
+      summary: Actualizar usuario (completo)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+    patch:
+      operationId: v1_users_users_partial_update
+      description: Actualiza campos específicos de un usuario. Requiere permiso USR_EDIT.
+      summary: Actualizar usuario (parcial)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+    delete:
+      operationId: v1_users_users_destroy
+      description: Elimina un usuario (soft delete). Requiere permiso USR_DELETE.
+      summary: Eliminar usuario
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/users/{id}/activate/:
+    post:
+      operationId: v1_users_users_activate_create
+      description: Activa un usuario (is_active=True). Requiere permiso USR_EDIT.
+      summary: Activar usuario
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/users/{id}/deactivate/:
+    post:
+      operationId: v1_users_users_deactivate_create
+      description: Desactiva un usuario (is_active=False). Requiere permiso USR_EDIT.
+      summary: Desactivar usuario
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Un valor de entero único que identifique este Usuario.
+        required: true
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/users/me/:
+    get:
+      operationId: v1_users_users_me_retrieve
+      description: Retorna información completa del usuario autenticado actualmente.
+      summary: Obtener usuario actual
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    AuditLog:
+      type: object
+      description: |-
+        Serializer para AuditLog (readonly).
+
+        Muestra información completa del log de auditoría.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Usuario
+        user_username:
+          type: string
+          readOnly: true
+          nullable: true
+        user_full_name:
+          type: string
+          readOnly: true
+        action:
+          type: string
+          readOnly: true
+          title: Accion
+          description: LOGIN, LOGOUT, CREATE, UPDATE, DELETE, etc
+        resource:
+          type: string
+          readOnly: true
+          title: Recurso
+          description: Recurso afectado
+        result:
+          allOf:
+          - $ref: '#/components/schemas/ResultEnum'
+          readOnly: true
+          title: Resultado
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha/Hora
+        ip_address:
+          type: string
+          readOnly: true
+          nullable: true
+          title: IP
+        user_agent:
+          type: string
+          readOnly: true
+        details:
+          readOnly: true
+          nullable: true
+          title: Detalles adicionales
+      required:
+      - action
+      - details
+      - id
+      - ip_address
+      - resource
+      - result
+      - timestamp
+      - user
+      - user_agent
+      - user_full_name
+      - user_username
+    AuditLogSummary:
+      type: object
+      description: |-
+        Serializer resumido para listados.
+
+        Omite detalles pesados como user_agent.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_username:
+          type: string
+          readOnly: true
+          nullable: true
+        action:
+          type: string
+          readOnly: true
+          title: Accion
+          description: LOGIN, LOGOUT, CREATE, UPDATE, DELETE, etc
+        resource:
+          type: string
+          readOnly: true
+          title: Recurso
+          description: Recurso afectado
+        result:
+          allOf:
+          - $ref: '#/components/schemas/ResultEnum'
+          readOnly: true
+          title: Resultado
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha/Hora
+        ip_address:
+          type: string
+          readOnly: true
+          nullable: true
+          title: IP
+      required:
+      - action
+      - id
+      - ip_address
+      - resource
+      - result
+      - timestamp
+      - user_username
+    AvatarUploadRequest:
+      type: object
+      description: Serializer para subir avatar.
+      properties:
+        avatar:
+          type: string
+          format: binary
+          description: 'Imagen de perfil (max 2MB, formatos: jpg, png, gif)'
+      required:
+      - avatar
+    BulkGrantAccess:
+      type: object
+      description: |-
+        Serializer para otorgar acceso a múltiples usuarios.
+
+        CLEAN_CODE v3.0.1: Bulk operation serializer.
+
+        Usado en endpoint POST /services/{id}/bulk-grant-access/
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: integer
+          maxItems: 100
+          minItems: 1
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - user_ids
+    BulkGrantAccessRequest:
+      type: object
+      description: |-
+        Serializer para otorgar acceso a múltiples usuarios.
+
+        CLEAN_CODE v3.0.1: Bulk operation serializer.
+
+        Usado en endpoint POST /services/{id}/bulk-grant-access/
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: integer
+          maxItems: 100
+          minItems: 1
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - user_ids
+    CallRecord:
+      type: object
+      description: |-
+        Serializer para CallRecord.
+
+        Campos adicionales calculados:
+            - answer_rate (read-only): Tasa de respuesta %
+            - abandonment_rate (read-only): Tasa de abandono %
+            - avg_duration_seconds (read-only): Duración promedio
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        fecha:
+          type: string
+          format: date
+          description: Fecha de las llamadas
+        telefono:
+          type: string
+          description: Número telefónico que realizó llamadas
+          maxLength: 20
+        servicio_800:
+          type: string
+          description: Número servicio 800 destino
+          maxLength: 20
+        total_llamadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Total de llamadas realizadas
+        llamadas_contestadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas contestadas por agente
+        llamadas_abandonadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas abandonadas (colgadas antes de contestar)
+        duracion_total_segundos:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Duración total en segundos
+        answer_rate:
+          type: string
+          readOnly: true
+        abandonment_rate:
+          type: string
+          readOnly: true
+        avg_duration_seconds:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp creación registro
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Timestamp última actualización
+      required:
+      - abandonment_rate
+      - answer_rate
+      - avg_duration_seconds
+      - created_at
+      - fecha
+      - id
+      - servicio_800
+      - telefono
+      - updated_at
+    CallRecordList:
+      type: object
+      description: Serializer simplificado para listado de registros.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        fecha:
+          type: string
+          format: date
+          description: Fecha de las llamadas
+        telefono:
+          type: string
+          description: Número telefónico que realizó llamadas
+          maxLength: 20
+        servicio_800:
+          type: string
+          description: Número servicio 800 destino
+          maxLength: 20
+        total_llamadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Total de llamadas realizadas
+        llamadas_contestadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas contestadas por agente
+        llamadas_abandonadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas abandonadas (colgadas antes de contestar)
+        answer_rate:
+          type: string
+          readOnly: true
+      required:
+      - answer_rate
+      - fecha
+      - id
+      - servicio_800
+      - telefono
+    CallRecordRequest:
+      type: object
+      description: |-
+        Serializer para CallRecord.
+
+        Campos adicionales calculados:
+            - answer_rate (read-only): Tasa de respuesta %
+            - abandonment_rate (read-only): Tasa de abandono %
+            - avg_duration_seconds (read-only): Duración promedio
+      properties:
+        fecha:
+          type: string
+          format: date
+          description: Fecha de las llamadas
+        telefono:
+          type: string
+          minLength: 1
+          description: Número telefónico que realizó llamadas
+          maxLength: 20
+        servicio_800:
+          type: string
+          minLength: 1
+          description: Número servicio 800 destino
+          maxLength: 20
+        total_llamadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Total de llamadas realizadas
+        llamadas_contestadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas contestadas por agente
+        llamadas_abandonadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas abandonadas (colgadas antes de contestar)
+        duracion_total_segundos:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Duración total en segundos
+      required:
+      - fecha
+      - servicio_800
+      - telefono
+    Center:
+      type: object
+      description: |-
+        Serializer para Center.
+
+        Campos adicionales:
+            - active_services_count (read-only): Cantidad de servicios activos
+            - total_services_count (read-only): Total de servicios
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          description: Nombre del centro de atención
+          maxLength: 200
+        codigo:
+          type: string
+          description: 'Código único del centro (ej: CT01, CENTER_SCL)'
+          maxLength: 20
+        descripcion:
+          type: string
+          description: Descripción del centro
+        direccion:
+          type: string
+          description: Dirección física del centro
+          maxLength: 500
+        activo:
+          type: boolean
+          description: ¿Centro actualmente operativo?
+        active_services_count:
+          type: string
+          readOnly: true
+        total_services_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Fecha de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Última actualización
+      required:
+      - active_services_count
+      - codigo
+      - created_at
+      - id
+      - nombre
+      - total_services_count
+      - updated_at
+    CenterDetail:
+      type: object
+      description: |-
+        Serializer detallado para Center.
+
+        Incluye lista de servicios anidados.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          description: Nombre del centro de atención
+          maxLength: 200
+        codigo:
+          type: string
+          description: 'Código único del centro (ej: CT01, CENTER_SCL)'
+          maxLength: 20
+        descripcion:
+          type: string
+          description: Descripción del centro
+        direccion:
+          type: string
+          description: Dirección física del centro
+          maxLength: 500
+        activo:
+          type: boolean
+          description: ¿Centro actualmente operativo?
+        active_services_count:
+          type: string
+          readOnly: true
+        total_services_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Fecha de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Última actualización
+        services:
+          type: string
+          readOnly: true
+      required:
+      - active_services_count
+      - codigo
+      - created_at
+      - id
+      - nombre
+      - services
+      - total_services_count
+      - updated_at
+    CenterList:
+      type: object
+      description: |-
+        Serializer simplificado para listado de centros.
+
+        Solo campos esenciales para optimizar queries.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          description: Nombre del centro de atención
+          maxLength: 200
+        codigo:
+          type: string
+          description: 'Código único del centro (ej: CT01, CENTER_SCL)'
+          maxLength: 20
+        activo:
+          type: boolean
+          description: ¿Centro actualmente operativo?
+        active_services_count:
+          type: integer
+          readOnly: true
+      required:
+      - active_services_count
+      - codigo
+      - id
+      - nombre
+    CenterRequest:
+      type: object
+      description: |-
+        Serializer para Center.
+
+        Campos adicionales:
+            - active_services_count (read-only): Cantidad de servicios activos
+            - total_services_count (read-only): Total de servicios
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          description: Nombre del centro de atención
+          maxLength: 200
+        codigo:
+          type: string
+          minLength: 1
+          description: 'Código único del centro (ej: CT01, CENTER_SCL)'
+          maxLength: 20
+        descripcion:
+          type: string
+          description: Descripción del centro
+        direccion:
+          type: string
+          description: Dirección física del centro
+          maxLength: 500
+        activo:
+          type: boolean
+          description: ¿Centro actualmente operativo?
+      required:
+      - codigo
+      - nombre
+    ChangePasswordRequest:
+      type: object
+      description: |-
+        Serializer para cambiar password.
+
+        Campos:
+        - old_password (required)
+        - new_password (required)
+
+        Validaciones:
+        - old_password debe ser correcto
+        - new_password debe cumplir requisitos
+        - new_password != old_password
+
+        Example:
+            >>> serializer = ChangePasswordSerializer(data={
+            ...     'old_password': 'OldPass123',
+            ...     'new_password': 'NewPass456'
+            ... })
+            >>> if serializer.is_valid():
+            ...     user = serializer.save(user=request.user)
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Password actual
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Nuevo password (mínimo 8 caracteres)
+      required:
+      - new_password
+      - old_password
+    CustomTokenObtainPairRequest:
+      type: object
+      description: |-
+        JWT con datos adicionales.
+
+        Incluye username y email en el token.
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    ExportJob:
+      type: object
+      description: |-
+        Serializer para ExportJob.
+
+        CNST-007: Valida límite de 100K registros.
+
+        Incluye:
+        - Datos del job
+        - Progreso de exportación
+        - Validación CNST-007
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        report:
+          type: integer
+        report_name:
+          type: string
+          readOnly: true
+        format:
+          $ref: '#/components/schemas/FormatEnum'
+        format_display:
+          type: string
+          readOnly: true
+        file_path:
+          type: string
+          readOnly: true
+          description: Ruta del archivo exportado
+        total_records:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          description: Total registros a exportar (max 100K CNST-007)
+        exported_records:
+          type: integer
+          readOnly: true
+          description: Registros exportados (progreso)
+        progress:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ExportJobStatusEnum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Inicio de la exportación
+        completed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Fin de la exportación
+        error_message:
+          type: string
+          readOnly: true
+          description: Mensaje de error si falla
+      required:
+      - completed_at
+      - created_at
+      - error_message
+      - exported_records
+      - file_path
+      - format_display
+      - id
+      - progress
+      - report
+      - report_name
+      - started_at
+      - status
+      - status_display
+      - total_records
+    ExportJobStatusEnum:
+      enum:
+      - pending
+      - running
+      - completed
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pendiente
+        * `running` - Ejecutando
+        * `completed` - Completado
+        * `failed` - Fallido
+    FormatEnum:
+      enum:
+      - csv
+      - excel
+      type: string
+      description: |-
+        * `csv` - CSV
+        * `excel` - Excel
+    GrantAccess:
+      type: object
+      description: |-
+        Serializer para otorgar acceso a servicio.
+
+        CLEAN_CODE v3.0.1: Action serializer específico.
+
+        Usado en endpoint POST /services/{id}/grant-access/
+      properties:
+        user_id:
+          type: integer
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - user_id
+    GrantAccessRequest:
+      type: object
+      description: |-
+        Serializer para otorgar acceso a servicio.
+
+        CLEAN_CODE v3.0.1: Action serializer específico.
+
+        Usado en endpoint POST /services/{id}/grant-access/
+      properties:
+        user_id:
+          type: integer
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - user_id
+    LanguageEnum:
+      enum:
+      - es
+      - en
+      type: string
+      description: |-
+        * `es` - Español
+        * `en` - English
+    LoginRequest:
+      type: object
+      description: |-
+        Serializer para login.
+
+        Campos:
+        - username (required)
+        - password (required)
+
+        Usa AuthenticationService.login() para autenticar.
+
+        Example:
+            >>> serializer = LoginSerializer(data={
+            ...     'username': 'jdoe',
+            ...     'password': 'SecurePass123'
+            ... })
+            >>> if serializer.is_valid():
+            ...     user = serializer.save(request=request)
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Nombre de usuario
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Password
+      required:
+      - password
+      - username
+    Module:
+      type: object
+      description: |-
+        Serializer para módulos.
+
+        Incluye información de jerarquía y estado.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          title: Código
+          description: 'Código único del módulo (ej: MOD_Dashboard)'
+          maxLength: 50
+        name:
+          type: string
+          title: Nombre
+          description: Nombre descriptivo del módulo
+          maxLength: 200
+        description:
+          type: string
+          title: Descripción
+          description: Descripción detallada del módulo
+        parent:
+          type: integer
+          nullable: true
+          title: Módulo padre
+          description: Módulo padre en la jerarquía (None para raíz)
+        parent_code:
+          type: string
+          readOnly: true
+          nullable: true
+        parent_name:
+          type: string
+          readOnly: true
+          nullable: true
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: Orden
+          description: Orden de visualización
+        icon:
+          type: string
+          title: Icono
+          description: 'Nombre del icono (ej: dashboard, report)'
+          maxLength: 50
+        url_path:
+          type: string
+          description: 'Ruta URL del módulo (ej: /dashboard)'
+          maxLength: 200
+        is_active:
+          type: boolean
+          title: Activo
+          description: Módulo activo en el sistema
+        level:
+          type: integer
+          readOnly: true
+        is_root:
+          type: boolean
+          readOnly: true
+        children_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - children_count
+      - code
+      - created_at
+      - id
+      - is_root
+      - level
+      - name
+      - parent_code
+      - parent_name
+      - updated_at
+    ModuleRequest:
+      type: object
+      description: |-
+        Serializer para módulos.
+
+        Incluye información de jerarquía y estado.
+      properties:
+        code:
+          type: string
+          minLength: 1
+          title: Código
+          description: 'Código único del módulo (ej: MOD_Dashboard)'
+          maxLength: 50
+        name:
+          type: string
+          minLength: 1
+          title: Nombre
+          description: Nombre descriptivo del módulo
+          maxLength: 200
+        description:
+          type: string
+          title: Descripción
+          description: Descripción detallada del módulo
+        parent:
+          type: integer
+          nullable: true
+          title: Módulo padre
+          description: Módulo padre en la jerarquía (None para raíz)
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: Orden
+          description: Orden de visualización
+        icon:
+          type: string
+          title: Icono
+          description: 'Nombre del icono (ej: dashboard, report)'
+          maxLength: 50
+        url_path:
+          type: string
+          description: 'Ruta URL del módulo (ej: /dashboard)'
+          maxLength: 200
+        is_active:
+          type: boolean
+          title: Activo
+          description: Módulo activo en el sistema
+      required:
+      - code
+      - name
+    PaginatedAuditLogSummaryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogSummary'
+    PaginatedCallRecordListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallRecordList'
+    PaginatedCenterListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CenterList'
+    PaginatedExportJobList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExportJob'
+    PaginatedModuleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Module'
+    PaginatedReportList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+    PaginatedServiceListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceList'
+    PaginatedSessionHistoryListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionHistoryList'
+    PaginatedUserListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserList'
+    PaginatedUserModuleAccessList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserModuleAccess'
+    PaginatedUserServiceAccessList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserServiceAccess'
+    PasswordResetConfirmRequest:
+      type: object
+      description: |-
+        Serializer para confirmar reset de password.
+
+        Campos:
+        - uidb64 (required) - User ID codificado
+        - token (required) - Token de reset
+        - new_password (required) - Nuevo password
+
+        Flujo:
+        1. Usuario recibe email con link
+        2. Click en link con uidb64 y token
+        3. Ingresa nuevo password
+        4. Se valida token y se actualiza password
+
+        Example:
+            >>> serializer = PasswordResetConfirmSerializer(data={
+            ...     'uidb64': 'MQ',
+            ...     'token': 'abc123-def456',
+            ...     'new_password': 'NewPass456'
+            ... })
+            >>> if serializer.is_valid():
+            ...     user = serializer.save()
+      properties:
+        uidb64:
+          type: string
+          minLength: 1
+          description: User ID codificado (del link de email)
+        token:
+          type: string
+          minLength: 1
+          description: Token de reset (del link de email)
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Nuevo password (mínimo 8 caracteres)
+      required:
+      - new_password
+      - token
+      - uidb64
+    PasswordResetRequestRequest:
+      type: object
+      description: |-
+        Serializer para solicitar reset de password.
+
+        Campos:
+        - email (required)
+
+        Flujo:
+        1. Usuario envía email
+        2. Se genera token
+        3. Se envía email con link
+
+        Example:
+            >>> serializer = PasswordResetRequestSerializer(data={
+            ...     'email': 'user@company.com'
+            ... })
+            >>> if serializer.is_valid():
+            ...     success = serializer.save()
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          description: Email del usuario
+      required:
+      - email
+    PatchedCallRecordRequest:
+      type: object
+      description: |-
+        Serializer para CallRecord.
+
+        Campos adicionales calculados:
+            - answer_rate (read-only): Tasa de respuesta %
+            - abandonment_rate (read-only): Tasa de abandono %
+            - avg_duration_seconds (read-only): Duración promedio
+      properties:
+        fecha:
+          type: string
+          format: date
+          description: Fecha de las llamadas
+        telefono:
+          type: string
+          minLength: 1
+          description: Número telefónico que realizó llamadas
+          maxLength: 20
+        servicio_800:
+          type: string
+          minLength: 1
+          description: Número servicio 800 destino
+          maxLength: 20
+        total_llamadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Total de llamadas realizadas
+        llamadas_contestadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas contestadas por agente
+        llamadas_abandonadas:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Llamadas abandonadas (colgadas antes de contestar)
+        duracion_total_segundos:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          description: Duración total en segundos
+    PatchedCenterRequest:
+      type: object
+      description: |-
+        Serializer para Center.
+
+        Campos adicionales:
+            - active_services_count (read-only): Cantidad de servicios activos
+            - total_services_count (read-only): Total de servicios
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          description: Nombre del centro de atención
+          maxLength: 200
+        codigo:
+          type: string
+          minLength: 1
+          description: 'Código único del centro (ej: CT01, CENTER_SCL)'
+          maxLength: 20
+        descripcion:
+          type: string
+          description: Descripción del centro
+        direccion:
+          type: string
+          description: Dirección física del centro
+          maxLength: 500
+        activo:
+          type: boolean
+          description: ¿Centro actualmente operativo?
+    PatchedModuleRequest:
+      type: object
+      description: |-
+        Serializer para módulos.
+
+        Incluye información de jerarquía y estado.
+      properties:
+        code:
+          type: string
+          minLength: 1
+          title: Código
+          description: 'Código único del módulo (ej: MOD_Dashboard)'
+          maxLength: 50
+        name:
+          type: string
+          minLength: 1
+          title: Nombre
+          description: Nombre descriptivo del módulo
+          maxLength: 200
+        description:
+          type: string
+          title: Descripción
+          description: Descripción detallada del módulo
+        parent:
+          type: integer
+          nullable: true
+          title: Módulo padre
+          description: Módulo padre en la jerarquía (None para raíz)
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: Orden
+          description: Orden de visualización
+        icon:
+          type: string
+          title: Icono
+          description: 'Nombre del icono (ej: dashboard, report)'
+          maxLength: 50
+        url_path:
+          type: string
+          description: 'Ruta URL del módulo (ej: /dashboard)'
+          maxLength: 200
+        is_active:
+          type: boolean
+          title: Activo
+          description: Módulo activo en el sistema
+    PatchedReportRequest:
+      type: object
+      description: |-
+        Serializer para Report.
+
+        Incluye:
+        - Datos básicos del reporte
+        - Usuario creador (read-only)
+        - Validación de filtros JSON
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Nombre descriptivo del reporte
+          maxLength: 200
+        report_type:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        filters:
+          description: Filtros aplicados al reporte (JSON)
+    PatchedServiceRequest:
+      type: object
+      description: |-
+        Serializer para Service.
+
+        Campos adicionales:
+            - center_name (read-only): Nombre del centro
+            - users_with_access_count (read-only): Cantidad de usuarios con acceso
+      properties:
+        numero_800:
+          type: string
+          minLength: 1
+          description: 'Número servicio 800 (ej: 800-123-4567)'
+          maxLength: 20
+        nombre:
+          type: string
+          minLength: 1
+          description: Nombre del servicio
+          maxLength: 200
+        descripcion:
+          type: string
+          description: Descripción del servicio
+        center:
+          type: integer
+          description: Centro al que pertenece el servicio
+        activo:
+          type: boolean
+          description: ¿Servicio actualmente operativo?
+    PatchedUserModuleAccessRequest:
+      type: object
+      description: Serializer para accesos de usuarios a módulos.
+      properties:
+        user:
+          type: integer
+          title: Usuario
+        module:
+          type: integer
+          title: Módulo
+        reason:
+          type: string
+          title: Razón
+          description: Por qué se otorgó este acceso
+        is_active:
+          type: boolean
+          title: Activo
+    PatchedUserProfileRequest:
+      type: object
+      description: Serializer para UserProfile.
+      properties:
+        bio:
+          type: string
+          nullable: true
+          title: Biografía
+          description: Descripción breve del usuario
+        department:
+          type: string
+          nullable: true
+          title: Departamento
+          description: Departamento al que pertenece
+          maxLength: 100
+    PatchedUserSettingsRequest:
+      type: object
+      description: Serializer para UserSettings.
+      properties:
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Idioma
+          description: |-
+            Idioma de la interfaz
+
+            * `es` - Español
+            * `en` - English
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeEnum'
+          title: Tema
+          description: |-
+            Tema de la interfaz
+
+            * `light` - Claro
+            * `dark` - Oscuro
+        timezone:
+          type: string
+          minLength: 1
+          title: Zona Horaria
+          description: Zona horaria del usuario
+          maxLength: 50
+        notifications_enabled:
+          type: boolean
+          title: Notificaciones Habilitadas
+          description: Habilitar/deshabilitar notificaciones
+        email_notifications:
+          type: boolean
+          title: Notificaciones por Email
+          description: Recibir notificaciones por email
+    PatchedUserUpdateRequest:
+      type: object
+      description: Serializer para actualizar usuarios.
+      properties:
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+    Report:
+      type: object
+      description: |-
+        Serializer para Report.
+
+        Incluye:
+        - Datos básicos del reporte
+        - Usuario creador (read-only)
+        - Validación de filtros JSON
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Nombre descriptivo del reporte
+          maxLength: 200
+        report_type:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        report_type_display:
+          type: string
+          readOnly: true
+        created_by:
+          type: integer
+          readOnly: true
+        created_by_username:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        filters:
+          description: Filtros aplicados al reporte (JSON)
+        total_records:
+          type: integer
+          readOnly: true
+          description: Total de registros en el reporte
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReportStatusEnum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - created_by_username
+      - id
+      - name
+      - report_type
+      - report_type_display
+      - status
+      - status_display
+      - total_records
+      - updated_at
+    ReportCreate:
+      type: object
+      description: |-
+        Serializer para crear reportes.
+
+        Simplificado para creación, sin campos calculados.
+      properties:
+        name:
+          type: string
+          description: Nombre descriptivo del reporte
+          maxLength: 200
+        report_type:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        filters:
+          description: Filtros aplicados al reporte (JSON)
+      required:
+      - name
+      - report_type
+    ReportCreateRequest:
+      type: object
+      description: |-
+        Serializer para crear reportes.
+
+        Simplificado para creación, sin campos calculados.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Nombre descriptivo del reporte
+          maxLength: 200
+        report_type:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        filters:
+          description: Filtros aplicados al reporte (JSON)
+      required:
+      - name
+      - report_type
+    ReportRequest:
+      type: object
+      description: |-
+        Serializer para Report.
+
+        Incluye:
+        - Datos básicos del reporte
+        - Usuario creador (read-only)
+        - Validación de filtros JSON
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Nombre descriptivo del reporte
+          maxLength: 200
+        report_type:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        filters:
+          description: Filtros aplicados al reporte (JSON)
+      required:
+      - name
+      - report_type
+    ReportStatusEnum:
+      enum:
+      - pending
+      - processing
+      - completed
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pendiente
+        * `processing` - Procesando
+        * `completed` - Completado
+        * `failed` - Fallido
+    ReportTypeEnum:
+      enum:
+      - calls
+      - users
+      - audit
+      type: string
+      description: |-
+        * `calls` - Llamadas
+        * `users` - Usuarios
+        * `audit` - Auditoría
+    ResultEnum:
+      enum:
+      - SUCCESS
+      - FAILURE
+      type: string
+      description: |-
+        * `SUCCESS` - Exito
+        * `FAILURE` - Fallo
+    Service:
+      type: object
+      description: |-
+        Serializer para Service.
+
+        Campos adicionales:
+            - center_name (read-only): Nombre del centro
+            - users_with_access_count (read-only): Cantidad de usuarios con acceso
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero_800:
+          type: string
+          description: 'Número servicio 800 (ej: 800-123-4567)'
+          maxLength: 20
+        nombre:
+          type: string
+          description: Nombre del servicio
+          maxLength: 200
+        descripcion:
+          type: string
+          description: Descripción del servicio
+        center:
+          type: integer
+          description: Centro al que pertenece el servicio
+        center_name:
+          type: string
+          readOnly: true
+        activo:
+          type: boolean
+          description: ¿Servicio actualmente operativo?
+        users_with_access_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Fecha de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Última actualización
+      required:
+      - center
+      - center_name
+      - created_at
+      - id
+      - nombre
+      - numero_800
+      - updated_at
+      - users_with_access_count
+    ServiceDetail:
+      type: object
+      description: |-
+        Serializer detallado para Service.
+
+        Incluye información del centro.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero_800:
+          type: string
+          description: 'Número servicio 800 (ej: 800-123-4567)'
+          maxLength: 20
+        nombre:
+          type: string
+          description: Nombre del servicio
+          maxLength: 200
+        descripcion:
+          type: string
+          description: Descripción del servicio
+        center:
+          type: integer
+          description: Centro al que pertenece el servicio
+        center_name:
+          type: string
+          readOnly: true
+        activo:
+          type: boolean
+          description: ¿Servicio actualmente operativo?
+        users_with_access_count:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Fecha de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Última actualización
+        center_detail:
+          allOf:
+          - $ref: '#/components/schemas/CenterList'
+          readOnly: true
+      required:
+      - center
+      - center_detail
+      - center_name
+      - created_at
+      - id
+      - nombre
+      - numero_800
+      - updated_at
+      - users_with_access_count
+    ServiceList:
+      type: object
+      description: Serializer simplificado para listado de servicios.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero_800:
+          type: string
+          description: 'Número servicio 800 (ej: 800-123-4567)'
+          maxLength: 20
+        nombre:
+          type: string
+          description: Nombre del servicio
+          maxLength: 200
+        center_name:
+          type: string
+          readOnly: true
+        activo:
+          type: boolean
+          description: ¿Servicio actualmente operativo?
+      required:
+      - center_name
+      - id
+      - nombre
+      - numero_800
+    ServiceRequest:
+      type: object
+      description: |-
+        Serializer para Service.
+
+        Campos adicionales:
+            - center_name (read-only): Nombre del centro
+            - users_with_access_count (read-only): Cantidad de usuarios con acceso
+      properties:
+        numero_800:
+          type: string
+          minLength: 1
+          description: 'Número servicio 800 (ej: 800-123-4567)'
+          maxLength: 20
+        nombre:
+          type: string
+          minLength: 1
+          description: Nombre del servicio
+          maxLength: 200
+        descripcion:
+          type: string
+          description: Descripción del servicio
+        center:
+          type: integer
+          description: Centro al que pertenece el servicio
+        activo:
+          type: boolean
+          description: ¿Servicio actualmente operativo?
+      required:
+      - center
+      - nombre
+      - numero_800
+    SessionHistory:
+      type: object
+      description: |-
+        Serializer para SessionHistory (read-only).
+
+        Muestra historial de sesiones de usuario.
+
+        Read-only fields:
+        - Todos (este modelo es solo lectura desde API)
+
+        Example:
+            >>> serializer = SessionHistorySerializer(sessions, many=True)
+            >>> data = serializer.data
+            >>> for session in data:
+            ...     print(f"{session['login_at']} - {session['ip_address']}")
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        ip_address:
+          type: string
+          readOnly: true
+          title: Dirección IP
+          description: IP desde donde se conectó
+        user_agent:
+          type: string
+          readOnly: true
+          description: Información del navegador/cliente
+        login_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Login
+          description: Fecha y hora de login
+        logout_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Logout
+          description: Fecha y hora de logout
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Sesión Activa
+          description: True si la sesión sigue activa
+        status:
+          type: string
+          description: |-
+            Retorna estado de la sesión.
+
+            Returns:
+                str: 'Activa' o 'Cerrada'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Creado
+          description: Fecha y hora de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Actualizado
+          description: Fecha y hora de última actualización
+      required:
+      - created_at
+      - id
+      - ip_address
+      - is_active
+      - login_at
+      - logout_at
+      - status
+      - updated_at
+      - user_agent
+      - user_id
+      - username
+    SessionHistoryList:
+      type: object
+      description: |-
+        Serializer ligero para listar sesiones.
+
+        Solo campos esenciales.
+
+        Example:
+            >>> serializer = SessionHistoryListSerializer(sessions, many=True)
+            >>> data = serializer.data
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ip_address:
+          type: string
+          readOnly: true
+          title: Dirección IP
+          description: IP desde donde se conectó
+        login_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Login
+          description: Fecha y hora de login
+        logout_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Logout
+          description: Fecha y hora de logout
+        status:
+          type: string
+          description: Retorna estado de la sesión.
+          readOnly: true
+      required:
+      - id
+      - ip_address
+      - login_at
+      - logout_at
+      - status
+    ThemeEnum:
+      enum:
+      - light
+      - dark
+      type: string
+      description: |-
+        * `light` - Claro
+        * `dark` - Oscuro
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      description: |-
+        Serializer base para User.
+
+        Incluye:
+        - Campos básicos de usuario
+        - full_name (computed)
+        - functions (RBAC codes)
+        - profile y settings (nested)
+
+        Read-only fields:
+        - id, date_joined, last_login
+        - is_deleted, deleted_at
+        - full_name, functions
+
+        Example:
+            >>> serializer = UserSerializer(user)
+            >>> data = serializer.data
+            >>> print(data['full_name'])
+            'John Doe'
+            >>> print(data['functions'])
+            ['USR_VIEW', 'USR_EDIT']
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Nombre de usuario
+          description: Obligatorio. Longitud máxima 150 caracteres alfanuméricos.
+            Letras, dígitos y @/./+/-/_ únicamente.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+          description: 'Imagen de perfil del usuario (max 2MB, formatos: jpg, png,
+            gif)'
+        is_active:
+          type: boolean
+          title: Activo
+          description: Indica si el usuario debe ser tratado como un usuario activo.
+            Desactive este campo en lugar de eliminar usuarios.
+        is_staff:
+          type: boolean
+          title: Es staff
+          description: Indica si el usuario puede ingresar a este sitio de administración.
+        is_superuser:
+          type: boolean
+          title: Es superusuario
+          description: Indica que este usuario posee todos los permisos sin que sea
+            necesario asignarle los mismos en forma explícita.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de creación
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Último ingreso
+        is_deleted:
+          type: boolean
+          readOnly: true
+          title: Eliminado
+          description: Indica si el registro está eliminado (delete lógico)
+        deleted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Eliminado en
+          description: Fecha y hora en que se eliminó el registro
+        functions:
+          type: array
+          items: {}
+          description: Obtiene funciones RBAC del usuario.
+          readOnly: true
+        profile:
+          type: object
+          additionalProperties: {}
+          description: Obtiene datos básicos del profile.
+          readOnly: true
+        settings:
+          type: object
+          additionalProperties: {}
+          description: Obtiene configuración del usuario.
+          readOnly: true
+      required:
+      - date_joined
+      - deleted_at
+      - full_name
+      - functions
+      - id
+      - is_deleted
+      - last_login
+      - profile
+      - settings
+      - username
+    UserCreate:
+      type: object
+      description: Serializer para crear usuarios.
+      properties:
+        username:
+          type: string
+          title: Nombre de usuario
+          description: Obligatorio. Longitud máxima 150 caracteres alfanuméricos.
+            Letras, dígitos y @/./+/-/_ únicamente.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+      required:
+      - username
+    UserCreateRequest:
+      type: object
+      description: Serializer para crear usuarios.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Nombre de usuario
+          description: Obligatorio. Longitud máxima 150 caracteres alfanuméricos.
+            Letras, dígitos y @/./+/-/_ únicamente.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Password (mínimo 8 caracteres)
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+      required:
+      - password
+      - username
+    UserList:
+      type: object
+      description: Serializer ligero para listar usuarios.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Nombre de usuario
+          description: Obligatorio. Longitud máxima 150 caracteres alfanuméricos.
+            Letras, dígitos y @/./+/-/_ únicamente.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        full_name:
+          type: string
+          readOnly: true
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Activo
+          description: Indica si el usuario debe ser tratado como un usuario activo.
+            Desactive este campo en lugar de eliminar usuarios.
+      required:
+      - full_name
+      - id
+      - username
+    UserModuleAccess:
+      type: object
+      description: Serializer para accesos de usuarios a módulos.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          title: Usuario
+        user_username:
+          type: string
+          readOnly: true
+        module:
+          type: integer
+          title: Módulo
+        module_code:
+          type: string
+          readOnly: true
+        module_name:
+          type: string
+          readOnly: true
+        granted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Otorgado en
+        granted_by:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Otorgado por
+        granted_by_username:
+          type: string
+          readOnly: true
+          nullable: true
+        reason:
+          type: string
+          title: Razón
+          description: Por qué se otorgó este acceso
+        is_active:
+          type: boolean
+          title: Activo
+        revoked_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Revocado en
+        revoked_by:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Revocado por
+        revoked_by_username:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - granted_at
+      - granted_by
+      - granted_by_username
+      - id
+      - module
+      - module_code
+      - module_name
+      - revoked_at
+      - revoked_by
+      - revoked_by_username
+      - user
+      - user_username
+    UserModuleAccessRequest:
+      type: object
+      description: Serializer para accesos de usuarios a módulos.
+      properties:
+        user:
+          type: integer
+          title: Usuario
+        module:
+          type: integer
+          title: Módulo
+        reason:
+          type: string
+          title: Razón
+          description: Por qué se otorgó este acceso
+        is_active:
+          type: boolean
+          title: Activo
+      required:
+      - module
+      - user
+    UserProfile:
+      type: object
+      description: Serializer para UserProfile.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+          nullable: true
+          title: Biografía
+          description: Descripción breve del usuario
+        department:
+          type: string
+          nullable: true
+          title: Departamento
+          description: Departamento al que pertenece
+          maxLength: 100
+        avatar_url:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Creado
+          description: Fecha y hora de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Actualizado
+          description: Fecha y hora de última actualización
+      required:
+      - avatar_url
+      - created_at
+      - id
+      - updated_at
+      - user_id
+      - username
+    UserServiceAccess:
+      type: object
+      description: |-
+        Serializer para UserServiceAccess.
+
+        MOVIDO DESDE: apps.pipeline.serializers (refactor organizacional)
+        CLEAN_CODE v3.0.1: UserServiceAccess pertenece a apps.access (RBAC)
+
+        Campos adicionales:
+            - user_username (read-only): Username del usuario
+            - user_email (read-only): Email del usuario
+            - service_numero (read-only): Número 800 del servicio
+            - service_name (read-only): Nombre del servicio
+            - granted_by_username (read-only): Username de quien otorgó
+            - revoked_by_username (read-only): Username de quien revocó
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          title: Usuario
+        user_username:
+          type: string
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        service:
+          type: integer
+          title: Servicio
+        service_numero:
+          type: string
+          readOnly: true
+        service_name:
+          type: string
+          readOnly: true
+        granted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Otorgado en
+        granted_by:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Otorgado por
+        granted_by_username:
+          type: string
+          readOnly: true
+          nullable: true
+        reason:
+          type: string
+          title: Razón
+          description: Por qué se otorgó este acceso
+        is_active:
+          type: boolean
+          title: Activo
+        revoked_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Revocado en
+        revoked_by:
+          type: integer
+          readOnly: true
+          nullable: true
+          title: Revocado por
+        revoked_by_username:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - granted_at
+      - granted_by
+      - granted_by_username
+      - id
+      - revoked_at
+      - revoked_by
+      - revoked_by_username
+      - service
+      - service_name
+      - service_numero
+      - user
+      - user_email
+      - user_username
+    UserSettings:
+      type: object
+      description: Serializer para UserSettings.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Idioma
+          description: |-
+            Idioma de la interfaz
+
+            * `es` - Español
+            * `en` - English
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeEnum'
+          title: Tema
+          description: |-
+            Tema de la interfaz
+
+            * `light` - Claro
+            * `dark` - Oscuro
+        timezone:
+          type: string
+          title: Zona Horaria
+          description: Zona horaria del usuario
+          maxLength: 50
+        notifications_enabled:
+          type: boolean
+          title: Notificaciones Habilitadas
+          description: Habilitar/deshabilitar notificaciones
+        email_notifications:
+          type: boolean
+          title: Notificaciones por Email
+          description: Recibir notificaciones por email
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Creado
+          description: Fecha y hora de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Actualizado
+          description: Fecha y hora de última actualización
+      required:
+      - created_at
+      - id
+      - updated_at
+      - user_id
+      - username
+    UserUpdate:
+      type: object
+      description: Serializer para actualizar usuarios.
+      properties:
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+    UserUpdateRequest:
+      type: object
+      description: Serializer para actualizar usuarios.
+      properties:
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 150
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        phone:
+          type: string
+          nullable: true
+          title: Teléfono
+          description: Número de teléfono del usuario
+          maxLength: 20
+        position:
+          type: string
+          nullable: true
+          title: Cargo
+          description: Cargo o posición del usuario en la organización
+          maxLength: 100
+        employee_id:
+          type: string
+          nullable: true
+          title: ID Empleado
+          description: Identificador único del empleado
+          maxLength: 20
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: iact_sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
