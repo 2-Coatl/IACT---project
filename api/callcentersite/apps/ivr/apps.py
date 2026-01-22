@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class IvrLegacyConfig(AppConfig):
+class IvrConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.ivr_legacy'
+    name = 'apps.ivr'

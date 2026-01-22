@@ -135,3 +135,20 @@ class MyModulesSerializer(serializers.Serializer):
     modules = ModuleTreeSerializer(many=True, read_only=True)
     total_count = serializers.IntegerField(read_only=True)
     root_count = serializers.IntegerField(read_only=True)
+
+
+# ====================================================================================
+# REMOVED - FASE A DT-002
+# ====================================================================================
+#
+# UserServiceAccess Serializers (eliminados 2026-01-21):
+#   - UserServiceAccessSerializer
+#   - UserServiceAccessListSerializer
+#   - GrantAccessSerializer
+#   - BulkGrantAccessSerializer
+#   - RevokeAccessSerializer
+#
+# Razón: UserServiceAccess eliminado, reemplazado por RBAC puro
+# Ver: apps/access/models.py (comentario REMOVED)
+# ====================================================================================
+

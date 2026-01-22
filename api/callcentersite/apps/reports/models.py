@@ -5,7 +5,7 @@ CNST-007: Límite 100,000 registros por exportación.
 """
 from django.db import models
 from django.contrib.auth import get_user_model
-from apps.utils import SoftDeleteMixin
+from apps.core.models import SoftDeleteMixin
 
 User = get_user_model()
 

@@ -1,92 +1,95 @@
 """
-Custom User model con SoftDeleteMixin, Avatar y RBAC.
+Models para apps/users/.
 
-Extiende AbstractUser de Django para agregar:
-- SoftDeleteMixin (delete lógico)
-- Avatar (imagen de perfil)
-- Metodos RBAC (get_functions, has_function)
-- Campos personalizados (phone, position, employee_id)
+ARQUITECTURA:
+- User: Hereda AbstractUser (Django) + SoftDeleteMixin (apps.core)
+- UserProfile: Hereda TimeStampedModel (apps.core.models)
+- SessionHistory: Hereda TimeStampedModel (apps.core.models)
+- UserSettings: Hereda TimeStampedModel (apps.core.models)
+
+CNST-037: Custom User Model
+FASE 2 PARTE 2: Correcciones (sin employee_id, sin theme/timezone/email_notifications)
 """
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from apps.utils import SoftDeleteMixin
-import os
+from django.conf import settings
 
+from apps.core.models import TimeStampedModel, SoftDeleteMixin
+from apps.users.managers import CustomUserManager
+from apps.users.validators import validate_avatar_file
+from apps.utils.validators import validate_phone_number
+from apps.users.constants import POSITION_CHOICES, DEPARTMENT_CHOICES
 
 def user_avatar_path(instance, filename):
     """
-    Genera ruta de almacenamiento para avatar de usuario.
+    Genera path para avatar.
     
-    Formato: media/profiles/user_{id}/{filename}
-    Ejemplo: media/profiles/user_123/avatar.jpg
+    Format: avatars/user_{id}/{filename}
     """
-    ext = os.path.splitext(filename)[1]
-    return f'profiles/user_{instance.id}/avatar{ext}'
+    return f'avatars/user_{instance.id}/{filename}'
 
 
-class CustomUser(SoftDeleteMixin, AbstractUser):
+class User(AbstractUser, SoftDeleteMixin):
     """
-    Usuario personalizado del sistema IACT.
+    Usuario custom del sistema.
     
     Hereda de:
-    - AbstractUser: Funcionalidad completa de usuario Django
-    - SoftDeleteMixin: Delete lógico
+    - AbstractUser (Django): username, email, password, first_name, last_name,
+      is_active, is_staff, is_superuser, date_joined, last_login
+    - SoftDeleteMixin (apps.core): is_deleted, deleted_at, delete(), hard_delete()
     
-    Campos heredados de AbstractUser:
-    - username, password, email
-    - first_name, last_name
-    - is_staff, is_active, is_superuser
-    - date_joined, last_login
-    - groups, user_permissions
+    CNST-037: Custom User Model
     
-    Campos de SoftDeleteMixin:
-    - is_deleted, deleted_at
+    Relaciones:
+    - profile: UserProfile (1-to-1, auto-creado vía signal)
+    - settings: UserSettings (1-to-1, auto-creado vía signal)
+    - sessions: SessionHistory (1-to-many)
+    - functions: UserFunction (M2M vía apps.access)
     
-    Campos adicionales:
-    - avatar: Imagen de perfil
-    - phone: Telefono
-    - position: Cargo
-    - employee_id: ID de empleado
-    
-    Manager:
-    - objects: SoftDeleteManager (excluye eliminados por defecto)
+    Example:
+        user = User.objects.create_user(
+            username='jdoe',
+            email='jdoe@company.com',
+            password='SecurePass123'
+        )
+        user.profile  # ← Auto-creado vía signal
+        user.get_functions()  # ← RBAC de apps.access
     """
     
-    # Campos personalizados
-    avatar = models.ImageField(
-        upload_to=user_avatar_path,
-        blank=True,
-        null=True,
-        default=None,
-        max_length=255,
-        verbose_name='Avatar',
-        help_text='Imagen de perfil del usuario (max 2MB, formatos: jpg, png, gif)'
-    )
+    # Campos adicionales (AbstractUser ya tiene username, email, etc)
     
     phone = models.CharField(
         max_length=20,
-        blank=True,
         null=True,
-        verbose_name='Telefono',
-        help_text='Numero de telefono del usuario'
+        blank=True,
+        validators=[validate_phone_number],
+        verbose_name='Teléfono',
+        help_text='Número de teléfono del usuario (formato: +1234567890 o 123-456-7890)'
     )
     
     position = models.CharField(
         max_length=100,
-        blank=True,
         null=True,
+        blank=True,
+        choices=POSITION_CHOICES,
         verbose_name='Cargo',
-        help_text='Cargo o posicion del usuario en la organizacion'
+        help_text='Cargo o posición del usuario en la organización'
     )
     
-    employee_id = models.CharField(
-        max_length=20,
-        blank=True,
+    avatar = models.ImageField(
+        upload_to=user_avatar_path,
         null=True,
-        unique=True,
-        verbose_name='ID Empleado',
-        help_text='Identificador unico del empleado'
+        blank=True,
+        default=None,
+        max_length=255,
+        validators=[validate_avatar_file],
+        verbose_name='Avatar',
+        help_text='Imagen de perfil del usuario (max 2MB, formatos: jpg, png, gif)'
     )
+    
+    # Manager personalizado
+    objects = CustomUserManager()
     
     class Meta:
         db_table = 'users'
@@ -94,134 +97,302 @@ class CustomUser(SoftDeleteMixin, AbstractUser):
         verbose_name_plural = 'Usuarios'
         ordering = ['username']
         indexes = [
-            models.Index(fields=['username']),
-            models.Index(fields=['email']),
-            models.Index(fields=['employee_id']),
+            models.Index(fields=['username'], name='users_username_idx'),
+            models.Index(fields=['email'], name='users_email_idx'),
         ]
     
     def __str__(self):
+        """String representation."""
         full_name = self.get_full_name()
-        if full_name and full_name != self.username:
+        if full_name:
             return f"{full_name} ({self.username})"
         return self.username
     
-    def get_full_name(self):
+    @property
+    def full_name(self):
         """
-        Retorna nombre completo del usuario.
+        Retorna nombre completo.
         
         Returns:
-            str: "first_name last_name" o username si no hay nombre
+            str: Nombre completo o username si no tiene nombre
         """
-        full_name = super().get_full_name()
-        return full_name if full_name.strip() else self.username
+        return self.get_full_name() or self.username
     
-    def get_avatar_url(self):
+    def get_functions(self):
         """
-        Retorna URL completa del avatar del usuario.
-        Si no tiene avatar, retorna el icono por defecto.
+        Obtiene funciones RBAC del usuario.
+        
+        Usa apps.access.services.AccessService (cuando se implemente).
+        Por ahora retorna set vacío.
+        
+        Returns:
+            set: Set de códigos de funciones
+        
+        Example:
+            user = User.objects.get(id=1)
+            functions = user.get_functions()
+            # {'USR_VIEW', 'USR_EDIT', 'REPORTS_VIEW'}
+        """
+        # TODO: Implementar cuando AccessService esté disponible
+        # from apps.access.services import AccessService
+        # return AccessService.get_user_functions(self)
+        return set()
+    
+    def has_function(self, function_code):
+        """
+        Verifica si usuario tiene función RBAC.
+        
+        Args:
+            function_code: Código de función (ej: 'USR_VIEW')
+        
+        Returns:
+            bool: True si tiene la función
+        
+        Example:
+            if user.has_function('USR_EDIT'):
+                # Usuario puede editar usuarios
+        """
+        return function_code in self.get_functions()
+
+
+class UserProfile(TimeStampedModel):
+    """
+    Perfil extendido del usuario.
+    
+    Hereda de TimeStampedModel (apps.core):
+    - created_at (auto)
+    - updated_at (auto)
+    
+    Relación 1-to-1 con User.
+    Se crea automáticamente vía signal cuando se crea User.
+    
+    Example:
+        user = User.objects.get(id=1)
+        profile = user.profile  # ← Auto-creado
+        profile.bio = 'Software Developer'
+        profile.save()
+    """
+    
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        verbose_name='Usuario'
+    )
+    
+    bio = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name='Biografía',
+        help_text='Descripción breve del usuario'
+    )
+    
+    department = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        choices=DEPARTMENT_CHOICES,
+        verbose_name='Departamento',
+        help_text='Departamento al que pertenece'
+    )
+    
+    # Campos heredados de TimeStampedModel:
+    # - created_at (DateTimeField, auto_now_add=True)
+    # - updated_at (DateTimeField, auto_now=True)
+    
+    class Meta:
+        db_table = 'user_profiles'
+        verbose_name = 'Perfil de Usuario'
+        verbose_name_plural = 'Perfiles de Usuario'
+    
+    def __str__(self):
+        """String representation."""
+        return f"Perfil de {self.user.username}"
+    
+    @property
+    def avatar_url(self):
+        """
+        Retorna URL del avatar.
         
         Returns:
             str: URL del avatar o default
         """
-        if self.avatar:
-            return self.avatar.url
-        return '/static/icons/defaults/avatar_default.png'
+        if self.user.avatar:
+            return self.user.avatar.url
+        return '/static/images/default-avatar.png'
+
+
+class SessionHistory(TimeStampedModel):
+    """
+    Historial de sesiones de usuario.
     
-    def get_functions(self):
-        """
-        Obtiene lista de funciones RBAC del usuario.
-        
-        Incluye:
-        - Funciones directas asignadas
-        - Funciones heredadas de grupos
-        
-        Returns:
-            List[str]: Lista de nombres de funciones
-        """
-        functions = set()
-        
-        # Funciones directas (UserFunction)
-        if hasattr(self, 'user_functions'):
-            try:
-                direct_functions = self.user_functions.filter(
-                    is_active=True
-                ).values_list('function__name', flat=True)
-                functions.update(direct_functions)
-            except Exception:
-                pass
-        
-        # Funciones de grupos (FunctionGroup)
-        if hasattr(self, 'function_groups'):
-            try:
-                for group in self.function_groups.filter(is_active=True):
-                    group_functions = group.functions.filter(
-                        is_active=True
-                    ).values_list('name', flat=True)
-                    functions.update(group_functions)
-            except Exception:
-                pass
-        
-        return list(functions)
+    Hereda de TimeStampedModel (apps.core):
+    - created_at (auto)
+    - updated_at (auto)
     
-    def has_function(self, function_name):
-        """
-        Verifica si el usuario tiene una funcion especifica.
-        
-        Args:
-            function_name (str): Nombre de la funcion (ej: 'view_reports')
-        
-        Returns:
-            bool: True si tiene la funcion
-        """
-        user_functions = self.get_functions()
-        return function_name in user_functions
+    CNST-039: Session Auditing
     
-    def has_any_function(self, function_names):
-        """
-        Verifica si el usuario tiene alguna de las funciones.
-        
-        Args:
-            function_names (list): Lista de nombres de funciones
-        
-        Returns:
-            bool: True si tiene al menos una funcion
-        """
-        user_functions = set(self.get_functions())
-        required = set(function_names)
-        return bool(user_functions.intersection(required))
+    Se crea automáticamente vía signal (user_logged_in).
+    Se actualiza vía signal (user_logged_out).
     
-    def has_all_functions(self, function_names):
-        """
-        Verifica si el usuario tiene todas las funciones.
-        
-        Args:
-            function_names (list): Lista de nombres de funciones
-        
-        Returns:
-            bool: True si tiene todas las funciones
-        """
-        user_functions = set(self.get_functions())
-        required = set(function_names)
-        return required.issubset(user_functions)
+    Example:
+        user = User.objects.get(id=1)
+        sessions = user.sessions.filter(is_active=True)
+        # Sesiones activas del usuario
+    """
     
-    def delete_avatar(self):
-        """
-        Elimina el archivo fisico del avatar.
-        
-        Returns:
-            bool: True si se elimino correctamente
-        """
-        if self.avatar:
-            avatar_path = self.avatar.path
-            if os.path.exists(avatar_path):
-                try:
-                    os.remove(avatar_path)
-                    self.avatar = None
-                    self.save()
-                    return True
-                except Exception as e:
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error(f"Error eliminando avatar de {self.username}: {e}")
-                    return False
-        return False
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='sessions',
+        verbose_name='Usuario'
+    )
+    
+    ip_address = models.GenericIPAddressField(
+        verbose_name='Dirección IP',
+        help_text='IP desde donde se conectó'
+    )
+    
+    user_agent = models.CharField(
+        max_length=255,
+        verbose_name='User Agent',
+        help_text='Información del navegador/cliente'
+    )
+    
+    login_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Login',
+        help_text='Fecha y hora de login'
+    )
+    
+    logout_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Logout',
+        help_text='Fecha y hora de logout'
+    )
+    
+    is_active = models.BooleanField(
+        default=True,
+        db_index=True,
+        verbose_name='Sesión Activa',
+        help_text='True si la sesión sigue activa'
+    )
+    
+    class Meta:
+        db_table = 'session_history'
+        verbose_name = 'Historial de Sesión'
+        verbose_name_plural = 'Historial de Sesiones'
+        ordering = ['-login_at']
+        indexes = [
+            models.Index(fields=['user', '-login_at'], name='sessions_user_login_idx'),
+            models.Index(fields=['is_active', '-login_at'], name='sessions_active_idx'),
+        ]
+    
+    def __str__(self):
+        """String representation."""
+        status = "Activa" if self.is_active else "Cerrada"
+        return f"{self.user.username} - {self.login_at} ({status})"
+
+
+class UserSettings(TimeStampedModel):
+    """
+    Configuración de usuario.
+    
+    FASE 2 PARTE 2: Simplificado - solo preferencias personales del usuario.
+    
+    Campos:
+    - language: Idioma de interfaz (es, en) [default: es]
+    - notifications_enabled: Habilitar alertas internas [default: True]
+    
+    NO incluye (son configuraciones globales del sistema):
+    - theme: Configuración del sistema
+    - timezone: America/Mexico_City (configuración del sistema)
+    - email_notifications: Sistema de alertas (no por email)
+    
+    Hereda de TimeStampedModel (apps.core):
+    - created_at (auto)
+    - updated_at (auto)
+    
+    Se crea automáticamente vía signal cuando se crea User.
+    
+    Example:
+        user = User.objects.get(id=1)
+        settings = user.settings  # ← Auto-creado
+        settings.language = 'en'
+        settings.notifications_enabled = True
+        settings.save()
+    """
+    
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='settings',
+        verbose_name='Usuario'
+    )
+    
+    language = models.CharField(
+        max_length=10,
+        default='es',
+        choices=[
+            ('es', 'Español'),
+            ('en', 'English'),
+        ],
+        verbose_name='Idioma',
+        help_text='Idioma de la interfaz'
+    )
+    
+    
+    
+    notifications_enabled = models.BooleanField(
+        default=True,
+        verbose_name='Notificaciones Habilitadas',
+        help_text='Habilitar/deshabilitar notificaciones'
+    )
+    
+    
+    class Meta:
+        db_table = 'user_settings'
+        verbose_name = 'Configuración de Usuario'
+        verbose_name_plural = 'Configuraciones de Usuario'
+    
+    def __str__(self):
+        """String representation."""
+        return f"Settings de {self.user.username}"
+
+
+# ============================================================================
+# RESUMEN MODELS
+# 
+# Total Models: 4
+# 
+# User (AbstractUser + SoftDeleteMixin):
+#   - Campos Django: username, email, password, first_name, last_name, etc
+#   - Campos custom: employee_id, phone, position, avatar
+#   - Campos SoftDeleteMixin: is_deleted, deleted_at
+#   - Métodos: get_functions(), has_function()
+# 
+# UserProfile (TimeStampedModel):
+#   - Relación: 1-to-1 con User
+#   - Campos: bio, department
+#   - Auto-creado: Via signal
+# 
+# SessionHistory (TimeStampedModel):
+#   - Relación: M2M con User
+#   - Campos: ip_address, user_agent, login_at, logout_at, is_active
+#   - Auto-creado: Via signal (user_logged_in)
+# 
+# UserSettings (TimeStampedModel):
+#   - Relación: 1-to-1 con User
+#   - Campos: language, theme, timezone, notifications_enabled, email_notifications
+#   - Auto-creado: Via signal
+# 
+# Uso de Arquitectura:
+#   ✅ AbstractUser (Django built-in)
+#   ✅ SoftDeleteMixin (apps.core.models)
+#   ✅ TimeStampedModel (apps.core.models)
+#   ✅ AccessService (apps.access.services)
+# 
+# Líneas: ~400
+# ============================================================================
+

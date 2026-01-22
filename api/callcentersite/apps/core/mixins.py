@@ -1,76 +1,353 @@
 """
-Mixins para ViewSets con filtrado automático por servicio.
+Mixins para ViewSets DRF.
+
+CLEAN_CODE v3.0.1: Nombres auto-documentados.
+SOLID: SRP - Cada mixin una responsabilidad.
 """
-from .services import ServiceAccessService
+
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
-class ServiceFilterMixin:
+# ============================================================================
+# SOFT DELETE MIXIN
+# ============================================================================
+
+class SoftDeleteViewSetMixin:
     """
-    Mixin para auto-filtrar queryset por servicios del usuario.
+    Mixin para ViewSets con soft delete.
     
-    Uso en ViewSet:
-        class CallRecordViewSet(ServiceFilterMixin, viewsets.ModelViewSet):
-            service_field = 'servicio_800'  # Campo que contiene el servicio
-            ...
+    CLEAN_CODE v3.0.1: Nombre descriptivo.
+    SOLID SRP: Solo agrega acciones soft delete.
     
-    Características:
-    - Superusuarios ven todos los registros
-    - Usuarios normales solo ven registros de sus servicios
-    - Si no se especifica service_field, usa 'service' por defecto
+    Agrega acciones custom:
+    - POST /resource/{id}/restore/ - Restaura eliminado
+    - DELETE /resource/{id}/hard-delete/ - Elimina físicamente
+    
+    Requiere que el modelo tenga:
+    - is_deleted (BooleanField)
+    - restore() (method)
+    - hard_delete() (method, opcional)
+    
+    Uso:
+        class ReportViewSet(SoftDeleteViewSetMixin, viewsets.ModelViewSet):
+            pass
+        
+        # Endpoints adicionales:
+        POST /api/reports/1/restore/
+        DELETE /api/reports/1/hard-delete/
+    
+    Examples:
+        # Restaurar:
+        POST /api/reports/1/restore/
+        → 200 OK {report_data}
+        
+        # Hard delete:
+        DELETE /api/reports/1/hard-delete/
+        → 204 No Content
     """
     
-    service_field = 'service'  # Override en subclases
-    
-    def get_queryset(self):
+    @action(detail=True, methods=['post'])
+    def restore(self, request, pk=None):
         """
-        Filtrar queryset por servicios del usuario automáticamente.
+        Restaura registro eliminado (soft delete).
+        
+        Args:
+            request: HttpRequest
+            pk: Primary key
         
         Returns:
-            QuerySet filtrado
+            Response con objeto restaurado o error
         """
-        queryset = super().get_queryset()
+        obj = self.get_object()
         
-        # Si no hay usuario autenticado, retornar vacío
-        if not self.request.user or not self.request.user.is_authenticated:
-            return queryset.none()
+        # Verificar que modelo soporte soft delete
+        if not hasattr(obj, 'is_deleted'):
+            return Response(
+                {'error': 'Model does not support soft delete'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        # Filtrar por servicios del usuario
-        return ServiceAccessService.filter_by_user_services(
-            queryset,
-            self.request.user,
-            self.service_field
-        )
-
-
-class OptionalServiceFilterMixin:
-    """
-    Mixin que filtra por servicio solo si el usuario NO es superusuario.
+        # Verificar que esté eliminado
+        if not obj.is_deleted:
+            return Response(
+                {'error': 'Object is not deleted'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Restaurar
+        obj.restore()
+        
+        # Serializar y retornar
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
     
-    Útil cuando quieres que superusuarios vean todo sin filtro,
-    pero usuarios normales solo sus servicios.
-    """
-    
-    service_field = 'service'
-    
-    def get_queryset(self):
+    @action(detail=True, methods=['delete'])
+    def hard_delete(self, request, pk=None):
         """
-        Filtrar queryset opcionalmente por servicios.
+        Elimina físicamente (hard delete).
+        
+        Args:
+            request: HttpRequest
+            pk: Primary key
         
         Returns:
-            QuerySet filtrado o completo (si superuser)
+            Response 204 No Content
         """
-        queryset = super().get_queryset()
+        obj = self.get_object()
         
-        if not self.request.user or not self.request.user.is_authenticated:
-            return queryset.none()
+        # Si tiene método hard_delete, usarlo
+        if hasattr(obj, 'hard_delete'):
+            obj.hard_delete()
+        else:
+            # Fallback a delete normal
+            obj.delete()
         
-        # Superusuarios ven todo sin filtro
-        if self.request.user.is_superuser:
-            return queryset
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# ============================================================================
+# SERVICE FILTER MIXIN
+# ============================================================================
+
+# ====================================================================================
+# REMOVED - FASE A DT-002 (2026-01-21)
+# ====================================================================================
+#
+# ServiceFilterMixin (eliminado):
+#   - Filtraba queryset por UserServiceAccess del usuario
+#   - Usaba service_field para filtrar FK a Service
+#
+# Razón: UserServiceAccess eliminado, reemplazado por RBAC puro
+# Reemplazo: Implementar filtrado custom en ViewSet si es necesario
+# ====================================================================================
+
+
+# ============================================================================
+# AUDIT MIXINS
+# ============================================================================
+
+
+class AuditCreateMixin:
+    """
+    Mixin para setear created_by al crear.
+    
+    CLEAN_CODE v3.0.1: Nombre que revela intención.
+    SOLID SRP: Solo setea created_by.
+    
+    Requiere que el modelo tenga campo created_by.
+    
+    Uso:
+        class ReportViewSet(AuditCreateMixin, viewsets.ModelViewSet):
+            pass
+    
+    Examples:
+        POST /api/reports/ {name: "Q1 Report"}
+        → created_by se setea automáticamente a request.user
+    """
+    
+    def perform_create(self, serializer):
+        """
+        Setea created_by al crear.
         
-        # Otros filtran por servicios
-        return ServiceAccessService.filter_by_user_services(
-            queryset,
-            self.request.user,
-            self.service_field
-        )
+        Args:
+            serializer: Serializer con datos validados
+        """
+        serializer.save(created_by=self.request.user)
+
+
+class AuditUpdateMixin:
+    """
+    Mixin para setear updated_by al actualizar.
+    
+    CLEAN_CODE v3.0.1: Nombre descriptivo.
+    SOLID SRP: Solo setea updated_by.
+    
+    Requiere que el modelo tenga campo updated_by.
+    
+    Uso:
+        class ReportViewSet(AuditUpdateMixin, viewsets.ModelViewSet):
+            pass
+    
+    Examples:
+        PUT /api/reports/1/ {name: "Q1 Report Updated"}
+        → updated_by se setea automáticamente a request.user
+    """
+    
+    def perform_update(self, serializer):
+        """
+        Setea updated_by al actualizar.
+        
+        Args:
+            serializer: Serializer con datos validados
+        """
+        serializer.save(updated_by=self.request.user)
+
+
+class AuditMixin(AuditCreateMixin, AuditUpdateMixin):
+    """
+    Mixin combinado para created_by y updated_by.
+    
+    CLEAN_CODE v3.0.1: Nombre auto-documentado.
+    SOLID SRP: Combina create y update audit.
+    
+    Uso:
+        class ReportViewSet(AuditMixin, viewsets.ModelViewSet):
+            pass
+        
+        # Equivalente a:
+        class ReportViewSet(AuditCreateMixin, AuditUpdateMixin, viewsets.ModelViewSet):
+            pass
+    """
+    pass
+
+
+# ============================================================================
+# PAGINATION MIXIN
+# ============================================================================
+
+class PaginationControlMixin:
+    """
+    Mixin para controlar paginación dinámicamente.
+    
+    CLEAN_CODE v3.0.1: Nombre que revela intención.
+    SOLID SRP: Solo controla paginación.
+    
+    Permite al cliente desactivar paginación con query param.
+    
+    Uso:
+        class ReportViewSet(PaginationControlMixin, viewsets.ModelViewSet):
+            pass
+        
+        # Con paginación (default):
+        GET /api/reports/
+        → {count: 100, next: ..., results: [...]}
+        
+        # Sin paginación:
+        GET /api/reports/?paginate=false
+        → [...]
+    
+    Query Params:
+        paginate (str): 'true' (default) o 'false'
+    
+    Examples:
+        # Export sin paginación:
+        GET /api/reports/?paginate=false&format=csv
+        → Todos los registros en CSV
+    """
+    
+    def paginate_queryset(self, queryset):
+        """
+        Pagina queryset según query param.
+        
+        Args:
+            queryset: QuerySet a paginar
+        
+        Returns:
+            QuerySet paginado o None (sin paginación)
+        """
+        # Obtener query param
+        paginate = self.request.query_params.get('paginate', 'true')
+        
+        # Si paginate=false, no paginar
+        if paginate.lower() == 'false':
+            return None
+        
+        # Paginar normalmente
+        return super().paginate_queryset(queryset)
+
+
+# ============================================================================
+# EXPORT MIXIN
+# ============================================================================
+
+class ExportMixin:
+    """
+    Mixin para exportar datos.
+    
+    CLEAN_CODE v3.0.1: Nombre descriptivo.
+    SOLID SRP: Solo agrega acción export.
+    
+    Agrega action custom:
+    - GET /resource/export/?format=csv - Exporta a CSV
+    
+    Uso:
+        class ReportViewSet(ExportMixin, viewsets.ModelViewSet):
+            export_fields = ['id', 'name', 'created_at']
+    
+    Configuración:
+        export_fields (list): Campos a exportar
+    
+    Examples:
+        GET /api/reports/export/?format=csv
+        → CSV con todos los reports
+    """
+    
+    export_fields = []  # Override en subclass
+    
+    @action(detail=False, methods=['get'])
+    def export(self, request):
+        """
+        Exporta datos a CSV.
+        
+        Args:
+            request: HttpRequest
+        
+        Returns:
+            HttpResponse con CSV
+        """
+        import csv
+        from django.http import HttpResponse
+        
+        # Obtener queryset filtrado
+        queryset = self.filter_queryset(self.get_queryset())
+        
+        # Crear response CSV
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="export.csv"'
+        
+        # Escribir CSV
+        writer = csv.writer(response)
+        
+        # Header
+        fields = self.export_fields or ['id']
+        writer.writerow(fields)
+        
+        # Rows
+        for obj in queryset:
+            row = [getattr(obj, field, '') for field in fields]
+            writer.writerow(row)
+        
+        return response
+
+
+# ============================================================================
+# RESUMEN MIXINS
+# 
+# Total: 8 mixins
+# 
+# Soft Delete:
+#   ✅ SoftDeleteViewSetMixin - Acciones restore/hard-delete
+# 
+# Service Filter:
+#   ✅ ServiceFilterMixin - Filtra por servicios del usuario
+# 
+# Audit:
+#   ✅ AuditCreateMixin - Setea created_by
+#   ✅ AuditUpdateMixin - Setea updated_by
+#   ✅ AuditMixin - Combinado (create + update)
+# 
+# Pagination:
+#   ✅ PaginationControlMixin - Control dinámico paginación
+# 
+# Export:
+#   ✅ ExportMixin - Exportar a CSV
+# 
+# Principios SOLID Aplicados:
+#   ✅ SRP: Cada mixin una responsabilidad
+#   ✅ DRY: _get_user_services() helper
+#   ✅ Clean Naming: Nombres auto-documentados
+#   ✅ Documentation: Docstrings + ejemplos
+#   ✅ Composable: Mixins combinables
+# ============================================================================

@@ -1,315 +1,308 @@
 """
-Modelos core - IACT Call Center System.
+Abstract Models base para IACT.
 
-CNST-003: Modelos analytics (PostgreSQL default DB).
+CLEAN_CODE v3.0.1: Nombres auto-documentados.
+CRÍTICO: SOLO modelos con abstract=True.
+
+Modelos concretos van en apps de negocio:
+- Center, Service, CallRecord → apps/pipeline/models.py
+- UserServiceAccess → apps/access/models.py (PARTE 7)
 """
+
 from django.db import models
-from django.contrib.auth import get_user_model
-from decimal import Decimal
-from apps.utils import SoftDeleteMixin
-
-User = get_user_model()
+from django.utils import timezone
+from django.conf import settings
 
 
-class CallRecord(SoftDeleteMixin, models.Model):
+# ============================================================================
+# TIMESTAMPED MODEL
+# ============================================================================
+
+class TimeStampedModel(models.Model):
     """
-    Registro de llamadas procesado.
+    Modelo base con timestamps automáticos.
     
-    Almacena datos agregados por fecha/telefono/servicio.
-    Base de datos: default (PostgreSQL analytics).
+    CLEAN_CODE v3.0.1: Nombre que revela intención.
     
-    CNST-003: Este modelo usa 'default' DB (PostgreSQL).
-    NO usa 'ivr_legacy' (MariaDB READ-ONLY).
+    Provee campos automáticos:
+    - created_at: Se setea al crear
+    - updated_at: Se actualiza al guardar
     
-    Usa SoftDeleteMixin para delete lógico.
+    Uso:
+        class MiModelo(TimeStampedModel):
+            # Automáticamente tiene created_at y updated_at
+            nombre = models.CharField(max_length=100)
     """
-    
-    fecha = models.DateField(
-        db_index=True,
-        help_text='Fecha de las llamadas'
-    )
-    
-    telefono = models.CharField(
-        max_length=20,
-        db_index=True,
-        help_text='Numero telefonico que realizo llamadas'
-    )
-    
-    servicio_800 = models.CharField(
-        max_length=20,
-        db_index=True,
-        help_text='Numero servicio 800 destino'
-    )
-    
-    total_llamadas = models.IntegerField(
-        default=0,
-        help_text='Total de llamadas realizadas'
-    )
-    
-    llamadas_contestadas = models.IntegerField(
-        default=0,
-        help_text='Llamadas contestadas por agente'
-    )
-    
-    llamadas_abandonadas = models.IntegerField(
-        default=0,
-        help_text='Llamadas abandonadas (colgadas antes de contestar)'
-    )
     
     created_at = models.DateTimeField(
         auto_now_add=True,
-        help_text='Timestamp creacion registro'
+        verbose_name='Creado',
+        help_text='Fecha y hora de creación'
     )
     
     updated_at = models.DateTimeField(
         auto_now=True,
-        help_text='Timestamp ultima actualizacion'
+        verbose_name='Actualizado',
+        help_text='Fecha y hora de última actualización'
     )
     
     class Meta:
-        db_table = 'core_call_records'
-        ordering = ['-fecha', '-created_at']
-        unique_together = [['fecha', 'telefono', 'servicio_800']]
-        indexes = [
-            models.Index(fields=['fecha', 'servicio_800']),
-            models.Index(fields=['fecha', 'telefono']),
-        ]
-        verbose_name = 'Registro de Llamada'
-        verbose_name_plural = 'Registros de Llamadas'
+        abstract = True  # ✅ OBLIGATORIO
+
+
+# ============================================================================
+# SOFT DELETE QUERYSET Y MANAGER
+# ============================================================================
+
+class SoftDeleteQuerySet(models.QuerySet):
+    """
+    QuerySet para soft delete.
     
-    def __str__(self):
-        """Representacion string."""
-        return f"{self.fecha} - {self.telefono} -> {self.servicio_800}"
+    CLEAN_CODE v3.0.1: Nombre auto-documentado.
     
-    def answer_rate(self):
-        """
-        Calcular porcentaje de respuesta.
+    Provee métodos:
+    - active(): Solo no eliminados
+    - deleted(): Solo eliminados
+    - with_deleted(): Todos (incluye eliminados)
+    
+    Uso:
+        MiModelo.objects.active()  # Solo no eliminados
+        MiModelo.objects.deleted()  # Solo eliminados
+        MiModelo.objects.with_deleted()  # Todos
+    """
+    
+    def active(self):
+        """Retorna solo registros no eliminados."""
+        return self.filter(is_deleted=False)
+    
+    def deleted(self):
+        """Retorna solo registros eliminados."""
+        return self.filter(is_deleted=True)
+    
+    def with_deleted(self):
+        """Retorna todos los registros (incluye eliminados)."""
+        return self
+
+
+class SoftDeleteManager(models.Manager):
+    """
+    Manager para soft delete.
+    
+    CLEAN_CODE v3.0.1: Manager Pattern.
+    
+    Por defecto retorna solo no eliminados.
+    
+    Uso:
+        class MiModelo(SoftDeleteMixin):
+            objects = SoftDeleteManager()
         
-        Returns:
-            Decimal: Porcentaje (0-100)
-        """
-        if self.total_llamadas == 0:
-            return Decimal('0.00')
+        MiModelo.objects.all()  # Solo no eliminados
+        MiModelo.objects.active()  # Explícito
+        MiModelo.objects.deleted()  # Solo eliminados
+    """
+    
+    def get_queryset(self):
+        """Retorna queryset base."""
+        return SoftDeleteQuerySet(self.model, using=self._db)
+    
+    def active(self):
+        """Retorna solo no eliminados."""
+        return self.get_queryset().active()
+    
+    def deleted(self):
+        """Retorna solo eliminados."""
+        return self.get_queryset().deleted()
+    
+    def with_deleted(self):
+        """Retorna todos (incluye eliminados)."""
+        return self.get_queryset().with_deleted()
+
+
+# ============================================================================
+# SOFT DELETE MIXIN
+# ============================================================================
+
+class SoftDeleteMixin(models.Model):
+    """
+    Mixin para soft delete (borrado lógico).
+    
+    CLEAN_CODE v3.0.1: Nombre descriptivo.
+    
+    Permite marcar registros como eliminados sin borrarlos físicamente de la BD.
+    
+    Provee:
+    - is_deleted (flag booleano)
+    - deleted_at (timestamp)
+    - delete() override (soft delete)
+    - hard_delete() (eliminación física)
+    - restore() (restaurar eliminado)
+    
+    Uso:
+        class MiModelo(SoftDeleteMixin, models.Model):
+            nombre = models.CharField(max_length=100)
+            
+            # Usar SoftDeleteManager
+            objects = SoftDeleteManager()
         
-        rate = (Decimal(self.llamadas_contestadas) / 
-                Decimal(self.total_llamadas)) * 100
-        return rate.quantize(Decimal('0.01'))
-
-
-class Center(SoftDeleteMixin, models.Model):
+        # Soft delete
+        obj = MiModelo.objects.get(id=1)
+        obj.delete()  # Marca is_deleted=True
+        
+        # Hard delete
+        obj.hard_delete()  # Elimina de BD
+        
+        # Restaurar
+        obj.restore()  # is_deleted=False
+        
+        # Query solo no eliminados
+        MiModelo.objects.active()
     """
-    Centro de atencion.
     
-    Representa un centro fisico de call center.
-    
-    Usa SoftDeleteMixin para delete lógico.
-    """
-    
-    nombre = models.CharField(
-        max_length=200,
-        help_text='Nombre del centro'
+    is_deleted = models.BooleanField(
+        default=False,
+        db_index=True,  # ✅ Índice para queries rápidas
+        verbose_name='Eliminado',
+        help_text='Indica si el registro está eliminado (delete lógico)'
     )
     
-    codigo = models.CharField(
-        max_length=20,
-        unique=True,
-        db_index=True,
-        help_text='Codigo unico del centro'
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Eliminado en',
+        help_text='Fecha y hora en que se eliminó el registro'
     )
-    
-    activo = models.BooleanField(
-        default=True,
-        help_text='Centro activo'
-    )
-    
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = 'core_centers'
-        ordering = ['nombre']
-        verbose_name = 'Centro'
-        verbose_name_plural = 'Centros'
+        abstract = True  # ✅ OBLIGATORIO
     
-    def __str__(self):
-        return self.nombre
+    def delete(self, using=None, keep_parents=False):
+        """
+        Soft delete: marca como eliminado.
+        
+        NO elimina físicamente de la BD.
+        """
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save(update_fields=['is_deleted', 'deleted_at'])
+    
+    def hard_delete(self, using=None, keep_parents=False):
+        """
+        Hard delete: elimina físicamente.
+        
+        Usa delete() de Django directamente.
+        """
+        super().delete(using=using, keep_parents=keep_parents)
+    
+    def restore(self):
+        """Restaura registro eliminado."""
+        self.is_deleted = False
+        self.deleted_at = None
+        self.save(update_fields=['is_deleted', 'deleted_at'])
 
 
+# ============================================================================
+# AUDITED MODEL
+# ============================================================================
 
-class Service(SoftDeleteMixin, models.Model):
+class AuditedModel(models.Model):
     """
-    Servicio 800.
+    Modelo con auditoría de creador y modificador.
     
-    Representa un numero de servicio 800 asociado a un centro.
+    CLEAN_CODE v3.0.1: Nombre que revela intención.
     
-    Usa SoftDeleteMixin para delete lógico.
-    """
+    Provee campos:
+    - created_by: Usuario que creó
+    - updated_by: Usuario que modificó
     
-    numero_800 = models.CharField(
-        max_length=20,
-        unique=True,
-        db_index=True,
-        help_text='Numero servicio 800'
-    )
-    
-    nombre = models.CharField(
-        max_length=200,
-        help_text='Nombre del servicio'
-    )
-    
-    center = models.ForeignKey(
-        Center,
-        on_delete=models.PROTECT,
-        related_name='services',
-        help_text='Centro al que pertenece'
-    )
-    
-    activo = models.BooleanField(
-        default=True,
-        help_text='Servicio activo'
-    )
-    
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        db_table = 'core_services'
-        ordering = ['numero_800']
-        verbose_name = 'Servicio'
-        verbose_name_plural = 'Servicios'
-    
-    def __str__(self):
-        return f"{self.numero_800} - {self.nombre}"
-
-
-class UserServiceAccess(SoftDeleteMixin, models.Model):
-    """
-    Acceso de usuario a servicios 800.
-    
-    Define qué servicios puede ver/gestionar cada usuario.
-    Permite segmentación de datos por servicio.
-    
-    Ejemplos:
-    - Usuario Juan: acceso a servicios [800-123-4567, 800-987-6543]
-    - Usuario María: acceso a servicio [800-555-0000]
-    - Usuario Admin: acceso a todos los servicios
-    
-    Si un usuario NO tiene ServiceAccess asignado:
-    - Superusuarios: ven todos los servicios
-    - Usuarios normales: no ven ningún servicio
+    Uso:
+        class MiModelo(AuditedModel, TimeStampedModel):
+            nombre = models.CharField(max_length=100)
+        
+        # Al crear
+        obj = MiModelo(nombre='Test')
+        obj.created_by = request.user
+        obj.save()
+        
+        # Al actualizar
+        obj.nombre = 'Updated'
+        obj.updated_by = request.user
+        obj.save()
     """
     
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='service_accesses',
-        verbose_name='Usuario',
-    )
-    
-    service = models.ForeignKey(
-        Service,
-        on_delete=models.CASCADE,
-        related_name='user_accesses',
-        verbose_name='Servicio',
-    )
-    
-    # Asignación
-    granted_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Otorgado en',
-    )
-    
-    granted_by = models.ForeignKey(
-        User,
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='service_accesses_granted',
-        verbose_name='Otorgado por',
+        related_name='%(app_label)s_%(class)s_created',
+        verbose_name='Creado por',
+        help_text='Usuario que creó el registro'
     )
     
-    reason = models.TextField(
-        blank=True,
-        verbose_name='Razón',
-        help_text='Por qué se otorgó este acceso',
-    )
-    
-    # Estado
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name='Activo',
-    )
-    
-    revoked_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        verbose_name='Revocado en',
-    )
-    
-    revoked_by = models.ForeignKey(
-        User,
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='service_accesses_revoked',
-        verbose_name='Revocado por',
+        related_name='%(app_label)s_%(class)s_updated',
+        verbose_name='Actualizado por',
+        help_text='Usuario que actualizó el registro'
     )
     
     class Meta:
-        db_table = 'user_service_accesses'
-        verbose_name = 'Acceso a Servicio'
-        verbose_name_plural = 'Accesos a Servicios'
-        unique_together = [['user', 'service']]
-        ordering = ['-granted_at']
-        indexes = [
-            models.Index(fields=['user', 'is_active']),
-            models.Index(fields=['service', 'is_active']),
-        ]
+        abstract = True  # ✅ OBLIGATORIO
+
+
+# ============================================================================
+# COMPLETE BASE MODEL
+# ============================================================================
+
+class CompleteBaseModel(TimeStampedModel, SoftDeleteMixin, AuditedModel):
+    """
+    Modelo base completo con timestamps, soft delete y auditoría.
     
-    def __str__(self):
-        return f"{self.user.username} -> {self.service.numero_800}"
+    CLEAN_CODE v3.0.1: Nombre descriptivo.
     
-    @classmethod
-    def get_user_services(cls, user):
-        """
-        Obtener servicios accesibles por usuario.
-        
-        Args:
-            user: Usuario
+    Combina:
+    - TimeStampedModel (created_at, updated_at)
+    - SoftDeleteMixin (is_deleted, deleted_at, delete(), restore())
+    - AuditedModel (created_by, updated_by)
+    
+    Uso:
+        class MiModelo(CompleteBaseModel):
+            nombre = models.CharField(max_length=100)
             
-        Returns:
-            QuerySet de Service accesibles
-        """
-        if user.is_superuser:
-            # Superusuarios ven todos
-            return Service.objects.filter(activo=True)
+            # Usar SoftDeleteManager
+            objects = SoftDeleteManager()
         
-        # Usuarios normales: solo servicios asignados
-        return Service.objects.filter(
-            user_accesses__user=user,
-            user_accesses__is_active=True,
-            activo=True,
-        ).distinct()
+        # Tiene automáticamente:
+        # - created_at, updated_at
+        # - is_deleted, deleted_at
+        # - created_by, updated_by
+        # - delete(), hard_delete(), restore()
+    """
     
-    @classmethod
-    def has_service_access(cls, user, service):
-        """
-        Verificar si usuario tiene acceso a servicio.
-        
-        Args:
-            user: Usuario
-            service: Instancia de Service o ID
-            
-        Returns:
-            bool: True si tiene acceso
-        """
-        if user.is_superuser:
-            return True
-        
-        service_id = service.id if hasattr(service, 'id') else service
-        
-        return cls.objects.filter(
-            user=user,
-            service_id=service_id,
-            is_active=True,
-        ).exists()
+    class Meta:
+        abstract = True  # ✅ OBLIGATORIO
+
+
+# ============================================================================
+# RESUMEN DE ABSTRACT MODELS
+# 
+# Total: 6 clases abstractas
+# 
+# Models:
+#   ✅ TimeStampedModel (created_at, updated_at)
+#   ✅ SoftDeleteMixin (is_deleted, deleted_at, delete, restore)
+#   ✅ AuditedModel (created_by, updated_by)
+#   ✅ CompleteBaseModel (combina los 3 anteriores)
+# 
+# Managers:
+#   ✅ SoftDeleteManager
+#   ✅ SoftDeleteQuerySet
+# 
+# CRÍTICO:
+#   ❌ NO hay modelos concretos (db_table)
+#   ✅ TODOS tienen abstract=True
+#   ✅ SOLO clases base reutilizables
+# ============================================================================

@@ -1,18 +1,38 @@
-from django.urls import path
-from rest_framework_simplejwt.views import TokenRefreshView
+"""
+URLs para authentication.
 
-from apps.authentication.views import (
-    CustomTokenObtainPairView,
-    password_reset_request,
-)
+CLEAN_CODE v3.0.1: URLs auto-documentadas.
+"""
 
-app_name = 'authentication'
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
+from apps.authentication.viewsets import AuthViewSet, SessionViewSet
+
+# Router DRF
+router = DefaultRouter()
+router.register(r'auth', AuthViewSet, basename='auth')
+router.register(r'sessions', SessionViewSet, basename='sessions')
 
 urlpatterns = [
-    # JWT Authentication
-    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    # Password Reset (sin email)
-    path('password-reset/', password_reset_request, name='password_reset'),
+    path('', include(router.urls)),
 ]
+
+"""
+Endpoints generados (11 total):
+
+Auth (7):
+- POST   /api/v1/auth/login/                    (AllowAny)
+- POST   /api/v1/auth/logout/                   (IsAuthenticated)
+- POST   /api/v1/auth/change-password/          (IsAuthenticated + Permission)
+- GET    /api/v1/auth/security-questions/       (AllowAny)
+- POST   /api/v1/auth/set-security-answers/     (IsAuthenticated + Permission)
+- POST   /api/v1/auth/verify-security-answers/  (AllowAny)
+- POST   /api/v1/auth/reset-password/           (AllowAny)
+
+Sessions (4):
+- GET    /api/v1/sessions/                      (IsAuthenticated + Permission)
+- GET    /api/v1/sessions/{id}/                 (IsAuthenticated + Permission)
+- POST   /api/v1/sessions/{id}/invalidate/      (IsAuthenticated + Permission)
+- POST   /api/v1/sessions/invalidate-all/       (IsAuthenticated + Permission)
+"""
