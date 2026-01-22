@@ -5,7 +5,7 @@ FactoryBoy para generación de datos test.
 """
 import factory
 from datetime import date
-from apps.core.models import CallRecord, Center, Service
+from apps.pipeline.models import CallRecord, Center, Service
 
 
 class CenterFactory(factory.django.DjangoModelFactory):

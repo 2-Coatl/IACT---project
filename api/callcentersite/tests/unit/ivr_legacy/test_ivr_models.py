@@ -13,12 +13,12 @@ class TestCallLogModel:
     
     def test_calllog_importable(self):
         """CallLog debe ser importable."""
-        from apps.ivr_legacy.models import CallLog
+        from apps.ivr.models import CallLog
         assert CallLog is not None
     
     def test_calllog_model_structure(self):
         """CallLog debe tener campos correctos."""
-        from apps.ivr_legacy.models import CallLog
+        from apps.ivr.models import CallLog
         
         # Verificar campos existen
         assert hasattr(CallLog, 'fecha')
@@ -28,12 +28,12 @@ class TestCallLogModel:
     
     def test_calllog_meta_unmanaged(self):
         """CallLog debe ser unmanaged."""
-        from apps.ivr_legacy.models import CallLog
+        from apps.ivr.models import CallLog
         
         assert CallLog._meta.managed is False
     
     def test_calllog_meta_db_table(self):
         """CallLog debe apuntar a tabla call_logs."""
-        from apps.ivr_legacy.models import CallLog
+        from apps.ivr.models import CallLog
         
         assert CallLog._meta.db_table == 'call_logs'

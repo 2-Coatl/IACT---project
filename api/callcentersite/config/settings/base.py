@@ -69,11 +69,11 @@ INSTALLED_APPS = [
     
     # Local apps
     'apps.core',
-    'apps.ivr_legacy',
+    'apps.ivr',
     'apps.authentication',
+    'apps.users',  # ← Debe estar ANTES de apps.access (User model)
     'apps.access',
     'apps.audit',
-    'apps.users',
     'apps.pipeline',
     'apps.reports',
 ]
@@ -83,8 +83,8 @@ INSTALLED_APPS = [
 # AUTHENTICATION
 # ==============================================================================
 
-# Custom User Model
-AUTH_USER_MODEL = 'users.CustomUser'
+# Custom User Model (CNST-037)
+AUTH_USER_MODEL = 'users.User'
 
 
 # ==============================================================================
@@ -466,21 +466,38 @@ PASSWORD_HASHERS = [
 
 
 # ==============================================================================
+# ==============================================================================
 # CACHE
 # ==============================================================================
-# CNST_TECNICAS: NO Redis
+# CNST-010: NO cache permitido
+# Usar SOLO base de datos PostgreSQL para persistencia
 # ==============================================================================
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'iact-cache',
-    }
-}
+# CACHES configuración removida - CUMPLE CNST-010
+# Toda persistencia debe usar PostgreSQL directamente
 
-# CNST_TECNICAS: NO Redis
-# NO usar django-redis
-# NO usar cache distribuido
+# ❌ PROHIBIDO por CNST-010:
+# - Redis (django-redis)
+# - Memcached
+# - LocMemCache (volátil, se pierde en restart)
+# - Cualquier cache backend
+
+# ✅ PERMITIDO por CNST-010:
+# - PostgreSQL (único backend de persistencia)
+# - Base de datos para sessions (django.contrib.sessions.backends.db)
+
+# ANTES (VIOLABA CNST-010):
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ❌ Prohibido
+#         'LOCATION': 'iact-cache',
+#     }
+# }
+
+# AHORA:
+# - LoginLockout usa modelo en PostgreSQL
+# - Sessions usan tabla django_session en PostgreSQL
+# - NO cache en memoria (cumple CNST-010)
 
 
 # ==============================================================================
