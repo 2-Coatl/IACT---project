@@ -121,8 +121,7 @@ class CenterService:
         Returns:
             dict: {
                 'center': Center,
-                'services_deactivated': int,
-                'user_accesses_affected': int
+                'services_deactivated': int
             }
         
         Examples:
@@ -138,23 +137,12 @@ class CenterService:
         services = center.services.filter(activo=True)
         services_count = services.count()
         
-        # Contar accesos afectados antes de desactivar
-        from apps.access.models import UserServiceAccess
-        user_accesses_affected = UserServiceAccess.objects.filter(
-            service__in=services,
-            is_active=True
-        ).count()
-        
         # Desactivar servicios
         services.update(activo=False)
         
-        # Invalidar cache
-        CenterService._invalidate_services_cache(center)
-        
         return {
             'center': center,
-            'services_deactivated': services_count,
-            'user_accesses_affected': user_accesses_affected
+            'services_deactivated': services_count
         }
     
     @staticmethod
@@ -191,7 +179,6 @@ class CenterService:
                 'total_services': int,
                 'active_services': int,
                 'inactive_services': int,
-                'total_users_with_access': int,
                 'is_active': bool
             }
         
@@ -203,18 +190,10 @@ class CenterService:
         services = center.services.all()
         active_services = services.filter(activo=True)
         
-        # Contar usuarios con acceso a servicios de este centro
-        from apps.access.models import UserServiceAccess
-        users_with_access = UserServiceAccess.objects.filter(
-            service__center=center,
-            is_active=True
-        ).values('user').distinct().count()
-        
         return {
             'total_services': services.count(),
             'active_services': active_services.count(),
             'inactive_services': services.filter(activo=False).count(),
-            'total_users_with_access': users_with_access,
             'is_active': center.activo
         }
     
@@ -279,30 +258,10 @@ class CenterService:
         
         # Crear en batch
         return Center.objects.bulk_create(centers)
-    
-    @staticmethod
-    def _invalidate_services_cache(center: Center):
-        """
-        Invalidar cache relacionado con servicios del centro.
-        
-        Args:
-            center (Center): Centro
-        """
-        # Invalidar cache de servicios de usuarios que tienen acceso
-        from apps.access.models import UserServiceAccess
-        
-        user_ids = UserServiceAccess.objects.filter(
-            service__center=center,
-            is_active=True
-        ).values_list('user_id', flat=True).distinct()
-        
-        for user_id in user_ids:
-            cache_key = CACHE_KEY_USER_SERVICES.format(user_id=user_id)
-            cache.delete(cache_key)
 
 
 # ============================================================================
-# TOTAL METHODS: 9
+# TOTAL METHODS: 8 (LIMPIEZA DEUDA TÉCNICA 2026-01-22)
 # 
 # CRUD:
 #   - create_center(data)

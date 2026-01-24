@@ -5,7 +5,11 @@ Django-filter filtros para UserViewSet.
 """
 
 import django_filters
-from apps.users.models import User
+from django.contrib.auth import get_user_model
+
+# ✅ BEST PRACTICE: Use get_user_model() instead of direct import
+# https://docs.djangoproject.com/en/stable/topics/auth/customizing/#referencing-the-user-model
+User = get_user_model()
 
 
 class UserFilter(django_filters.FilterSet):

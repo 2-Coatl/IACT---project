@@ -17,7 +17,9 @@
           "endpoint": "/api/v1/users/",
           "method": "GET",
           "orden": 1,
-          "required_functions": ["USR-004: list_users"]
+          "required_functions": [
+            "users.view"
+          ]
         },
         {
           "id_menu": 202,
@@ -26,7 +28,9 @@
           "endpoint": "/api/v1/users/",
           "method": "POST",
           "orden": 2,
-          "required_functions": ["USR-001: create_users"]
+          "required_functions": [
+            "users.create"
+          ]
         },
         {
           "id_menu": 203,

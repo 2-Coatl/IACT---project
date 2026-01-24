@@ -14,64 +14,111 @@ from rest_framework import permissions
 
 class RequiresFunctionPermission(permissions.BasePermission):
     """
-    Permission que requiere función RBAC específica.
+    Permission que requiere función RBAC específica usando namespaces Django.
+    
+    RBAC v6.0.0: Usa permission_django (namespaces) en lugar de codes.
+    
+    El ViewSet debe definir function_map con namespaces Django:
+    
+    Uso en ViewSet:
+        class UserViewSet(viewsets.ModelViewSet):
+            permission_classes = [IsAuthenticated, RequiresFunctionPermission]
+            
+            function_map = {
+                'list': 'users.view',           # ← Namespace Django
+                'create': 'users.create',
+                'update': 'users.edit',
+                'partial_update': 'users.edit',
+                'destroy': 'users.delete',
+            }
+    
+    Comportamiento:
+        - Sin function_map: Permite acceso (sin restricción RBAC)
+        - Con function_map pero acción no mapeada: Permite acceso
+        - Con function_map y acción mapeada: Verifica permiso
+    
+    Examples:
+        # Usuario CON función 'users.view':
+        GET /api/v1/users/ → 200 OK ✅
+        
+        # Usuario SIN función 'users.create':
+        POST /api/v1/users/ → 403 Forbidden ❌
+        
+        # Acción no mapeada (sin restricción):
+        OPTIONS /api/v1/users/ → 200 OK ✅
     
     CLEAN_CODE v3.0.1: Nombre que revela intención.
     SOLID SRP: Solo verifica función RBAC.
-    
-    Uso en ViewSet:
-        class ReportViewSet(viewsets.ModelViewSet):
-            permission_classes = [RequiresFunctionPermission]
-            
-            function_map = {
-                'list': 'reports.view',
-                'create': 'reports.create',
-                'update': 'reports.edit',
-                'destroy': 'reports.delete',
-            }
-    
-    Examples:
-        # Usuario con función 'reports.view':
-        GET /api/reports/ → 200 OK
-        
-        # Usuario sin función 'reports.create':
-        POST /api/reports/ → 403 Forbidden
     """
     
     message = 'No tiene permiso para realizar esta acción.'
     
     def has_permission(self, request, view):
         """
-        Verifica permiso RBAC.
+        Verifica permiso RBAC usando namespace Django.
+        
+        Args:
+            request: HttpRequest
+            view: ViewSet instance
+        
+        Returns:
+            bool: True si tiene permiso, False si no
+        
+        Proceso:
+            1. Verifica autenticación
+            2. Superuser bypass
+            3. Obtiene function_map del ViewSet
+            4. Si no hay function_map → permite (sin restricción)
+            5. Si acción no mapeada → permite (sin restricción)
+            6. Si acción mapeada → verifica con User.has_function()
+        """
+        # 1. Usuario debe estar autenticado
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        # 2. Superusers siempre tienen acceso
+        if request.user.is_superuser:
+            return True
+        
+        # 3. Obtener function_map del ViewSet
+        function_map = getattr(view, 'function_map', {})
+        
+        # 4. Si no hay function_map, permitir (sin restricción RBAC)
+        if not function_map:
+            return True
+        
+        # 5. Obtener acción actual
+        action = getattr(view, 'action', None)
+        
+        # Si la acción no está mapeada, permitir (sin restricción)
+        if action not in function_map:
+            return True
+        
+        # 6. Obtener permission_django (namespace)
+        permission_django = function_map[action]
+        
+        # Verificar permiso RBAC usando namespace
+        return request.user.has_function(permission_django)
+    
+    def get_required_function(self, request, view):
+        """
+        Helper para debugging: obtiene la función requerida.
         
         Args:
             request: HttpRequest
             view: ViewSet
         
         Returns:
-            bool: True si tiene permiso
+            str | None: Namespace requerido o None
+        
+        Example:
+            >>> permission = RequiresFunctionPermission()
+            >>> permission.get_required_function(request, view)
+            'users.view'
         """
-        # Usuario debe estar autenticado
-        if not request.user or not request.user.is_authenticated:
-            return False
-        
-        # Superusers siempre tienen acceso
-        if request.user.is_superuser:
-            return True
-        
-        # Obtener action y function_map del view
-        action = getattr(view, 'action', None)
         function_map = getattr(view, 'function_map', {})
-        
-        # Si no hay function_map para esta action, denegar
-        if action not in function_map:
-            return False
-        
-        # Obtener function_id
-        function_id = function_map[action]
-        
-        # Verificar permiso RBAC usando el método del User
-        return request.user.has_function(function_id)
+        action = getattr(view, 'action', None)
+        return function_map.get(action)
 
 
 # ============================================================================

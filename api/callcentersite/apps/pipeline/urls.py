@@ -11,7 +11,7 @@ from apps.pipeline.viewsets import (
     CenterViewSet,
     ServiceViewSet,
     CallRecordViewSet,
-    UserServiceAccessViewSet,
+    CallNoteViewSet,  # FASE 0.2
 )
 
 app_name = 'pipeline'
@@ -21,7 +21,7 @@ router = DefaultRouter()
 router.register(r'centers', CenterViewSet, basename='center')
 router.register(r'services', ServiceViewSet, basename='service')
 router.register(r'calls', CallRecordViewSet, basename='callrecord')
-router.register(r'user-service-accesses', UserServiceAccessViewSet, basename='userserviceaccess')
+router.register(r'call-notes', CallNoteViewSet, basename='callnote')  # FASE 0.2
 
 urlpatterns = [
     # ViewSets (DRF Router)
@@ -39,7 +39,7 @@ urlpatterns = [
 #   /api/v1/pipeline/centers/
 #   /api/v1/pipeline/services/
 #   /api/v1/pipeline/calls/
-#   /api/v1/pipeline/user-service-accesses/
+#   /api/v1/pipeline/call-notes/                # FASE 0.2
 # 
 # Custom Views:
 #   /api/v1/pipeline/status/

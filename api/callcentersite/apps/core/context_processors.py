@@ -53,11 +53,15 @@ def user_permissions(request):
     """
     Agrega funciones RBAC del usuario al context.
     
+    RBAC v6.0.0: Usa métodos del User model directamente.
+    ARQUITECTURA CORRECTA: No depende de apps específicas.
+    
     CLEAN_CODE v3.0.1: Nombre descriptivo.
     SOLID SRP: Solo provee user permissions.
+    SOLID DIP: No depende de implementaciones específicas.
     
     Disponible en templates:
-    - {{ user_functions }} (lista de function codes)
+    - {{ user_functions }} (set de namespaces Django)
     
     Permite verificar permisos en templates:
     {% if 'reports.create' in user_functions %}
@@ -79,20 +83,30 @@ def user_permissions(request):
         request: HttpRequest
     
     Returns:
-        dict: Variables de contexto
+        dict: Variables de contexto con user_functions
     
     Examples:
         # En template:
         {% if 'reports.create' in user_functions %}
             <a href="{% url 'reports:create' %}">Nuevo Reporte</a>
         {% endif %}
+        
+        {% if 'users.edit' in user_functions %}
+            <button>Editar Usuario</button>
+        {% endif %}
+    
+    Architecture Note:
+        Uses User.get_functions() method instead of AccessService
+        to avoid creating a dependency from core → access.
+        This respects the Dependency Inversion Principle (DIP).
     """
     user_functions = []
     
     if request.user.is_authenticated:
         try:
-            from apps.access.services import AccessService
-            user_functions = AccessService.get_user_functions(request.user)
+            # ✅ CORRECTO: User model tiene get_functions()
+            # No depende de apps específicas (DIP compliance)
+            user_functions = list(request.user.get_functions())
         except Exception:
             # Si falla, retornar lista vacía
             user_functions = []

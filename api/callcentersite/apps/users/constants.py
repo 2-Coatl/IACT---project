@@ -30,13 +30,39 @@ USER_STATUS_INACTIVE = 'inactive'
 USER_STATUS_LOCKED = 'locked'
 USER_STATUS_PENDING = 'pending'
 
-# Funciones RBAC (referencia)
-# Definidas en apps/access/fixtures/functions.json
-PERM_USERS_VIEW = 'users.view'       # Ver usuarios
-PERM_USERS_CREATE = 'users.create'   # Crear usuarios
-PERM_USERS_EDIT = 'users.edit'       # Editar usuarios
-PERM_USERS_DELETE = 'users.delete'   # Eliminar usuarios
-PERM_SESSIONS_VIEW = 'sessions.view' # Ver sesiones
+# ============================================================================
+# RBAC PERMISSIONS v6.0.0 (Django Namespaces)
+# ============================================================================
+
+# Users permissions
+PERM_USERS_VIEW = 'users.view'
+PERM_USERS_CREATE = 'users.create'
+PERM_USERS_EDIT = 'users.edit'
+PERM_USERS_DELETE = 'users.delete'
+
+# Sessions permissions
+PERM_SESSIONS_VIEW = 'sessions.view'
+PERM_SESSIONS_MANAGE = 'sessions.manage'
+
+# Authentication permissions
+PERM_AUTH_LOGIN = 'authentication.login'
+PERM_AUTH_LOGOUT = 'authentication.logout'
+PERM_AUTH_CHANGE_PASSWORD = 'authentication.change_password'
+PERM_AUTH_RECOVER_PASSWORD = 'authentication.recover_password'
+
+# ============================================================================
+# DEPRECATED: RBAC Codes (usar namespaces arriba)
+# ============================================================================
+
+# Funciones RBAC (referencia legacy - NO USAR)
+# DEPRECADO v6.0.0: Usar PERM_* arriba
+USR_VIEW = 'USR_VIEW'       # → PERM_USERS_VIEW
+USR_EDIT = 'USR_EDIT'       # → PERM_USERS_EDIT
+USR_DELETE = 'USR_DELETE'   # → PERM_USERS_DELETE
+USR_PERMS = 'USR_PERMS'     # → PERM_USERS_MANAGE
+
+
+
 
 # ============================================================================
 # CHOICES (FASE 2 PARTE 1)

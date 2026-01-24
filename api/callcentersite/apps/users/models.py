@@ -118,41 +118,114 @@ class User(AbstractUser, SoftDeleteMixin):
         """
         return self.get_full_name() or self.username
     
-    def get_functions(self):
+    def get_user_functions(self):
         """
-        Obtiene funciones RBAC del usuario.
+        Obtiene QuerySet de funciones RBAC activas del usuario.
         
-        Usa apps.access.services.AccessService (cuando se implemente).
-        Por ahora retorna set vacío.
+        CORRECCIÓN v6.0.0:
+        Usa UserFunctionAssignment (sistema real implementado).
         
         Returns:
-            set: Set de códigos de funciones
+            QuerySet[Function]: QuerySet de funciones activas asignadas directamente
         
         Example:
-            user = User.objects.get(id=1)
-            functions = user.get_functions()
-            # {'USR_VIEW', 'USR_EDIT', 'REPORTS_VIEW'}
+            >>> user = User.objects.get(username='jdoe')
+            >>> functions = user.get_user_functions()
+            >>> functions.count()
+            5
+            >>> functions.values_list('permission_django', flat=True)
+            <QuerySet ['users.view', 'users.edit', 'calls.view', 'reports.view', 'reports.export.csv']>
+        
+        Note:
+            - Retorna QuerySet, NO set
+            - Usa .distinct() para evitar duplicados
+            - Filtra por is_active en asignación y función
+            - Filtra por status='activo' (excluye planificadas)
+            - Para obtener set de namespaces, usar get_functions()
         """
-        # TODO: Implementar cuando AccessService esté disponible
-        # from apps.access.services import AccessService
-        # return AccessService.get_user_functions(self)
-        return set()
+        from apps.access.models import Function
+        
+        return Function.objects.filter(
+            user_assignments__user=self,
+            user_assignments__is_active=True,
+            status='activo',
+            is_active=True,
+        ).distinct()
     
-    def has_function(self, function_code):
+    def get_functions(self):
+        """
+        Retorna set de permission_django (namespaces) activos.
+        
+        CORRECCIÓN v6.0.0:
+        Implementado correctamente usando get_user_functions().
+        Retorna namespaces Django, NO codes.
+        
+        DEPRECATED: Preferir get_user_functions() para obtener QuerySet.
+        Este método se mantiene por compatibilidad con código existente.
+        
+        Returns:
+            set: Set de strings con function.permission_django (namespaces)
+        
+        Example:
+            >>> user = User.objects.get(username='jdoe')
+            >>> user.get_functions()
+            {'users.view', 'users.edit', 'calls.view', 'reports.view', 'reports.export.csv'}
+        
+        Note:
+            - Retorna set de namespaces (NO codes)
+            - Format: 'users.view', 'authentication.change_password'
+            - Para QuerySet completo, usar get_user_functions()
+            - CAMBIO v6.0.0: Antes retornaba codes, ahora namespaces
+        """
+        return set(
+            self.get_user_functions()
+            .values_list('permission_django', flat=True)  # ← Namespace, NO code
+        )
+    
+    def has_function(self, permission_django: str) -> bool:
         """
         Verifica si usuario tiene función RBAC.
         
+        CORRECCIÓN v6.0.0:
+        Usa permission_django (namespace Django).
+        
+        IMPORTANTE:
+        - Usa namespaces: 'users.view', 'authentication.change_password'
+        - NO usar codes: 'USR_VIEW', 'AUTH_PASS' (deprecados)
+        
         Args:
-            function_code: Código de función (ej: 'USR_VIEW')
+            permission_django: Namespace Django
+                              Ej: 'users.view', 'authentication.change_password',
+                                  'reports.export.csv'
         
         Returns:
-            bool: True si tiene la función
+            bool: True si usuario tiene la función activa
         
         Example:
-            if user.has_function('USR_EDIT'):
-                # Usuario puede editar usuarios
+            >>> user = User.objects.get(username='jdoe')
+            >>> user.has_function('users.view')
+            True
+            >>> user.has_function('users.delete')
+            False
+        
+        Implementation:
+            Usa UserFunctionAssignment.objects.filter() con
+            function__permission_django para verificar asignación activa.
+        
+        Note:
+            - Sistema RBAC v6.0.0: User → UserFunctionAssignment → Function
+            - permission_django es el identificador único de funciones
+            - Filtro adicional por status='activo' para funciones planificadas
         """
-        return function_code in self.get_functions()
+        from apps.access.models import UserFunctionAssignment
+        
+        return UserFunctionAssignment.objects.filter(
+            user=self,
+            is_active=True,
+            function__permission_django=permission_django,  # ← Namespace Django
+            function__status='activo',
+            function__is_active=True,
+        ).exists()
 
 
 class UserProfile(TimeStampedModel):

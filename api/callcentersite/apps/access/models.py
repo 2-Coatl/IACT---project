@@ -6,41 +6,73 @@ from apps.core.models import SoftDeleteMixin
 
 class Function(SoftDeleteMixin, models.Model):
     """
-    Funcion atomica RBAC.
+    Función atómica RBAC con namespace Django.
     
-    RBAC v5.1.1: 44 funciones atomicas.
+    RBAC v6.0.0: Sistema estandarizado con permission_django.
     Reemplaza sistema de roles fijos.
     
     Usa SoftDeleteMixin para delete lógico.
     
+    IMPORTANTE:
+    - permission_django: PK funcional (ej: 'users.view', 'authentication.change_password')
+    - code: Código referencial (ej: 'USR_VIEW', 'AUTH_PASS') - solo documentación
+    
     Ejemplos:
-    - ve_reportes (MOD_Reports)
-    - crea_usuarios (MOD_Users)
-    - edita_configuracion (MOD_Config)
+    - permission_django='users.view', code='USR_VIEW'
+    - permission_django='authentication.change_password', code='AUTH_PASS'
+    - permission_django='reports.export.csv', code='RPT_EXP_CSV'
     """
+    
+    permission_django = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        verbose_name='Permission Django',
+        help_text='Namespace Django: users.view, authentication.change_password, reports.export.csv',
+    )
     
     code = models.CharField(
         max_length=50,
         unique=True,
-        verbose_name='Codigo funcion',
-        help_text='Ej: ve_reportes, crea_usuarios',
+        db_index=True,
+        verbose_name='Código Referencial',
+        help_text='Código referencial: USR_VIEW, AUTH_PASS, RPT_EXP_CSV (solo documentación)',
     )
+    
     module = models.CharField(
         max_length=50,
-        verbose_name='Modulo',
-        help_text='Ej: MOD_Reports, MOD_Users',
+        verbose_name='Módulo',
+        help_text='Ej: MOD_Users, MOD_Auth, MOD_Reports',
     )
+    
     name = models.CharField(
         max_length=200,
         verbose_name='Nombre',
+        help_text='Nombre descriptivo: Ver Usuarios, Cambiar Contraseña',
     )
+    
     description = models.TextField(
         blank=True,
-        verbose_name='Descripcion',
+        verbose_name='Descripción',
+        help_text='Descripción detallada de la función',
     )
+    
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('activo', 'Activo'),
+            ('planificado', 'Planificado'),
+            ('deprecado', 'Deprecado'),
+        ],
+        default='activo',
+        verbose_name='Estado',
+        help_text='Estado de la función en el sistema',
+    )
+    
     is_active = models.BooleanField(
         default=True,
         verbose_name='Activa',
+        help_text='Si False, la función no otorga permisos',
     )
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,12 +80,18 @@ class Function(SoftDeleteMixin, models.Model):
     
     class Meta:
         db_table = 'functions'
-        verbose_name = 'Funcion'
+        verbose_name = 'Función'
         verbose_name_plural = 'Funciones'
-        ordering = ['module', 'code']
+        ordering = ['module', 'permission_django']
+        indexes = [
+            models.Index(fields=['permission_django'], name='func_perm_django_idx'),
+            models.Index(fields=['code'], name='func_code_idx'),
+            models.Index(fields=['module'], name='func_module_idx'),
+            models.Index(fields=['status'], name='func_status_idx'),
+        ]
     
     def __str__(self):
-        return f"{self.code} ({self.module})"
+        return f"{self.permission_django} ({self.code})"
 
 
 class UserFunctionAssignment(SoftDeleteMixin, models.Model):
@@ -118,9 +156,34 @@ class UserFunctionAssignment(SoftDeleteMixin, models.Model):
         verbose_name = 'Asignacion Funcion'
         verbose_name_plural = 'Asignaciones Funciones'
         ordering = ['-assigned_at']
+        
+        # PERFORMANCE: Índices críticos para queries frecuentes
+        indexes = [
+            # Índice compuesto para user.has_function() - CRÍTICO (usado en cada request)
+            models.Index(
+                fields=['user', 'is_active'],
+                name='ufunc_user_active_idx'
+            ),
+            # Índice compuesto para queries de función
+            models.Index(
+                fields=['function', 'is_active'],
+                name='ufunc_func_active_idx'
+            ),
+            # Índice para filtrado por estado activo/inactivo
+            models.Index(
+                fields=['is_active'],
+                name='ufunc_active_idx'
+            ),
+            # Índice para ordenamiento cronológico (admin, auditoría)
+            models.Index(
+                fields=['-assigned_at'],
+                name='ufunc_assigned_idx'
+            ),
+        ]
     
     def __str__(self):
-        return f"{self.user.username} -> {self.function.code}"
+        # RBAC v6.0.0: Usa permission_django (namespace) en lugar de code (legacy)
+        return f"{self.user.username} -> {self.function.permission_django}"
     
     @classmethod
     def get_user_functions(cls, user):

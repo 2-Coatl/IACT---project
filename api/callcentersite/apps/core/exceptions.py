@@ -57,16 +57,21 @@ class PermissionDeniedError(IACTBaseException):
     Error de permisos insuficientes.
     
     CLEAN_CODE v3.0.1: Nombre que revela intención.
+    RBAC v6.0.0: Usa métodos del User model.
     
-    Se lanza cuando usuario no tiene permisos.
+    Se lanza cuando usuario no tiene permisos suficientes.
     
-    Uso:
-        from apps.access.services import AccessService
-        
-        if not AccessService.user_has_function(user, 'reports.delete'):
+    Usage:
+        # ✅ CORRECTO - RBAC v6.0.0
+        if not user.has_function('reports.delete'):
             raise PermissionDeniedError(
                 "No tiene permiso para eliminar reportes"
             )
+    
+    Architecture Note:
+        Uses user.has_function() (User model method) instead of
+        AccessService to avoid creating dependency core → access.
+        This respects the Dependency Inversion Principle (DIP).
     """
     pass
 

@@ -17,8 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from datetime import date, datetime
 
-from apps.pipeline.models import Center, Service, CallRecord
-# REMOVED FASE A DT-002: from apps.access.models import UserServiceAccess
+from apps.pipeline.models import Center, Service, CallRecord, CallNote
 
 from apps.pipeline.serializers import (
     # Center
@@ -33,30 +32,20 @@ from apps.pipeline.serializers import (
     CallRecordSerializer,
     CallRecordListSerializer,
     CallRecordStatsSerializer,
+    # CallNote (FASE 0.2)
+    CallNoteSerializer,
 )
-# REMOVED FASE A DT-002: UserServiceAccess serializers
-# from apps.access.serializers import (
-#     UserServiceAccessSerializer,
-#     GrantAccessSerializer,
-#     BulkGrantAccessSerializer,
-#     RevokeAccessSerializer,
-# )
 from apps.pipeline.filters import (
     CenterFilter,
     ServiceFilter,
     CallRecordFilter,
 )
-# REMOVED FASE A DT-002: UserServiceAccessFilter
-# from apps.access.filters import UserServiceAccessFilter
 from apps.pipeline.permissions import (
     IsCenterManager,
     IsServiceManager,
-    # HasServiceAccess,  # REMOVED - FASE A DT-002
-    CanGrantAccess,
-    CanRevokeAccess,
     IsActiveUser,
 )
-from apps.core.permissions import RequiresFunctionPermission  # ADDED - FASE A DT-002
+from apps.core.permissions import RequiresFunctionPermission
 from apps.pipeline.services import (
     CenterService,
     ServiceService,
@@ -233,17 +222,11 @@ class ServiceViewSet(viewsets.ModelViewSet):
         
         POST   /services/{id}/deactivate/       - Desactivar servicio
         POST   /services/{id}/activate/         - Activar servicio
-        POST   /services/{id}/grant_access/     - Otorgar acceso a usuario
-        POST   /services/{id}/bulk_grant_access/ - Otorgar acceso a múltiples usuarios
-        POST   /services/{id}/revoke_access/    - Revocar acceso
-        GET    /services/{id}/users/            - Usuarios con acceso
     
     Permissions:
         - IsAuthenticated
         - IsActiveUser
         - IsServiceManager (POST/PUT/PATCH/DELETE)
-        - CanGrantAccess (grant_access, bulk_grant_access)
-        - CanRevokeAccess (revoke_access)
     
     Filters:
         - numero_800 (exact, icontains)
@@ -273,12 +256,6 @@ class ServiceViewSet(viewsets.ModelViewSet):
             return ServiceListSerializer
         elif self.action == 'retrieve':
             return ServiceDetailSerializer
-        elif self.action == 'grant_access':
-            return GrantAccessSerializer
-        elif self.action == 'bulk_grant_access':
-            return BulkGrantAccessSerializer
-        elif self.action == 'revoke_access':
-            return RevokeAccessSerializer
         return ServiceSerializer
     
     def perform_create(self, serializer):
@@ -312,11 +289,12 @@ class ServiceViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        result = ServiceService.deactivate_service(service)
+        deactivated = ServiceService.deactivate_service(service)
+        serializer = self.get_serializer(deactivated)
         
         return Response({
             'message': f"Servicio '{service.numero_800}' desactivado exitosamente",
-            'user_accesses_affected': result['user_accesses_affected']
+            'service': serializer.data
         })
     
     @action(detail=True, methods=['post'])
@@ -347,123 +325,6 @@ class ServiceViewSet(viewsets.ModelViewSet):
                 {'error': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
-    
-    @action(detail=True, methods=['post'], permission_classes=[CanGrantAccess])
-    def grant_access(self, request, pk=None):
-        """
-        Otorgar acceso a usuario.
-        
-        POST /services/{id}/grant_access/
-        Body: {'user_id': int, 'reason': str}
-        """
-        service = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        user = User.objects.get(id=serializer.validated_data['user_id'])
-        reason = serializer.validated_data.get('reason', '')
-        
-        access = ServiceService.grant_access(
-            service=service,
-            user=user,
-            granted_by=request.user,
-            reason=reason
-        )
-        
-        return Response({
-            'message': f"Acceso otorgado a '{user.username}'",
-            'access': UserServiceAccessSerializer(access).data
-        }, status=status.HTTP_201_CREATED)
-    
-    @action(detail=True, methods=['post'], permission_classes=[CanGrantAccess])
-    def bulk_grant_access(self, request, pk=None):
-        """
-        Otorgar acceso a múltiples usuarios.
-        
-        POST /services/{id}/bulk_grant_access/
-        Body: {'user_ids': [int, ...], 'reason': str}
-        """
-        service = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        user_ids = serializer.validated_data['user_ids']
-        reason = serializer.validated_data.get('reason', '')
-        users = User.objects.filter(id__in=user_ids)
-        
-        accesses, created, reactivated = ServiceService.bulk_grant_access(
-            service=service,
-            users=users,
-            granted_by=request.user,
-            reason=reason
-        )
-        
-        return Response({
-            'message': f"Acceso otorgado a {len(accesses)} usuarios",
-            'created': created,
-            'reactivated': reactivated,
-            'total': len(accesses)
-        }, status=status.HTTP_201_CREATED)
-    
-    @action(detail=True, methods=['post'], permission_classes=[CanRevokeAccess])
-    def revoke_access(self, request, pk=None):
-        """
-        Revocar acceso de usuario.
-        
-        POST /services/{id}/revoke_access/
-        Body: {'user_id': int}
-        """
-        service = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        user = User.objects.get(id=serializer.validated_data['user_id'])
-        
-        # Obtener acceso activo
-        try:
-            access = UserServiceAccess.objects.get(
-                user=user,
-                service=service,
-                is_active=True
-            )
-        except UserServiceAccess.DoesNotExist:
-            return Response(
-                {'error': f"Usuario '{user.username}' no tiene acceso activo"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        revoked = ServiceService.revoke_access(access, revoked_by=request.user)
-        
-        return Response({
-            'message': f"Acceso revocado a '{user.username}'",
-            'access': UserServiceAccessSerializer(revoked).data
-        })
-    
-    @action(detail=True, methods=['get'])
-    def users(self, request, pk=None):
-        """
-        Listar usuarios con acceso al servicio.
-        
-        GET /services/{id}/users/
-        Query params: ?include_inactive=true
-        """
-        service = self.get_object()
-        include_inactive = request.query_params.get('include_inactive', 'false').lower() == 'true'
-        
-        users = ServiceService.get_service_users(service, include_inactive=include_inactive)
-        
-        return Response({
-            'service': service.numero_800,
-            'users_count': len(users),
-            'users': [
-                {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email
-                }
-                for user in users
-            ]
-        })
 
 
 # ============================================================================
@@ -523,37 +384,33 @@ class CallRecordViewSet(viewsets.ModelViewSet):
         RequiresFunctionPermission,  # FASE A DT-002: RBAC puro
     ]
     
-    # FASE A DT-002: Function map para RBAC
+    # FASE A DT-002: Function map para RBAC v6.0.0
     function_map = {
-        'list': 'CALL_VIEW',
-        'retrieve': 'CALL_VIEW',
-        'create': 'CALL_EDIT',
-        'update': 'CALL_EDIT',
-        'partial_update': 'CALL_EDIT',
-        'destroy': 'CALL_DELETE',
-        'bulk_create': 'CALL_EDIT',
-        'stats': 'CALL_STATS',
-        'daily_stats': 'CALL_STATS',
-        'top_callers': 'CALL_STATS',
+        'list': 'calls.view',           # ← Namespace Django
+        'retrieve': 'calls.view',       # ← Namespace Django
+        'create': 'calls.create',       # ← Namespace Django
+        'update': 'calls.edit',         # ← Namespace Django
+        'partial_update': 'calls.edit', # ← Namespace Django
+        'destroy': 'calls.delete',      # ← Namespace Django
+        'bulk_create': 'calls.create',  # ← Namespace Django
+        'stats': 'calls.stats',         # ← Namespace Django
+        'daily_stats': 'calls.stats',   # ← Namespace Django
+        'top_callers': 'calls.stats',   # ← Namespace Django
     }
     
     def get_queryset(self):
         """
-        Filtrar queryset por servicios del usuario.
+        Filtrar queryset según RBAC.
         
+        Con RBAC puro:
+        - Usuario con permiso apropiado: ve TODOS los registros
         - Superusers: ven todos los registros
-        - Usuarios normales: solo registros de sus servicios
+        
+        NOTA: Filtrado granular por servicio eliminado (UserServiceAccess deprecated)
         """
-        user = self.request.user
-        
-        if user.is_superuser:
-            return CallRecord.objects.all()
-        
-        # Obtener servicios del usuario
-        user_services = ServiceService.get_user_services(user, include_inactive=False)
-        service_800_numbers = user_services.values_list('numero_800', flat=True)
-        
-        return CallRecord.objects.filter(servicio_800__in=service_800_numbers)
+        # Sistema RBAC: Usuario con permiso ve TODOS los registros
+        # Los permisos se validan en permission_classes
+        return CallRecord.objects.all()
     
     def get_serializer_class(self):
         """Retornar serializer según action."""
@@ -706,79 +563,81 @@ class CallRecordViewSet(viewsets.ModelViewSet):
 
 
 # ============================================================================
-# USERSERVICEACCESS VIEWSET
+# CALLNOTE VIEWSET (FASE 0.2)
 # ============================================================================
 
-class UserServiceAccessViewSet(viewsets.ReadOnlyModelViewSet):
+class CallNoteViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para UserServiceAccess.
+    API para gestionar notas de llamadas.
     
-    NOTA: Este ViewSet es ReadOnly.
-    Para crear/modificar accesos, usar ServiceViewSet actions:
-        - POST /services/{id}/grant_access/
-        - POST /services/{id}/bulk_grant_access/
-        - POST /services/{id}/revoke_access/
+    Permite:
+    - Crear notas sobre llamadas procesadas (CallRecord)
+    - Editar/eliminar propias notas
+    - Ver todas las notas de una llamada
+    - Filtrar por call_record, user, is_important
     
-    Endpoints:
-        GET    /user-service-accesses/      - Listar accesos
-        GET    /user-service-accesses/{id}/ - Detalle acceso
+    Permisos:
+    - IsAuthenticated: Usuario debe estar autenticado
+    - IsActiveUser: Usuario debe estar activo
     
-    Permissions:
-        - IsAuthenticated
-        - IsActiveUser
+    FASE 0.2: Sistema de notas para CallRecord.
     
-    Filters:
-        - user (id)
-        - user_username (icontains)
-        - service (id)
-        - service_numero (icontains)
-        - is_active
-        - granted_at (gte, lte)
+    Examples:
+        # Crear nota
+        POST /api/v1/pipeline/call-notes/
+        {
+            "call_record": 123,
+            "note": "Cliente reportó problema con facturación",
+            "is_important": true
+        }
+        
+        # Listar notas de un CallRecord
+        GET /api/v1/pipeline/call-notes/?call_record=123
+        
+        # Filtrar notas importantes
+        GET /api/v1/pipeline/call-notes/?is_important=true
     """
     
-    queryset = UserServiceAccess.objects.select_related(
-        'user',
-        'service',
-        'granted_by',
-        'revoked_by'
-    ).all()
-    serializer_class = UserServiceAccessSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = UserServiceAccessFilter
-    search_fields = ['user__username', 'service__numero_800']
-    ordering_fields = ['granted_at', 'revoked_at']
-    ordering = ['-granted_at']
+    queryset = CallNote.objects.select_related('user', 'call_record').all()
+    serializer_class = CallNoteSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['call_record', 'user', 'is_important']
+    ordering_fields = ['created_at', 'is_important']
+    ordering = ['-created_at']  # Más recientes primero
     
     permission_classes = [
         drf_permissions.IsAuthenticated,
         IsActiveUser,
     ]
+    
+    def perform_create(self, serializer):
+        """
+        Al crear, asignar automáticamente el usuario actual.
+        
+        Args:
+            serializer: CallNoteSerializer con datos validados
+        """
+        serializer.save(user=self.request.user)
 
 
 # ============================================================================
-# TOTAL VIEWSETS: 4
+# TOTAL VIEWSETS: 4 (LIMPIEZA DEUDA TÉCNICA + FASE 0.2)
 # 
 # ViewSets:
 #   - CenterViewSet (ModelViewSet)
 #   - ServiceViewSet (ModelViewSet)
 #   - CallRecordViewSet (ModelViewSet)
-#   - UserServiceAccessViewSet (ReadOnlyModelViewSet)
+#   - CallNoteViewSet (ModelViewSet) ← FASE 0.2
 # 
-# Total Actions: 16
-#   - Standard CRUD: 20 (5 per ViewSet x 4)
-#   - Custom Actions: 16
+# ELIMINADO en limpieza deuda técnica:
+#   ❌ UserServiceAccessViewSet - DEPRECADO
+#   ❌ ServiceViewSet.grant_access - DEPRECADO
+#   ❌ ServiceViewSet.bulk_grant_access - DEPRECADO  
+#   ❌ ServiceViewSet.revoke_access - DEPRECADO
+#   ❌ ServiceViewSet.users - DEPRECADO
 # 
-# Características:
-#   ✅ DRF ViewSets completos
-#   ✅ CRUD operations
-#   ✅ Custom actions (@action)
-#   ✅ Filters (django-filter)
-#   ✅ Search & Ordering
-#   ✅ Permissions granulares
-#   ✅ get_queryset() personalizado
-#   ✅ get_serializer_class() dinámico
-#   ✅ Service Layer integration
-#   ✅ Bulk operations
-#   ✅ Statistics endpoints
-#   ✅ CLEAN_CODE v3.0.1
+# Control de acceso:
+#   ✅ RBAC puro (Function/UserFunctionAssignment)
+#   ✅ Sin segmentación por servicio específico
+#   ✅ Usuario con permiso → ve TODOS los servicios
 # ============================================================================

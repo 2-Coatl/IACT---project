@@ -17,7 +17,7 @@
           "endpoint": "/api/v1/audit/log/",
           "method": "GET",
           "orden": 1,
-          "required_functions": ["AUD-001: view_audit_log"]
+          "required_functions": []
         },
         {
           "id_menu": 702,
@@ -26,7 +26,7 @@
           "endpoint": "/api/v1/audit/compliance-report/",
           "method": "POST",
           "orden": 2,
-          "required_functions": ["AUD-004: generate_compliance_report"]
+          "required_functions": []
         },
         {
           "id_menu": 703,
@@ -35,7 +35,7 @@
           "endpoint": "/api/v1/audit/export/",
           "method": "POST",
           "orden": 3,
-          "required_functions": ["AUD-003: export_audit_log"]
+          "required_functions": []
         }
       ]
     }

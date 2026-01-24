@@ -282,49 +282,6 @@ class Service(SoftDeleteMixin, models.Model):
     def __str__(self):
         """Representación string del servicio."""
         return f"{self.numero_800} - {self.nombre}"
-    
-    def get_users_with_access_count(self):
-        """
-        Obtener cantidad de usuarios con acceso al servicio.
-        
-        Returns:
-            int: Número de usuarios con acceso activo
-        """
-        return self.user_accesses.filter(is_active=True).count()
-    
-    def grant_access_to_user(self, user, granted_by=None, reason=''):
-        """
-        Otorgar acceso a usuario.
-        
-        Args:
-            user: Usuario a otorgar acceso
-            granted_by: Usuario que otorga el acceso (opcional)
-            reason: Razón del otorgamiento (opcional)
-        
-        Returns:
-            UserServiceAccess: Acceso creado o actualizado
-        """
-        # TODO: Actualizar import cuando se mueva UserServiceAccess
-        from apps.access.models import UserServiceAccess
-        
-        access, created = UserServiceAccess.objects.get_or_create(
-            user=user,
-            service=self,
-            defaults={
-                'granted_by': granted_by,
-                'reason': reason,
-                'is_active': True,
-            }
-        )
-        
-        if not created and not access.is_active:
-            # Reactivar acceso si estaba revocado
-            access.is_active = True
-            access.revoked_at = None
-            access.revoked_by = None
-            access.save()
-        
-        return access
 
 
 # ============================================================================
@@ -403,6 +360,53 @@ class CallRecord(SoftDeleteMixin, models.Model):
         help_text='Duración total en segundos'
     )
     
+    # ============================================================================
+    # CAMPOS ADICIONALES (FASE 0.2)
+    # Agregados para enriquecer información de llamadas
+    # Todos NULL/BLANK para compatibilidad con datos legacy
+    # ============================================================================
+    
+    agent = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='call_records_as_agent',
+        help_text='Agente que atendió la llamada (si aplica)',
+        verbose_name='Agente'
+    )
+    
+    call_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('INBOUND', 'Entrante'),
+            ('OUTBOUND', 'Saliente'),
+            ('INTERNAL', 'Interna'),
+            ('UNKNOWN', 'Desconocido'),
+        ],
+        default='UNKNOWN',
+        help_text='Tipo de llamada',
+        verbose_name='Tipo de llamada'
+    )
+    
+    recording_path = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='Ruta de archivo de grabación (si existe)',
+        verbose_name='Ruta grabación'
+    )
+    
+    service = models.ForeignKey(
+        'Service',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='call_records',
+        help_text='Servicio asociado (si existe en tabla Service)',
+        verbose_name='Servicio'
+    )
+    
     # Metadata
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -422,6 +426,9 @@ class CallRecord(SoftDeleteMixin, models.Model):
             models.Index(fields=['fecha', 'servicio_800']),
             models.Index(fields=['fecha', 'telefono']),
             models.Index(fields=['-fecha', '-total_llamadas']),
+            # FASE 0.2: Índices para campos adicionales
+            models.Index(fields=['agent', 'fecha']),
+            models.Index(fields=['call_type', 'fecha']),
         ]
         verbose_name = 'Registro de Llamada'
         verbose_name_plural = 'Registros de Llamadas'
@@ -500,3 +507,90 @@ class CallRecord(SoftDeleteMixin, models.Model):
         avg = (Decimal(self.duracion_total_segundos) / 
                Decimal(self.llamadas_contestadas))
         return avg.quantize(Decimal('0.01'))
+
+
+# ============================================================================
+# CALLNOTE MODEL (FASE 0.2)
+# ============================================================================
+
+class CallNote(SoftDeleteMixin, models.Model):
+    """
+    Nota o comentario sobre un CallRecord.
+    
+    Permite a usuarios agregar notas/observaciones DESPUÉS de 
+    procesar la llamada (NO tiempo real).
+    
+    CNST-003: NO viola porque:
+    - Se agrega DESPUÉS de la llamada (batch)
+    - Usuario agrega manualmente (no automático)
+    - No requiere WebSockets/SSE
+    
+    Relaciones:
+        - call_record (N:1): Registro de llamada asociado
+        - user (N:1): Usuario que creó la nota
+    
+    Soft Delete: Sí (usa SoftDeleteMixin)
+    
+    Ejemplo:
+        >>> record = CallRecord.objects.get(id=1)
+        >>> note = CallNote.objects.create(
+        ...     call_record=record,
+        ...     user=request.user,
+        ...     note='Cliente reportó problema con facturación',
+        ...     is_important=True
+        ... )
+    """
+    
+    call_record = models.ForeignKey(
+        CallRecord,
+        on_delete=models.CASCADE,
+        related_name='notes',
+        help_text='Registro de llamada asociado',
+        verbose_name='Registro de llamada'
+    )
+    
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='pipeline_call_notes',
+        help_text='Usuario que creó la nota',
+        verbose_name='Usuario'
+    )
+    
+    note = models.TextField(
+        help_text='Contenido de la nota',
+        verbose_name='Nota'
+    )
+    
+    is_important = models.BooleanField(
+        default=False,
+        help_text='Marcar como importante',
+        verbose_name='¿Es importante?'
+    )
+    
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text='Fecha de creación',
+        verbose_name='Creado'
+    )
+    
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        help_text='Última actualización',
+        verbose_name='Actualizado'
+    )
+    
+    class Meta:
+        db_table = 'pipeline_call_notes'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['call_record', '-created_at']),
+            models.Index(fields=['user', '-created_at']),
+            models.Index(fields=['is_important', '-created_at']),
+        ]
+        verbose_name = 'Nota de Llamada'
+        verbose_name_plural = 'Notas de Llamadas'
+    
+    def __str__(self):
+        """Representación string del registro."""
+        return f"Nota de {self.user.username} en {self.call_record}"

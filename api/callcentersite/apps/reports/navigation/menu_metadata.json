@@ -18,7 +18,7 @@
           "endpoint": "/api/v1/reports/",
           "method": "GET",
           "orden": 1,
-          "required_functions": ["reports.view_report"],
+          "required_functions": ["reports.view"],
           "description": "Ver lista de reportes propios"
         },
         {
@@ -28,7 +28,7 @@
           "endpoint": "/api/v1/reports/",
           "method": "POST",
           "orden": 2,
-          "required_functions": ["reports.create_report"],
+          "required_functions": ["reports.create"],
           "description": "Crear nuevo reporte (calls, users, audit)"
         },
         {
@@ -38,7 +38,7 @@
           "endpoint": "/api/v1/export-jobs/",
           "method": "GET",
           "orden": 3,
-          "required_functions": ["reports.view_report"],
+          "required_functions": ["reports.view"],
           "description": "Ver historial de exportaciones"
         },
         {
@@ -49,7 +49,7 @@
           "method": "POST",
           "payload": {"format": "csv"},
           "orden": 4,
-          "required_functions": ["reports.export_report"],
+          "required_functions": ["reports.export.csv"],
           "description": "Exportar reporte a CSV (max 100K registros CNST-007)"
         },
         {
@@ -60,7 +60,7 @@
           "method": "POST",
           "payload": {"format": "excel"},
           "orden": 5,
-          "required_functions": ["reports.export_report"],
+          "required_functions": ["reports.export.csv"],
           "description": "Exportar reporte a Excel (max 100K registros CNST-007)"
         }
       ]

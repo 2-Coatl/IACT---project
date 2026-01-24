@@ -18,12 +18,12 @@ class UserAdmin(BaseUserAdmin):
     """Admin para User."""
     
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff']
-    search_fields = ['username', 'email', 'first_name', 'last_name', 'employee_id']
+    search_fields = ['username', 'email', 'first_name', 'last_name']
     list_filter = ['is_active', 'is_staff', 'is_superuser']
     
     fieldsets = BaseUserAdmin.fieldsets + (
         ('Información Adicional', {
-            'fields': ('employee_id', 'phone', 'position', 'avatar')
+            'fields': ('phone', 'position', 'avatar')
         }),
     )
 

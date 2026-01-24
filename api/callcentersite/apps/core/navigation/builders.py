@@ -1,14 +1,15 @@
 """
-Menu Builder v3.0.0 - Sistema de Navegacion IACT con IDs Numericos
+Menu Builder v4.0.0 - Sistema de Navegacion IACT con RBAC v6.0.0
 
 Construye menus dinamicos basados en:
 - Metadata de navegacion (menu_metadata.json)
-- Permisos RBAC del usuario
+- Permisos RBAC v6.0.0 del usuario (namespaces Django)
 - Validacion de iconos fisicos
 - IDs numericos para todos los menus
 
-Version: 3.0.0
-Fecha: 2026-01-16
+Version: 4.0.0
+Fecha: 2026-01-23
+Cambios v4: RBAC v6.0.0 con namespaces Django
 Cambios v3: Soporte para IDs numericos
 """
 
@@ -23,18 +24,19 @@ logger = logging.getLogger(__name__)
 
 class MenuBuilder:
     """
-    Construye menus personalizados para usuarios segun sus permisos RBAC.
+    Construye menus personalizados para usuarios segun sus permisos RBAC v6.0.0.
     
     Caracteristicas:
-    - Filtra menus por funciones del usuario
+    - Filtra menus por funciones del usuario (namespaces Django)
     - Valida existencia fisica de iconos
     - Inyecta datos dinamicos (avatar del usuario)
     - Ordena menus segun metadata
     - Soporta IDs numericos para menus
     
-    Version 3.0.0: IDs numericos
-    - Nivel 1: 1-99
-    - Nivel 2: 100-999
+    Version 4.0.0: RBAC v6.0.0 con namespaces
+    - Usa permission_django (e.g., 'users.view')
+    - Soporta formato legacy 'CODE: namespace'
+    - IDs numericos (Nivel 1: 1-99, Nivel 2: 100-999)
     """
     
     ICON_DEFAULTS = {
@@ -150,11 +152,17 @@ class MenuBuilder:
         """
         Obtiene conjunto de funciones RBAC del usuario.
         
+        RBAC v6.0.0: Retorna namespaces Django (permission_django).
+        
         Args:
             user: Instancia del modelo User
         
         Returns:
-            Set con nombres de funciones (ej: 'view_reports', 'export_csv')
+            Set con namespaces de funciones (e.g., {'users.view', 'calls.view'})
+        
+        Examples:
+            >>> user.get_functions()
+            {'users.view', 'calls.view', 'reports.view'}
         """
         functions = set()
         
@@ -219,18 +227,42 @@ class MenuBuilder:
     
     def _extract_function_names(self, functions: List[str]) -> Set[str]:
         """
-        Extrae nombres de funciones desde lista con formato 'CODIGO: nombre'.
+        Extrae nombres de funciones (namespaces).
+        
+        RBAC v6.0.0: Soporta namespaces Django directamente.
+        
+        Formatos soportados:
+        - Namespace directo: 'users.view' → {'users.view'}
+        - Legacy con código: 'USR_VIEW: users.view' → {'users.view'}
+        - Lista vacía: [] → set()
         
         Args:
-            functions: Lista como ['RPT-001: view_reports', 'RPT-004: export_csv']
+            functions: Lista de namespaces o formato legacy
         
         Returns:
-            Set como {'view_reports', 'export_csv'}
+            Set de namespaces (e.g., {'users.view', 'calls.view'})
+        
+        Examples:
+            >>> _extract_function_names(['users.view', 'calls.view'])
+            {'users.view', 'calls.view'}
+            
+            >>> _extract_function_names(['USR_VIEW: users.view'])
+            {'users.view'}
         """
         names = set()
         
         for func in functions:
             if ':' in func:
+                # Formato legacy: 'USR_VIEW: users.view'
+                parts = func.split(':', 1)
+                if len(parts) == 2:
+                    namespace = parts[1].strip()
+                    names.add(namespace)
+            else:
+                # Formato v6.0.0: 'users.view'
+                names.add(func.strip())
+        
+        return names
                 # Formato: 'RPT-001: view_reports'
                 name = func.split(':')[1].strip()
             else:

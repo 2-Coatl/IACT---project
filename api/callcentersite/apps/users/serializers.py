@@ -99,7 +99,8 @@ class SessionHistorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = SessionHistory
-        fields = [
+        # CLEAN CODE: Explicit is better than implicit (PEP 20)
+        fields = (
             'id',
             'ip_address',
             'user_agent',
@@ -108,8 +109,9 @@ class SessionHistorySerializer(serializers.ModelSerializer):
             'is_active',
             'created_at',
             'updated_at',
-        ]
-        read_only_fields = '__all__'
+        )
+        # Session history is read-only (created by signals)
+        read_only_fields = fields
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -161,12 +163,12 @@ class UserSerializer(serializers.ModelSerializer):
             'full_name',
             
             # Datos adicionales
-            'employee_id',
             'phone',
             'position',
             
             # Avatar
             'avatar',
+            'avatar_url',
             
             # Estado
             'is_active',
@@ -204,10 +206,22 @@ class UserSerializer(serializers.ModelSerializer):
         """
         Obtiene funciones RBAC del usuario.
         
-        Usa User.get_functions() que delega a AccessService.
+        RBAC v6.0.0: Retorna namespaces Django (permission_django).
+        
+        Usa User.get_functions() que retorna set de namespaces activos:
+        - Solo funciones con status='activo'
+        - Solo asignaciones con is_active=True
         
         Returns:
-            list: Lista de códigos de funciones
+            list: Lista de namespaces de funciones
+        
+        Examples:
+            >>> user.get_functions()
+            {'users.view', 'calls.view', 'reports.view'}
+            
+            >>> serializer = UserSerializer(user)
+            >>> serializer.data['functions']
+            ['users.view', 'calls.view', 'reports.view']
         """
         return list(obj.get_functions())
 
@@ -225,7 +239,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     
     Optional fields:
     - first_name, last_name
-    - employee_id, phone, position
+    - phone, position
     
     Example:
         >>> data = {
@@ -265,7 +279,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'password_confirm',
             'first_name',
             'last_name',
-            'employee_id',
             'phone',
             'position',
         ]
@@ -326,7 +339,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     Editable fields:
     - first_name, last_name
     - email (con validación de unicidad)
-    - employee_id, phone, position
+    - phone, position
     
     Read-only fields:
     - username (no se puede cambiar)
@@ -348,7 +361,6 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'employee_id',
             'phone',
             'position',
         ]

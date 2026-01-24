@@ -44,7 +44,9 @@
           "endpoint": "/api/v1/auth/sessions/",
           "method": "GET",
           "orden": 4,
-          "required_functions": ["AUTH-004: view_active_sessions"]
+          "required_functions": [
+            "sessions.view"
+          ]
         }
       ]
     }

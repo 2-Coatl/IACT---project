@@ -1,4 +1,5 @@
 """
+ANALIZAR ESTA FUNCION DE MODULOS
 Management command para inicializar módulos del sistema.
 
 Uso:
@@ -70,7 +71,7 @@ class Command(BaseCommand):
                 'url_path': '/calls',
             },
             
-            # Centers
+            # Centers NO DEBE DE EXITR COMO MODULO
             {
                 'code': 'MOD_Centers',
                 'name': 'Centros',
@@ -81,7 +82,7 @@ class Command(BaseCommand):
                 'url_path': '/centers',
             },
             
-            # Services
+            # Services NO DEBE DE EXITR COMO MODULO
             {
                 'code': 'MOD_Services',
                 'name': 'Servicios',
@@ -107,7 +108,7 @@ class Command(BaseCommand):
             {
                 'code': 'MOD_Reports',
                 'name': 'Reportes',
-                'description': 'Generacion y gestion de reportes',
+                'description': 'Generación y gestion de reportes',
                 'parent_code': None,
                 'order': 6,
                 'icon': None,

@@ -2,23 +2,32 @@
 User Timezone Middleware.
 
 CLEAN_CODE v3.0.1: Nombre auto-documentado.
+CORRECCIÓN v5.1.1: Simplificado a usar configuración global del sistema.
 """
 
 import pytz
 from django.utils.deprecation import MiddlewareMixin
 from django.utils import timezone
+from django.conf import settings
 
 
 class UserTimezoneMiddleware(MiddlewareMixin):
     """
-    Middleware para timezone del usuario.
+    Middleware para timezone del sistema.
+    
+    CORRECCIÓN v5.1.1:
+    Simplificado a usar configuración global (settings.TIME_ZONE).
+    
+    IMPORTANTE:
+    UserSettings NO tiene campo timezone (eliminado en FASE 2 PARTE 2).
+    Sistema usa timezone global: America/Mexico_City.
     
     CLEAN_CODE v3.0.1: Nombre que revela intención.
     
-    Activa timezone según preferencia del usuario.
-    Todas las fechas se muestran en el timezone del usuario.
+    Activa timezone global del sistema.
+    Todas las fechas se muestran en el mismo timezone.
     
-    Fallback: America/Santiago si no hay preferencia.
+    Timezone: America/Mexico_City (configurado en settings.py)
     
     Instalación:
         # settings.py
@@ -26,23 +35,29 @@ class UserTimezoneMiddleware(MiddlewareMixin):
             ...
             'apps.core.middleware.timezone.UserTimezoneMiddleware',
         ]
+        
+        TIME_ZONE = 'America/Mexico_City'  # ← Configuración global
     
     Uso:
         # El timezone se activa automáticamente
-        # Todas las fechas se muestran en timezone del usuario
+        # Todas las fechas se muestran en America/Mexico_City
         
         # En views/templates:
-        {{ order.created_at }}  # Se muestra en timezone del usuario
+        {{ order.created_at }}  # Se muestra en America/Mexico_City
     
     Examples:
-        # Usuario con timezone 'America/New_York':
+        # Timezone global: America/Mexico_City
         # created_at: 2025-01-20 10:00 UTC
-        # Se muestra: 2025-01-20 05:00 EST
+        # Se muestra: 2025-01-20 04:00 CST
+    
+    Note:
+        Para timezone por usuario, agregar campo timezone a UserSettings
+        y modificar _get_timezone() para leerlo.
     """
     
     def process_request(self, request):
         """
-        Activa timezone del usuario.
+        Activa timezone del sistema.
         
         Args:
             request: HttpRequest
@@ -50,58 +65,58 @@ class UserTimezoneMiddleware(MiddlewareMixin):
         Returns:
             None
         """
-        if request.user.is_authenticated:
-            # Obtener timezone del perfil del usuario
-            # Default: America/Santiago
-            user_timezone = self._get_user_timezone(request.user)
-            
-            try:
-                timezone.activate(pytz.timezone(user_timezone))
-            except pytz.UnknownTimeZoneError:
-                # Fallback a Santiago si timezone inválido
-                timezone.activate(pytz.timezone('America/Santiago'))
-        else:
-            # Usuario anónimo: usar timezone por defecto
-            timezone.activate(pytz.timezone('America/Santiago'))
+        # Obtener timezone de configuración
+        tz = self._get_timezone(request.user)
+        
+        try:
+            timezone.activate(pytz.timezone(tz))
+        except pytz.UnknownTimeZoneError:
+            # Fallback a Mexico City si timezone inválido
+            timezone.activate(pytz.timezone('America/Mexico_City'))
         
         return None
     
-    def _get_user_timezone(self, user):
+    def _get_timezone(self, user):
         """
-        Obtiene timezone del usuario.
+        Obtiene timezone a usar.
         
-        Intenta obtener de:
-        1. user.profile.timezone
-        2. Fallback: America/Santiago
+        CORRECCIÓN v5.1.1:
+        Retorna settings.TIME_ZONE (configuración global).
+        
+        TODO: Si se implementa UserSettings.timezone, leerlo aquí:
+            if user.is_authenticated and hasattr(user, 'settings'):
+                return getattr(user.settings, 'timezone', settings.TIME_ZONE)
         
         Args:
-            user: User object
+            user: User object (puede ser AnonymousUser)
         
         Returns:
-            str: Timezone (ej: 'America/Santiago')
+            str: Timezone (ej: 'America/Mexico_City')
         """
-        # Intentar obtener de profile
-        if hasattr(user, 'profile'):
-            return getattr(user.profile, 'timezone', 'America/Santiago')
-        
-        # Fallback
-        return 'America/Santiago'
+        # Usar configuración global del sistema
+        return getattr(settings, 'TIME_ZONE', 'America/Mexico_City')
 
 
 # ============================================================================
 # RESUMEN MIDDLEWARE TIMEZONE
 # 
 # Middleware: UserTimezoneMiddleware
-# Propósito: Activar timezone del usuario automáticamente
+# Versión: v5.1.1 (Simplificado)
+# Propósito: Activar timezone global del sistema automáticamente
 # 
 # Comportamiento:
-#   ✅ Usuario autenticado → usa user.profile.timezone
-#   ✅ Usuario anónimo → America/Santiago
-#   ✅ Timezone inválido → fallback a America/Santiago
+#   ✅ Todos los usuarios → America/Mexico_City (settings.TIME_ZONE)
+#   ✅ Timezone inválido → fallback a America/Mexico_City
+# 
+# CORRECCIÓN v5.1.1:
+#   - UserSettings NO tiene campo timezone (eliminado FASE 2 PARTE 2)
+#   - Sistema usa timezone global configurado en settings.py
+#   - TODO: Si se agrega UserSettings.timezone, modificar _get_timezone()
 # 
 # Benefit:
-#   - Todas las fechas se muestran en timezone del usuario
+#   - Todas las fechas se muestran en timezone consistente
 #   - No necesita conversión manual en views/templates
+#   - Evita AttributeError por user.timezone inexistente
 # 
 # Instalación: Agregar a MIDDLEWARE en settings
 # ============================================================================

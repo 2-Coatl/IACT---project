@@ -17,7 +17,9 @@
           "endpoint": "/api/v1/access/assign-functions/",
           "method": "POST",
           "orden": 1,
-          "required_functions": ["ACC-001: assign_functions"]
+          "required_functions": [
+            "access.assign_functions"
+          ]
         },
         {
           "id_menu": 302,
@@ -26,7 +28,9 @@
           "endpoint": "/api/v1/access/revoke-functions/",
           "method": "POST",
           "orden": 2,
-          "required_functions": ["ACC-002: revoke_functions"]
+          "required_functions": [
+            "access.revoke_functions"
+          ]
         },
         {
           "id_menu": 303,
@@ -35,7 +39,9 @@
           "endpoint": "/api/v1/access/permissions/",
           "method": "GET",
           "orden": 3,
-          "required_functions": ["ACC-003: view_assignments"]
+          "required_functions": [
+            "access.view_functions"
+          ]
         },
         {
           "id_menu": 304,
@@ -44,7 +50,9 @@
           "endpoint": "/api/v1/access/groups/",
           "method": "GET",
           "orden": 4,
-          "required_functions": ["ACC-004: assign_function_groups"]
+          "required_functions": [
+            "access.assign_functions"
+          ]
         }
       ]
     }

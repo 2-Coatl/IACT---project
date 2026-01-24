@@ -1,4 +1,5 @@
 """
+IMPORTANTE, ESTE MODULO DEBE DE IR DENTRO DE IVR O PIPELINE
 Script para crear Functions de MOD_Calls.
 
 FASE A.2 - DT-002
@@ -38,9 +39,9 @@ class Command(BaseCommand):
         )
         
         if created:
-            self.stdout.write(self.style.SUCCESS(f'✅ Módulo creado: {mod_calls.code}'))
+            self.stdout.write(self.style.SUCCESS(f'Módulo creado: {mod_calls.code}'))
         else:
-            self.stdout.write(f'ℹ️  Módulo existente: {mod_calls.code}')
+            self.stdout.write(f'Módulo existente: {mod_calls.code}')
         
         # 2. Definir functions
         functions_data = [
@@ -88,10 +89,10 @@ class Command(BaseCommand):
             
             if created:
                 created_count += 1
-                self.stdout.write(self.style.SUCCESS(f'  ✅ {function.code}: {function.name}'))
+                self.stdout.write(self.style.SUCCESS(f'{function.code}: {function.name}'))
             else:
                 existing_count += 1
-                self.stdout.write(f'  ℹ️  {function.code}: Ya existe')
+                self.stdout.write(f'{function.code}: Ya existe')
         
         # 4. Resumen
         self.stdout.write('')
@@ -104,6 +105,6 @@ class Command(BaseCommand):
         self.stdout.write('=' * 70)
         
         if created_count > 0:
-            self.stdout.write(self.style.SUCCESS('✅ Functions creadas exitosamente'))
+            self.stdout.write(self.style.SUCCESS('Functions creadas exitosamente'))
         else:
-            self.stdout.write('ℹ️  Todas las functions ya existían')
+            self.stdout.write('Todas las functions ya existían')

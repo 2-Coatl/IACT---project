@@ -11,9 +11,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from decimal import Decimal
 
-from apps.pipeline.models import Center, Service, CallRecord
-# TODO PARTE 7: Mover UserServiceAccess a apps.access
-from apps.access.models import UserServiceAccess
+from apps.pipeline.models import Center, Service, CallRecord, CallNote
 
 User = get_user_model()
 
@@ -217,11 +215,25 @@ class CallRecordSerializer(serializers.ModelSerializer):
         - answer_rate (read-only): Tasa de respuesta %
         - abandonment_rate (read-only): Tasa de abandono %
         - avg_duration_seconds (read-only): Duración promedio
+    
+    FASE 0.2: Agregados campos agent, call_type, recording_path, service
     """
     
     answer_rate = serializers.SerializerMethodField()
     abandonment_rate = serializers.SerializerMethodField()
     avg_duration_seconds = serializers.SerializerMethodField()
+    
+    # FASE 0.2: Campos para ForeignKeys (mostrar nombres)
+    agent_username = serializers.CharField(
+        source='agent.username', 
+        read_only=True,
+        allow_null=True
+    )
+    service_name = serializers.CharField(
+        source='service.nombre',
+        read_only=True,
+        allow_null=True
+    )
     
     class Meta:
         model = CallRecord
@@ -234,6 +246,14 @@ class CallRecordSerializer(serializers.ModelSerializer):
             'llamadas_contestadas',
             'llamadas_abandonadas',
             'duracion_total_segundos',
+            # FASE 0.2: Campos nuevos
+            'agent',
+            'agent_username',
+            'call_type',
+            'recording_path',
+            'service',
+            'service_name',
+            # Métricas calculadas
             'answer_rate',
             'abandonment_rate',
             'avg_duration_seconds',
@@ -316,20 +336,6 @@ class CallRecordStatsSerializer(serializers.Serializer):
 
 
 # ============================================================================
-# NOTA: UserServiceAccess Serializers MOVIDOS a apps/access/serializers.py
-# 
-# Los siguientes serializers fueron movidos a apps.access (refactor organizacional):
-#   - UserServiceAccessSerializer
-#   - UserServiceAccessListSerializer
-#   - GrantAccessSerializer
-#   - BulkGrantAccessSerializer
-#   - RevokeAccessSerializer
-# 
-# Razón: UserServiceAccess es parte del sistema RBAC (apps/access)
-# ============================================================================
-
-
-# ============================================================================
 # TOTAL SERIALIZERS: 12 (pipeline only)
 # 
 # Center (3):
@@ -356,3 +362,50 @@ class CallRecordStatsSerializer(serializers.Serializer):
 #   ✅ Docstrings completos
 #   ✅ CLEAN_CODE v3.0.1
 # ============================================================================
+
+
+# ============================================================================
+# CALLNOTE SERIALIZER (FASE 0.2)
+# ============================================================================
+
+class CallNoteSerializer(serializers.ModelSerializer):
+    """
+    Serializer para CallNote.
+    
+    Permite crear/editar notas sobre CallRecords.
+    El usuario se asigna automáticamente desde request.user.
+    
+    FASE 0.2: Sistema de notas para llamadas procesadas.
+    """
+    
+    user_username = serializers.CharField(
+        source='user.username',
+        read_only=True
+    )
+    user_full_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = CallNote
+        fields = [
+            'id',
+            'call_record',
+            'user',
+            'user_username',
+            'user_full_name',
+            'note',
+            'is_important',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
+    
+    def get_user_full_name(self, obj):
+        """
+        Obtener nombre completo del usuario.
+        
+        Returns:
+            str: first_name + last_name o username si no tiene nombre
+        """
+        if obj.user.first_name and obj.user.last_name:
+            return f"{obj.user.first_name} {obj.user.last_name}"
+        return obj.user.username

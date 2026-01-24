@@ -8,8 +8,6 @@ CLEAN_CODE v3.0.1: Nombres auto-documentados.
 """
 
 from rest_framework import permissions
-# TODO PARTE 7: Mover UserServiceAccess a apps.access
-from apps.access.models import UserServiceAccess
 
 
 class IsCenterManager(permissions.BasePermission):
@@ -49,16 +47,15 @@ class IsServiceManager(permissions.BasePermission):
         return request.user.is_superuser or request.user.is_staff
 
 # ====================================================================================
-# REMOVED - FASE A DT-002 (2026-01-21)
+# LIMPIEZA DEUDA TÉCNICA (2026-01-22)
 # ====================================================================================
+# Permissions ELIMINADAS (UserServiceAccess deprecated):
+#   ❌ HasServiceAccess
+#   ❌ CanGrantAccess  
+#   ❌ CanRevokeAccess
 #
-# Permissions eliminadas:
-#   - HasServiceAccess: Verificaba UserServiceAccess
-#   - CanGrantAccess: Otorgar accesos a servicios
-#   - CanRevokeAccess: Revocar accesos a servicios
-#
-# Razón: UserServiceAccess eliminado, reemplazado por RBAC puro
-# Reemplazo: Usar RequiresFunctionPermission con functions apropiadas
+# Sistema actual: RBAC puro (Function/UserFunctionAssignment)
+# Control de acceso: Si tiene permiso → ve TODO
 # ====================================================================================
 
 

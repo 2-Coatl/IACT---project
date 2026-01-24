@@ -232,16 +232,6 @@ class CallRecordFilter(django_filters.FilterSet):
 
 
 # ============================================================================
-# NOTA: UserServiceAccessFilter MOVIDO a apps/access/filters.py
-# 
-# El siguiente filtro fue movido a apps.access (refactor organizacional):
-#   - UserServiceAccessFilter
-# 
-# Razón: UserServiceAccess es parte del sistema RBAC (apps/access)
-# ============================================================================
-
-
-# ============================================================================
 # TOTAL FILTERS: 3 (pipeline only)
 # 
 # Filters:

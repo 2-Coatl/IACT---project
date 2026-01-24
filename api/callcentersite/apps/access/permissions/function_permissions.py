@@ -1,5 +1,5 @@
 """
-DRF Permissions para RBAC v6.0.0.
+DRF Permissions para RBAC v6.0.0 - Funciones.
 
 Usa namespaces Django (permission_django) en lugar de codes.
 """
@@ -31,13 +31,13 @@ class HasFunction(BasePermission):
     
     Examples:
         # Usuario CON función 'reports.view':
-        GET /api/v1/reports/ → 200 OK ✅
+        GET /api/v1/reports/ → 200 OK
         
         # Usuario SIN función 'reports.view':
-        GET /api/v1/reports/ → 403 Forbidden ❌
+        GET /api/v1/reports/ → 403 Forbidden
         
         # Superuser (bypass):
-        GET /api/v1/reports/ → 200 OK ✅
+        GET /api/v1/reports/ → 200 OK
     
     Nota:
         Para ViewSets con múltiples acciones, usar RequiresFunctionPermission

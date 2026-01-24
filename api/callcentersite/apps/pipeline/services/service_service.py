@@ -14,7 +14,6 @@ from django.utils import timezone
 from typing import Dict, List, Optional, Tuple
 
 from apps.pipeline.models import Service, Center
-from apps.access.models import UserServiceAccess
 from apps.utils.constants import CACHE_TTL_MEDIUM, CACHE_KEY_USER_SERVICES
 
 
@@ -27,12 +26,19 @@ class ServiceService:
         - update_service(service, data)
         - deactivate_service(service)
         - activate_service(service)
-        - grant_access(service, user, granted_by, reason)
-        - revoke_access(access, revoked_by)
-        - bulk_grant_access(service, users, granted_by, reason)
-        - get_service_users(service)
-        - get_user_services(user, include_inactive)
         - transfer_service_to_center(service, new_center)
+    
+    LIMPIEZA DEUDA TÉCNICA (2026-01-22):
+    Métodos ELIMINADOS (UserServiceAccess deprecated):
+        ❌ grant_access
+        ❌ revoke_access
+        ❌ bulk_grant_access
+        ❌ get_service_users
+        ❌ get_user_services
+        ❌ _invalidate_user_caches
+    
+    Control de acceso ahora: RBAC puro (Function/UserFunctionAssignment)
+    Usuario con permiso → ve TODOS los servicios
     """
     
     @staticmethod
@@ -133,14 +139,11 @@ class ServiceService:
         service.full_clean()
         service.save()
         
-        # Invalidar cache de usuarios
-        ServiceService._invalidate_user_caches(service)
-        
         return service
     
     @staticmethod
     @transaction.atomic
-    def deactivate_service(service: Service) -> Dict:
+    def deactivate_service(service: Service) -> Service:
         """
         Desactivar servicio.
         
@@ -148,32 +151,17 @@ class ServiceService:
             service (Service): Servicio a desactivar
         
         Returns:
-            dict: {
-                'service': Service,
-                'user_accesses_affected': int
-            }
+            Service: Servicio desactivado
         
         Examples:
-            >>> result = ServiceService.deactivate_service(service)
-            >>> result['user_accesses_affected']
-            12
+            >>> service = ServiceService.deactivate_service(service)
+            >>> service.activo
+            False
         """
         service.activo = False
         service.save()
         
-        # Contar accesos afectados
-        user_accesses_affected = UserServiceAccess.objects.filter(
-            service=service,
-            is_active=True
-        ).count()
-        
-        # Invalidar cache
-        ServiceService._invalidate_user_caches(service)
-        
-        return {
-            'service': service,
-            'user_accesses_affected': user_accesses_affected
-        }
+        return service
     
     @staticmethod
     @transaction.atomic
@@ -191,6 +179,11 @@ class ServiceService:
         
         Raises:
             ValidationError: Si centro inactivo
+        
+        Examples:
+            >>> service = ServiceService.activate_service(service)
+            >>> service.activo
+            True
         """
         if not service.center.activo:
             raise ValidationError(
@@ -200,231 +193,7 @@ class ServiceService:
         service.activo = True
         service.save()
         
-        ServiceService._invalidate_user_caches(service)
-        
         return service
-    
-    @staticmethod
-    @transaction.atomic
-    def grant_access(
-        service: Service,
-        user,
-        granted_by=None,
-        reason: str = ''
-    ) -> UserServiceAccess:
-        """
-        Otorgar acceso de usuario a servicio.
-        
-        Args:
-            service (Service): Servicio
-            user (User): Usuario a otorgar acceso
-            granted_by (User, opcional): Usuario que otorga
-            reason (str, opcional): Razón del otorgamiento
-        
-        Returns:
-            UserServiceAccess: Acceso creado o reactivado
-        
-        Examples:
-            >>> access = ServiceService.grant_access(
-            ...     service=service,
-            ...     user=user,
-            ...     granted_by=admin,
-            ...     reason='Asignado a equipo soporte'
-            ... )
-        """
-        # Crear o reactivar acceso
-        access, created = UserServiceAccess.objects.get_or_create(
-            user=user,
-            service=service,
-            defaults={
-                'granted_by': granted_by,
-                'reason': reason,
-                'is_active': True,
-            }
-        )
-        
-        if not created and not access.is_active:
-            # Reactivar acceso revocado
-            access.is_active = True
-            access.revoked_at = None
-            access.revoked_by = None
-            access.granted_by = granted_by
-            access.reason = reason
-            access.save()
-        
-        # Invalidar cache del usuario
-        cache_key = CACHE_KEY_USER_SERVICES.format(user_id=user.id)
-        cache.delete(cache_key)
-        
-        return access
-    
-    @staticmethod
-    @transaction.atomic
-    def revoke_access(access: UserServiceAccess, revoked_by=None) -> UserServiceAccess:
-        """
-        Revocar acceso de usuario a servicio.
-        
-        Args:
-            access (UserServiceAccess): Acceso a revocar
-            revoked_by (User, opcional): Usuario que revoca
-        
-        Returns:
-            UserServiceAccess: Acceso revocado
-        
-        Examples:
-            >>> access = ServiceService.revoke_access(access, revoked_by=admin)
-        """
-        access.is_active = False
-        access.revoked_at = timezone.now()
-        access.revoked_by = revoked_by
-        access.save()
-        
-        # Invalidar cache del usuario
-        cache_key = CACHE_KEY_USER_SERVICES.format(user_id=access.user_id)
-        cache.delete(cache_key)
-        
-        return access
-    
-    @staticmethod
-    @transaction.atomic
-    def bulk_grant_access(
-        service: Service,
-        users: List,
-        granted_by=None,
-        reason: str = ''
-    ) -> Tuple[List[UserServiceAccess], int, int]:
-        """
-        Otorgar acceso a múltiples usuarios.
-        
-        Args:
-            service (Service): Servicio
-            users (list): Lista de usuarios
-            granted_by (User, opcional): Usuario que otorga
-            reason (str, opcional): Razón
-        
-        Returns:
-            tuple: (accesses_created, created_count, reactivated_count)
-        
-        Examples:
-            >>> accesses, created, reactivated = ServiceService.bulk_grant_access(
-            ...     service=service,
-            ...     users=[user1, user2, user3],
-            ...     granted_by=admin,
-            ...     reason='Migración equipo'
-            ... )
-        """
-        accesses = []
-        created_count = 0
-        reactivated_count = 0
-        
-        for user in users:
-            access, created = UserServiceAccess.objects.get_or_create(
-                user=user,
-                service=service,
-                defaults={
-                    'granted_by': granted_by,
-                    'reason': reason,
-                    'is_active': True,
-                }
-            )
-            
-            if created:
-                created_count += 1
-            elif not access.is_active:
-                # Reactivar
-                access.is_active = True
-                access.revoked_at = None
-                access.revoked_by = None
-                access.granted_by = granted_by
-                access.reason = reason
-                access.save()
-                reactivated_count += 1
-            
-            accesses.append(access)
-            
-            # Invalidar cache del usuario
-            cache_key = CACHE_KEY_USER_SERVICES.format(user_id=user.id)
-            cache.delete(cache_key)
-        
-        return accesses, created_count, reactivated_count
-    
-    @staticmethod
-    def get_service_users(service: Service, include_inactive: bool = False) -> List:
-        """
-        Obtener usuarios con acceso al servicio.
-        
-        Args:
-            service (Service): Servicio
-            include_inactive (bool): Incluir accesos inactivos
-        
-        Returns:
-            list: Lista de usuarios
-        
-        Examples:
-            >>> users = ServiceService.get_service_users(service)
-            >>> len(users)
-            12
-        """
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        
-        query = UserServiceAccess.objects.filter(service=service)
-        
-        if not include_inactive:
-            query = query.filter(is_active=True)
-        
-        user_ids = query.values_list('user_id', flat=True)
-        
-        return list(User.objects.filter(id__in=user_ids))
-    
-    @staticmethod
-    def get_user_services(user, include_inactive: bool = False):
-        """
-        Obtener servicios accesibles por usuario.
-        
-        Usa cache para optimizar.
-        
-        Args:
-            user (User): Usuario
-            include_inactive (bool): Incluir servicios inactivos
-        
-        Returns:
-            QuerySet: Servicios accesibles
-        
-        Examples:
-            >>> services = ServiceService.get_user_services(user)
-            >>> services.count()
-            5
-        """
-        # Si es superuser, retornar todos
-        if user.is_superuser:
-            if include_inactive:
-                return Service.objects.all()
-            return Service.objects.filter(activo=True)
-        
-        # Intentar obtener de cache
-        if not include_inactive:
-            cache_key = CACHE_KEY_USER_SERVICES.format(user_id=user.id)
-            cached = cache.get(cache_key)
-            if cached is not None:
-                return cached
-        
-        # Query BD
-        query = Service.objects.filter(
-            user_accesses__user=user,
-            user_accesses__is_active=True,
-        )
-        
-        if not include_inactive:
-            query = query.filter(activo=True)
-        
-        services = query.distinct()
-        
-        # Guardar en cache si no incluye inactivos
-        if not include_inactive:
-            cache.set(cache_key, services, CACHE_TTL_MEDIUM)
-        
-        return services
     
     @staticmethod
     @transaction.atomic
@@ -444,6 +213,8 @@ class ServiceService:
         
         Examples:
             >>> service = ServiceService.transfer_service_to_center(service, new_center)
+            >>> service.center == new_center
+            True
         """
         if not new_center.activo:
             raise ValidationError(
@@ -454,31 +225,11 @@ class ServiceService:
         service.center = new_center
         service.save()
         
-        # Invalidar cache
-        ServiceService._invalidate_user_caches(service)
-        
         return service
-    
-    @staticmethod
-    def _invalidate_user_caches(service: Service):
-        """
-        Invalidar cache de usuarios con acceso al servicio.
-        
-        Args:
-            service (Service): Servicio
-        """
-        user_ids = UserServiceAccess.objects.filter(
-            service=service,
-            is_active=True
-        ).values_list('user_id', flat=True)
-        
-        for user_id in user_ids:
-            cache_key = CACHE_KEY_USER_SERVICES.format(user_id=user_id)
-            cache.delete(cache_key)
 
 
 # ============================================================================
-# TOTAL METHODS: 12
+# TOTAL METHODS: 5 (LIMPIEZA DEUDA TÉCNICA 2026-01-22)
 # 
 # CRUD:
 #   - create_service(data)
@@ -488,27 +239,22 @@ class ServiceService:
 #   - deactivate_service(service)
 #   - activate_service(service)
 # 
-# Access Management:
-#   - grant_access(service, user, granted_by, reason)
-#   - revoke_access(access, revoked_by)
-#   - bulk_grant_access(service, users, granted_by, reason)
-# 
-# Queries:
-#   - get_service_users(service, include_inactive)
-#   - get_user_services(user, include_inactive)
-# 
 # Transfer:
 #   - transfer_service_to_center(service, new_center)
 # 
-# Cache:
-#   - _invalidate_user_caches(service)
+# ELIMINADO (UserServiceAccess deprecated):
+#   ❌ grant_access - Control ahora por RBAC
+#   ❌ revoke_access - Control ahora por RBAC
+#   ❌ bulk_grant_access - Control ahora por RBAC
+#   ❌ get_service_users - Sin segmentación por servicio
+#   ❌ get_user_services - Sin segmentación por servicio
+#   ❌ _invalidate_user_caches - Sin cache de accesos
 # 
 # Características:
 #   ✅ @transaction.atomic donde corresponde
-#   ✅ Cache con invalidation inteligente
 #   ✅ Validaciones de negocio complejas
-#   ✅ Bulk operations
 #   ✅ Type hints
 #   ✅ Docstrings completos
 #   ✅ CLEAN_CODE v3.0.1
+#   ✅ Sin dependencias deprecated
 # ============================================================================

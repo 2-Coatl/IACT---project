@@ -64,7 +64,8 @@ class SessionHistorySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = SessionHistory
-        fields = [
+        # CLEAN CODE: Explicit is better than implicit (PEP 20)
+        fields = (
             'id',
             'username',
             'full_name',
@@ -74,8 +75,9 @@ class SessionHistorySerializer(serializers.ModelSerializer):
             'ip_address',
             'user_agent',
             'is_active',
-        ]
-        read_only_fields = '__all__'  # Todo read-only
+        )
+        # Session history is read-only (created by signals)
+        read_only_fields = fields
     
     def get_duration(self, obj):
         """

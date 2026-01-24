@@ -10,15 +10,19 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.contrib.auth import get_user_model
 
 from apps.core.permissions import RequiresFunctionPermission
-from apps.users.models import User
 from apps.users.serializers import (
     UserSerializer,
     UserListSerializer,
-    UserDetailSerializer,
+    # UserDetailSerializer,  # TODO: No existe - usando UserSerializer temporalmente
 )
 from apps.users.filters import UserFilter
+
+# ✅ BEST PRACTICE: Use get_user_model() instead of direct import
+# https://docs.djangoproject.com/en/stable/topics/auth/customizing/#referencing-the-user-model
+User = get_user_model()
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -54,14 +58,14 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering = ['-date_joined']
     
     function_map = {
-        'list': 'USR_VIEW',
-        'retrieve': 'USR_VIEW',
-        'create': 'USR_EDIT',
-        'update': 'USR_EDIT',
-        'partial_update': 'USR_EDIT',
-        'destroy': 'USR_DELETE',
-        'activate': 'USR_EDIT',
-        'deactivate': 'USR_EDIT',
+        'list': 'users.view',           # ← Namespace Django
+        'retrieve': 'users.view',       # ← Namespace Django
+        'create': 'users.create',       # ← Namespace Django
+        'update': 'users.edit',         # ← Namespace Django
+        'partial_update': 'users.edit', # ← Namespace Django
+        'destroy': 'users.delete',      # ← Namespace Django
+        'activate': 'users.edit',       # ← Namespace Django
+        'deactivate': 'users.edit',     # ← Namespace Django
     }
     
     def get_serializer_class(self):
@@ -69,7 +73,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return UserListSerializer
         elif self.action == 'retrieve':
-            return UserDetailSerializer
+            return UserSerializer  # TODO: Debería ser UserDetailSerializer cuando exista
         return UserSerializer
     
     def perform_destroy(self, instance):
