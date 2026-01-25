@@ -510,12 +510,12 @@ class CallRecordService:
 #   - validate_export_size(queryset) (CNST-007)
 # 
 # Características:
-#   ✅ @transaction.atomic donde corresponde
-#   ✅ Bulk operations optimizadas
-#   ✅ Estadísticas agregadas complejas
-#   ✅ Validaciones de negocio
-#   ✅ CNST-007: Export validation
-#   ✅ Type hints
-#   ✅ Docstrings completos
-#   ✅ CLEAN_CODE v3.0.1
+#   [SUCCESS] @transaction.atomic donde corresponde
+#   [SUCCESS] Bulk operations optimizadas
+#   [SUCCESS] Estadísticas agregadas complejas
+#   [SUCCESS] Validaciones de negocio
+#   [SUCCESS] CNST-007: Export validation
+#   [SUCCESS] Type hints
+#   [SUCCESS] Docstrings completos
+#   [SUCCESS] CLEAN_CODE v3.0.1
 # ============================================================================

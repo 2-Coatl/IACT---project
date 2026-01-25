@@ -24,7 +24,7 @@ class SessionLogSerializer(serializers.ModelSerializer):
         read_only=True
     )
     
-    # ✅ login_at = created_at (heredado de TimeStampedModel)
+    # [SUCCESS] login_at = created_at (heredado de TimeStampedModel)
     login_at = serializers.DateTimeField(
         source='created_at',
         read_only=True
@@ -40,7 +40,7 @@ class SessionLogSerializer(serializers.ModelSerializer):
             'session_key',
             'ip_address',
             'user_agent',
-            'login_at',  # ✅ created_at
+            'login_at',  # [SUCCESS] created_at
             'logout_at',
             'is_active',
             'duration_seconds'
@@ -53,7 +53,7 @@ class SessionLogSerializer(serializers.ModelSerializer):
         
         SOLID SRP: Solo cálculo de duración.
         """
-        duration = obj.duration  # ✅ Property del modelo
+        duration = obj.duration  # [SUCCESS] Property del modelo
         
         if duration:
             return int(duration.total_seconds())
@@ -78,8 +78,8 @@ class SessionLogDetailSerializer(SessionLogSerializer):
     
     class Meta(SessionLogSerializer.Meta):
         fields = SessionLogSerializer.Meta.fields + [
-            'created_at',  # ✅ Timestamp
-            'updated_at',  # ✅ Timestamp
-            'created_by_username',  # ✅ Auditoría
+            'created_at',  # [SUCCESS] Timestamp
+            'updated_at',  # [SUCCESS] Timestamp
+            'created_by_username',  # [SUCCESS] Auditoría
         ]
         read_only_fields = fields

@@ -224,31 +224,31 @@ class ProfileViewSet(viewsets.GenericViewSet):
 # ViewSet: ProfileViewSet
 #
 # Endpoints:
-#   ✅ GET /api/profile/me/ - Ver perfil
-#   ✅ PUT/PATCH /api/profile/me/ - Actualizar perfil
-#   ✅ GET /api/profile/me/settings/ - Ver settings
-#   ✅ PUT/PATCH /api/profile/me/settings/ - Actualizar settings
-#   ✅ POST /api/profile/me/avatar/ - Subir avatar
-#   ✅ DELETE /api/profile/me/avatar/ - Eliminar avatar
+#   [SUCCESS] GET /api/profile/me/ - Ver perfil
+#   [SUCCESS] PUT/PATCH /api/profile/me/ - Actualizar perfil
+#   [SUCCESS] GET /api/profile/me/settings/ - Ver settings
+#   [SUCCESS] PUT/PATCH /api/profile/me/settings/ - Actualizar settings
+#   [SUCCESS] POST /api/profile/me/avatar/ - Subir avatar
+#   [SUCCESS] DELETE /api/profile/me/avatar/ - Eliminar avatar
 #
 # Permissions:
-#   ✅ IsAuthenticated (sin RBAC)
-#   ❌ NO function_map (perfil propio)
+#   [SUCCESS] IsAuthenticated (sin RBAC)
+#   [ERROR] NO function_map (perfil propio)
 #
 # Features:
-#   ✅ Solo /me/ endpoints (usuario autenticado)
-#   ✅ Auto-crear profile/settings si no existen
-#   ✅ Upload avatar con validación
-#   ✅ Remove avatar
+#   [SUCCESS] Solo /me/ endpoints (usuario autenticado)
+#   [SUCCESS] Auto-crear profile/settings si no existen
+#   [SUCCESS] Upload avatar con validación
+#   [SUCCESS] Remove avatar
 #
 # Delegación:
-#   ✅ ProfileSerializer → ProfileService.update_profile()
-#   ✅ AvatarUploadSerializer → ProfileService.upload_avatar()
-#   ✅ ProfileService.remove_avatar()
+#   [SUCCESS] ProfileSerializer -> ProfileService.update_profile()
+#   [SUCCESS] AvatarUploadSerializer -> ProfileService.upload_avatar()
+#   [SUCCESS] ProfileService.remove_avatar()
 #
 # Principios:
-#   ✅ SRP: Solo gestión de perfil propio
-#   ✅ DRY: Delegar a serializers/services
-#   ✅ Clean Code: Nombres auto-documentados
-#   ✅ No RBAC: Perfil propio no requiere permissions
+#   [SUCCESS] SRP: Solo gestión de perfil propio
+#   [SUCCESS] DRY: Delegar a serializers/services
+#   [SUCCESS] Clean Code: Nombres auto-documentados
+#   [SUCCESS] No RBAC: Perfil propio no requiere permissions
 # ============================================================================

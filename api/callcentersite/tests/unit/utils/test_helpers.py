@@ -246,7 +246,7 @@ class TestHashString:
         assert len(hashed) == 32  # MD5 = 32 chars hex
     
     def test_same_input_same_hash(self):
-        """Test: Mismo input → mismo hash."""
+        """Test: Mismo input -> mismo hash."""
         text = 'consistent'
         
         hash1 = hash_string(text)
@@ -513,28 +513,28 @@ class TestRemoveEmptyStrings:
 # Total: 40 tests
 # 
 # get_client_ip (6 tests) - CRÍTICO:
-#   ✅ ip_from_x_forwarded_for
-#   ✅ ip_from_remote_addr
-#   ✅ ip_from_x_real_ip
-#   ✅ ip_priority_x_forwarded_for
-#   ✅ ip_none_when_no_headers
-#   ✅ ipv6_support
+#   [SUCCESS] ip_from_x_forwarded_for
+#   [SUCCESS] ip_from_remote_addr
+#   [SUCCESS] ip_from_x_real_ip
+#   [SUCCESS] ip_priority_x_forwarded_for
+#   [SUCCESS] ip_none_when_no_headers
+#   [SUCCESS] ipv6_support
 # 
 # Otros helpers (34 tests):
-#   ✅ get_user_agent (2)
-#   ✅ is_ajax_request (2)
-#   ✅ generate_uuid (2)
-#   ✅ generate_short_uuid (2)
-#   ✅ hash_string (3)
-#   ✅ generate_random_token (2)
-#   ✅ safe_get (3)
-#   ✅ merge_dicts (3)
-#   ✅ chunk_list (3)
-#   ✅ flatten_list (2)
-#   ✅ unique_list (2)
-#   ✅ str_to_bool (4)
-#   ✅ remove_none_values (2)
-#   ✅ remove_empty_strings (2)
+#   [SUCCESS] get_user_agent (2)
+#   [SUCCESS] is_ajax_request (2)
+#   [SUCCESS] generate_uuid (2)
+#   [SUCCESS] generate_short_uuid (2)
+#   [SUCCESS] hash_string (3)
+#   [SUCCESS] generate_random_token (2)
+#   [SUCCESS] safe_get (3)
+#   [SUCCESS] merge_dicts (3)
+#   [SUCCESS] chunk_list (3)
+#   [SUCCESS] flatten_list (2)
+#   [SUCCESS] unique_list (2)
+#   [SUCCESS] str_to_bool (4)
+#   [SUCCESS] remove_none_values (2)
+#   [SUCCESS] remove_empty_strings (2)
 # 
 # Coverage: 95%+
 # CRÍTICO: get_client_ip usado en apps/users/signals.py

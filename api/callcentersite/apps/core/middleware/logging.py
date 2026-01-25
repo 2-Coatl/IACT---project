@@ -105,11 +105,11 @@ class RequestLoggingMiddleware(MiddlewareMixin):
 # CNST: CNST-031 (Auditoría completa)
 # 
 # Logs incluyen:
-#   ✅ Method + Path
-#   ✅ Usuario (o anonymous)
-#   ✅ IP del cliente
-#   ✅ Status code
-#   ✅ Duration en segundos
+#   [SUCCESS] Method + Path
+#   [SUCCESS] Usuario (o anonymous)
+#   [SUCCESS] IP del cliente
+#   [SUCCESS] Status code
+#   [SUCCESS] Duration en segundos
 # 
 # Instalación: Agregar a MIDDLEWARE en settings
 # ============================================================================

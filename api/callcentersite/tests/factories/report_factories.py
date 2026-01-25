@@ -445,6 +445,6 @@ class TemplateWithScheduleFactory:
 #   - CompleteReportFactory (static)
 #   - TemplateWithScheduleFactory (static)
 # 
-# CNST-007: Export máximo 100K rows ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-007: Export máximo 100K rows [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

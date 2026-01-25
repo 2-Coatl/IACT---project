@@ -25,7 +25,7 @@ class RequiresFunctionPermission(permissions.BasePermission):
             permission_classes = [IsAuthenticated, RequiresFunctionPermission]
             
             function_map = {
-                'list': 'users.view',           # ← Namespace Django
+                'list': 'users.view',           # <- Namespace Django
                 'create': 'users.create',
                 'update': 'users.edit',
                 'partial_update': 'users.edit',
@@ -39,13 +39,13 @@ class RequiresFunctionPermission(permissions.BasePermission):
     
     Examples:
         # Usuario CON función 'users.view':
-        GET /api/v1/users/ → 200 OK ✅
+        GET /api/v1/users/ -> 200 OK [SUCCESS]
         
         # Usuario SIN función 'users.create':
-        POST /api/v1/users/ → 403 Forbidden ❌
+        POST /api/v1/users/ -> 403 Forbidden [ERROR]
         
         # Acción no mapeada (sin restricción):
-        OPTIONS /api/v1/users/ → 200 OK ✅
+        OPTIONS /api/v1/users/ -> 200 OK [SUCCESS]
     
     CLEAN_CODE v3.0.1: Nombre que revela intención.
     SOLID SRP: Solo verifica función RBAC.
@@ -68,9 +68,9 @@ class RequiresFunctionPermission(permissions.BasePermission):
             1. Verifica autenticación
             2. Superuser bypass
             3. Obtiene function_map del ViewSet
-            4. Si no hay function_map → permite (sin restricción)
-            5. Si acción no mapeada → permite (sin restricción)
-            6. Si acción mapeada → verifica con User.has_function()
+            4. Si no hay function_map -> permite (sin restricción)
+            5. Si acción no mapeada -> permite (sin restricción)
+            6. Si acción mapeada -> verifica con User.has_function()
         """
         # 1. Usuario debe estar autenticado
         if not request.user or not request.user.is_authenticated:
@@ -140,11 +140,11 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     
     Examples:
         # Usuario es created_by:
-        PUT /api/reports/1/ → 200 OK
+        PUT /api/reports/1/ -> 200 OK
         
         # Usuario NO es created_by:
-        GET /api/reports/1/ → 200 OK (lectura permitida)
-        PUT /api/reports/1/ → 403 Forbidden (escritura denegada)
+        GET /api/reports/1/ -> 200 OK (lectura permitida)
+        PUT /api/reports/1/ -> 403 Forbidden (escritura denegada)
     """
     
     message = 'Solo el creador puede editar este recurso.'
@@ -190,11 +190,11 @@ class IsSuperUserOrReadOnly(permissions.BasePermission):
     
     Examples:
         # Superuser:
-        POST /api/config/ → 201 Created
+        POST /api/config/ -> 201 Created
         
         # Usuario normal:
-        GET /api/config/ → 200 OK (lectura permitida)
-        POST /api/config/ → 403 Forbidden (escritura denegada)
+        GET /api/config/ -> 200 OK (lectura permitida)
+        POST /api/config/ -> 403 Forbidden (escritura denegada)
     """
     
     message = 'Solo superusuarios pueden modificar este recurso.'
@@ -239,8 +239,8 @@ class AllowOptionsAuthentication(permissions.BasePermission):
             ]
     
     Examples:
-        OPTIONS /api/reports/ → 200 OK (sin autenticación)
-        GET /api/reports/ → Requiere autenticación
+        OPTIONS /api/reports/ -> 200 OK (sin autenticación)
+        GET /api/reports/ -> Requiere autenticación
     """
     
     def has_permission(self, request, view):
@@ -325,24 +325,24 @@ class IsStaffOrReadOnly(permissions.BasePermission):
 # Total: 7 permissions custom
 # 
 # RBAC:
-#   ✅ RequiresFunctionPermission - Función RBAC específica
+#   [SUCCESS] RequiresFunctionPermission - Función RBAC específica
 # 
 # Ownership:
-#   ✅ IsOwnerOrReadOnly - Solo owner puede editar
+#   [SUCCESS] IsOwnerOrReadOnly - Solo owner puede editar
 # 
 # Role-based:
-#   ✅ IsSuperUserOrReadOnly - Solo superuser puede editar
-#   ✅ IsStaffOrReadOnly - Solo staff puede editar
+#   [SUCCESS] IsSuperUserOrReadOnly - Solo superuser puede editar
+#   [SUCCESS] IsStaffOrReadOnly - Solo staff puede editar
 # 
 # Service Access:
-#   ✅ HasServiceAccess - Acceso a servicios 800
+#   [SUCCESS] HasServiceAccess - Acceso a servicios 800
 # 
 # CORS:
-#   ✅ AllowOptionsAuthentication - Permite OPTIONS
+#   [SUCCESS] AllowOptionsAuthentication - Permite OPTIONS
 # 
 # Principios SOLID Aplicados:
-#   ✅ SRP: Cada permission una responsabilidad
-#   ✅ Clean Naming: Nombres auto-documentados
-#   ✅ Documentation: Docstrings + ejemplos
-#   ✅ DRY: _get_service_from_object() helper
+#   [SUCCESS] SRP: Cada permission una responsabilidad
+#   [SUCCESS] Clean Naming: Nombres auto-documentados
+#   [SUCCESS] Documentation: Docstrings + ejemplos
+#   [SUCCESS] DRY: _get_service_from_object() helper
 # ============================================================================

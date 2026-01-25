@@ -274,30 +274,30 @@ class ProfileService(BaseService):
 # Hereda de: BaseService (apps.core.services)
 # 
 # Métodos Públicos: 4
-#   ✅ get_profile() - Obtiene perfil
-#   ✅ update_profile() - Actualiza bio, department
-#   ✅ upload_avatar() - Sube imagen de perfil
-#   ✅ remove_avatar() - Elimina avatar
+#   [SUCCESS] get_profile() - Obtiene perfil
+#   [SUCCESS] update_profile() - Actualiza bio, department
+#   [SUCCESS] upload_avatar() - Sube imagen de perfil
+#   [SUCCESS] remove_avatar() - Elimina avatar
 # 
 # Dependencias:
-#   ✅ BaseService (apps.core.services) - Logging
-#   ✅ AuditService (apps.audit.services) - Audit logging
-#   ✅ sanitize_filename, calculate_file_hash (apps.utils.file_utils)
-#   ✅ UserNotFoundError, UserServiceError (apps.users.exceptions)
+#   [SUCCESS] BaseService (apps.core.services) - Logging
+#   [SUCCESS] AuditService (apps.audit.services) - Audit logging
+#   [SUCCESS] sanitize_filename, calculate_file_hash (apps.utils.file_utils)
+#   [SUCCESS] UserNotFoundError, UserServiceError (apps.users.exceptions)
 # 
 # Validaciones de Avatar:
-#   ✅ Formatos permitidos: jpg, png, gif
-#   ✅ Tamaño máximo: 2MB
-#   ✅ Sanitización de nombre de archivo
-#   ✅ Hash calculado para audit
+#   [SUCCESS] Formatos permitidos: jpg, png, gif
+#   [SUCCESS] Tamaño máximo: 2MB
+#   [SUCCESS] Sanitización de nombre de archivo
+#   [SUCCESS] Hash calculado para audit
 # 
 # Integración con Signal:
-#   ✅ UserProfile auto-creado cuando se crea User
+#   [SUCCESS] UserProfile auto-creado cuando se crea User
 # 
 # Principios SOLID:
-#   ✅ SRP: Solo operaciones de perfil
-#   ✅ DIP: Depende de BaseService
-#   ✅ Clean Code: Validaciones claras
+#   [SUCCESS] SRP: Solo operaciones de perfil
+#   [SUCCESS] DIP: Depende de BaseService
+#   [SUCCESS] Clean Code: Validaciones claras
 # 
 # Líneas: ~250
 # ============================================================================

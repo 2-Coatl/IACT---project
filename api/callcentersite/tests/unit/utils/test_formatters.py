@@ -182,31 +182,31 @@ class TestTruncateText:
 # Total: 17 tests
 # 
 # format_phone (4 tests):
-#   ✅ format_mobile_chile
-#   ✅ format_landline_chile
-#   ✅ format_already_formatted
-#   ✅ format_invalid_returns_original
+#   [SUCCESS] format_mobile_chile
+#   [SUCCESS] format_landline_chile
+#   [SUCCESS] format_already_formatted
+#   [SUCCESS] format_invalid_returns_original
 # 
 # format_currency (4 tests):
-#   ✅ format_currency_clp
-#   ✅ format_currency_usd
-#   ✅ format_currency_decimals
-#   ✅ format_currency_negative
+#   [SUCCESS] format_currency_clp
+#   [SUCCESS] format_currency_usd
+#   [SUCCESS] format_currency_decimals
+#   [SUCCESS] format_currency_negative
 # 
 # format_percentage (3 tests):
-#   ✅ format_percentage_simple
-#   ✅ format_percentage_decimals
-#   ✅ format_percentage_zero
+#   [SUCCESS] format_percentage_simple
+#   [SUCCESS] format_percentage_decimals
+#   [SUCCESS] format_percentage_zero
 # 
 # format_number (3 tests):
-#   ✅ format_number_thousands
-#   ✅ format_number_decimals
-#   ✅ format_number_small
+#   [SUCCESS] format_number_thousands
+#   [SUCCESS] format_number_decimals
+#   [SUCCESS] format_number_small
 # 
 # truncate_text (3 tests):
-#   ✅ truncate_long_text
-#   ✅ truncate_short_text_unchanged
-#   ✅ truncate_exact_length
+#   [SUCCESS] truncate_long_text
+#   [SUCCESS] truncate_short_text_unchanged
+#   [SUCCESS] truncate_exact_length
 # 
 # Coverage: 95%+
 # ============================================================================

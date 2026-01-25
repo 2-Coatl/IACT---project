@@ -266,33 +266,33 @@ class TestUserService:
 # Total Tests: 19
 # 
 # create_user: 5 tests
-#   ✅ Creación exitosa
-#   ✅ Con campos opcionales
-#   ✅ Username duplicado
-#   ✅ Email duplicado
-#   ✅ Email inválido
+#   [SUCCESS] Creación exitosa
+#   [SUCCESS] Con campos opcionales
+#   [SUCCESS] Username duplicado
+#   [SUCCESS] Email duplicado
+#   [SUCCESS] Email inválido
 # 
 # get_user: 4 tests
-#   ✅ Por ID exitoso
-#   ✅ Por ID no encontrado
-#   ✅ Por username exitoso
-#   ✅ Por username no encontrado
+#   [SUCCESS] Por ID exitoso
+#   [SUCCESS] Por ID no encontrado
+#   [SUCCESS] Por username exitoso
+#   [SUCCESS] Por username no encontrado
 # 
 # list_users: 3 tests
-#   ✅ Listar todos
-#   ✅ Solo activos
-#   ✅ Con búsqueda
+#   [SUCCESS] Listar todos
+#   [SUCCESS] Solo activos
+#   [SUCCESS] Con búsqueda
 # 
 # update_user: 2 tests
-#   ✅ Actualización exitosa
-#   ✅ Email duplicado
+#   [SUCCESS] Actualización exitosa
+#   [SUCCESS] Email duplicado
 # 
 # activate/deactivate: 2 tests
-#   ✅ Activar
-#   ✅ Desactivar
+#   [SUCCESS] Activar
+#   [SUCCESS] Desactivar
 # 
 # delete_user: 1 test
-#   ✅ Soft delete
+#   [SUCCESS] Soft delete
 # 
 # Coverage: ~95% de UserService
 # ============================================================================

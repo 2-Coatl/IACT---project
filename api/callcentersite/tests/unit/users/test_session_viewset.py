@@ -226,23 +226,23 @@ class TestSessionHistoryReadOnly:
 # Total tests: 13
 # 
 # List (7 tests):
-#   ✅ Con permission
-#   ✅ Sin permission → 403
-#   ✅ Sin autenticación → 401
-#   ✅ Usuario ve solo propias
-#   ✅ Staff ve todas
-#   ✅ Filtro is_active
-#   ✅ Filtro user (staff only)
+#   [SUCCESS] Con permission
+#   [SUCCESS] Sin permission -> 403
+#   [SUCCESS] Sin autenticación -> 401
+#   [SUCCESS] Usuario ve solo propias
+#   [SUCCESS] Staff ve todas
+#   [SUCCESS] Filtro is_active
+#   [SUCCESS] Filtro user (staff only)
 # 
 # Retrieve (3 tests):
-#   ✅ Con permission
-#   ✅ Duration calculado (sesión cerrada)
-#   ✅ Duration null (sesión activa)
+#   [SUCCESS] Con permission
+#   [SUCCESS] Duration calculado (sesión cerrada)
+#   [SUCCESS] Duration null (sesión activa)
 # 
 # Read-only (3 tests):
-#   ✅ POST no permitido
-#   ✅ PATCH no permitido
-#   ✅ DELETE no permitido
+#   [SUCCESS] POST no permitido
+#   [SUCCESS] PATCH no permitido
+#   [SUCCESS] DELETE no permitido
 # 
 # Coverage: ~95% de SessionHistoryViewSet
 # ============================================================================

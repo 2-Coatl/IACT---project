@@ -94,22 +94,22 @@ class PasswordValidationError(UserServiceError):
 # Total Exceptions: 6
 # 
 # Base:
-#   ✅ UserServiceError (BusinessLogicError)
+#   [SUCCESS] UserServiceError (BusinessLogicError)
 # 
 # Específicas:
-#   ✅ UserAlreadyExistsError - Username/email duplicado
-#   ✅ UserNotFoundError - Usuario no encontrado
-#   ✅ InvalidCredentialsError - Credenciales incorrectas
-#   ✅ UserInactiveError - Usuario inactivo
-#   ✅ PasswordValidationError - Password inválido
+#   [SUCCESS] UserAlreadyExistsError - Username/email duplicado
+#   [SUCCESS] UserNotFoundError - Usuario no encontrado
+#   [SUCCESS] InvalidCredentialsError - Credenciales incorrectas
+#   [SUCCESS] UserInactiveError - Usuario inactivo
+#   [SUCCESS] PasswordValidationError - Password inválido
 # 
 # Uso de Arquitectura:
-#   ✅ BusinessLogicError (apps.core.exceptions)
+#   [SUCCESS] BusinessLogicError (apps.core.exceptions)
 # 
 # Principios SOLID:
-#   ✅ SRP: Cada excepción una responsabilidad
-#   ✅ Clean Naming: Nombres descriptivos
-#   ✅ Herencia: Jerarquía clara
+#   [SUCCESS] SRP: Cada excepción una responsabilidad
+#   [SUCCESS] Clean Naming: Nombres descriptivos
+#   [SUCCESS] Herencia: Jerarquía clara
 # 
 # Líneas: ~110
 # ============================================================================

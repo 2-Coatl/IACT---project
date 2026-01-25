@@ -441,6 +441,6 @@ class YearDataFactory:
 #   - CompleteQuarterDataFactory (static)
 #   - YearDataFactory (static)
 # 
-# CNST-002: Dual DB (MariaDB readonly en prod, SQLite en tests) ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-002: Dual DB (MariaDB readonly en prod, SQLite en tests) [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

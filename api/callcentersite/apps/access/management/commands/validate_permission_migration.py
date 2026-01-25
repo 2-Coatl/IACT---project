@@ -22,7 +22,7 @@ class Command(BaseCommand):
         """Ejecutar validación."""
         self.stdout.write('=' * 70)
         self.stdout.write(
-            self.style.SUCCESS('🔍 VALIDACIÓN DE MIGRACIÓN DE PERMISOS')
+            self.style.SUCCESS('[SEARCH] VALIDACIÓN DE MIGRACIÓN DE PERMISOS')
         )
         self.stdout.write('=' * 70)
         self.stdout.write('')
@@ -38,12 +38,12 @@ class Command(BaseCommand):
         old_functions = Function.objects.filter(code__startswith='CALL_')
         if old_functions.exists():
             errors.append(
-                f'❌ Todavía existen {old_functions.count()} funciones CALL_*'
+                f'[ERROR] Todavía existen {old_functions.count()} funciones CALL_*'
             )
             for func in old_functions:
                 errors.append(f'   - {func.code}')
         else:
-            success.append('✅ No existen funciones CALL_* (correcto)')
+            success.append('[SUCCESS] No existen funciones CALL_* (correcto)')
         self.stdout.write('')
         
         # ================================================================
@@ -53,12 +53,12 @@ class Command(BaseCommand):
         old_modules = Module.objects.filter(code__startswith='MOD_Calls')
         if old_modules.exists():
             errors.append(
-                f'❌ Todavía existen {old_modules.count()} módulos MOD_Calls*'
+                f'[ERROR] Todavía existen {old_modules.count()} módulos MOD_Calls*'
             )
             for mod in old_modules:
                 errors.append(f'   - {mod.code}')
         else:
-            success.append('✅ No existen módulos MOD_Calls* (correcto)')
+            success.append('[SUCCESS] No existen módulos MOD_Calls* (correcto)')
         self.stdout.write('')
         
         # ================================================================
@@ -77,9 +77,9 @@ class Command(BaseCommand):
         for func_code in expected_pipeline_functions:
             try:
                 func = Function.objects.get(code=func_code)
-                success.append(f'✅ {func_code} existe')
+                success.append(f'[SUCCESS] {func_code} existe')
             except Function.DoesNotExist:
-                errors.append(f'❌ {func_code} NO existe')
+                errors.append(f'[ERROR] {func_code} NO existe')
         self.stdout.write('')
         
         # ================================================================
@@ -88,9 +88,9 @@ class Command(BaseCommand):
         self.stdout.write('4. Verificando módulo MOD_IVR...')
         try:
             ivr_module = Module.objects.get(code='MOD_IVR')
-            success.append('✅ MOD_IVR existe')
+            success.append('[SUCCESS] MOD_IVR existe')
         except Module.DoesNotExist:
-            warnings.append('⚠️ MOD_IVR NO existe (opcional)')
+            warnings.append('[WARN] MOD_IVR NO existe (opcional)')
         self.stdout.write('')
         
         # ================================================================
@@ -105,9 +105,9 @@ class Command(BaseCommand):
         for func_code in expected_ivr_functions:
             try:
                 func = Function.objects.get(code=func_code)
-                success.append(f'✅ {func_code} existe')
+                success.append(f'[SUCCESS] {func_code} existe')
             except Function.DoesNotExist:
-                warnings.append(f'⚠️ {func_code} NO existe (opcional)')
+                warnings.append(f'[WARN] {func_code} NO existe (opcional)')
         self.stdout.write('')
         
         # ================================================================
@@ -122,9 +122,9 @@ class Command(BaseCommand):
         for func_code in expected_dash_functions:
             try:
                 func = Function.objects.get(code=func_code)
-                success.append(f'✅ {func_code} existe')
+                success.append(f'[SUCCESS] {func_code} existe')
             except Function.DoesNotExist:
-                warnings.append(f'⚠️ {func_code} NO existe (opcional)')
+                warnings.append(f'[WARN] {func_code} NO existe (opcional)')
         self.stdout.write('')
         
         # ================================================================
@@ -137,7 +137,7 @@ class Command(BaseCommand):
         )
         if orphan_assignments.exists():
             errors.append(
-                f'❌ {orphan_assignments.count()} asignaciones activas a '
+                f'[ERROR] {orphan_assignments.count()} asignaciones activas a '
                 'funciones CALL_* no migradas'
             )
             for assignment in orphan_assignments[:5]:
@@ -147,7 +147,7 @@ class Command(BaseCommand):
             if orphan_assignments.count() > 5:
                 errors.append(f'   ... y {orphan_assignments.count() - 5} más')
         else:
-            success.append('✅ No hay asignaciones activas a CALL_* (correcto)')
+            success.append('[SUCCESS] No hay asignaciones activas a CALL_* (correcto)')
         self.stdout.write('')
         
         # ================================================================
@@ -160,21 +160,21 @@ class Command(BaseCommand):
         
         # Mostrar éxitos
         if success:
-            self.stdout.write(self.style.SUCCESS('✅ ÉXITOS:'))
+            self.stdout.write(self.style.SUCCESS('[SUCCESS] ÉXITOS:'))
             for msg in success:
                 self.stdout.write(f'  {msg}')
             self.stdout.write('')
         
         # Mostrar advertencias
         if warnings:
-            self.stdout.write(self.style.WARNING('⚠️ ADVERTENCIAS:'))
+            self.stdout.write(self.style.WARNING('[WARN] ADVERTENCIAS:'))
             for msg in warnings:
                 self.stdout.write(f'  {msg}')
             self.stdout.write('')
         
         # Mostrar errores
         if errors:
-            self.stdout.write(self.style.ERROR('❌ ERRORES:'))
+            self.stdout.write(self.style.ERROR('[ERROR] ERRORES:'))
             for msg in errors:
                 self.stdout.write(f'  {msg}')
             self.stdout.write('')
@@ -182,16 +182,16 @@ class Command(BaseCommand):
         # Resultado final
         if errors:
             self.stdout.write(
-                self.style.ERROR('❌ VALIDACIÓN FALLIDA - Corregir errores')
+                self.style.ERROR('[ERROR] VALIDACIÓN FALLIDA - Corregir errores')
             )
             return False
         elif warnings:
             self.stdout.write(
-                self.style.WARNING('⚠️ VALIDACIÓN CON ADVERTENCIAS')
+                self.style.WARNING('[WARN] VALIDACIÓN CON ADVERTENCIAS')
             )
             return True
         else:
             self.stdout.write(
-                self.style.SUCCESS('✅ VALIDACIÓN EXITOSA - Todo correcto')
+                self.style.SUCCESS('[SUCCESS] VALIDACIÓN EXITOSA - Todo correcto')
             )
             return True

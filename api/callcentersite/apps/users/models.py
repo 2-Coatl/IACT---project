@@ -53,8 +53,8 @@ class User(AbstractUser, SoftDeleteMixin):
             email='jdoe@company.com',
             password='SecurePass123'
         )
-        user.profile  # ← Auto-creado vía signal
-        user.get_functions()  # ← RBAC de apps.access
+        user.profile  # <- Auto-creado vía signal
+        user.get_functions()  # <- RBAC de apps.access
     """
     
     # Campos adicionales (AbstractUser ya tiene username, email, etc)
@@ -179,7 +179,7 @@ class User(AbstractUser, SoftDeleteMixin):
         """
         return set(
             self.get_user_functions()
-            .values_list('permission_django', flat=True)  # ← Namespace, NO code
+            .values_list('permission_django', flat=True)  # <- Namespace, NO code
         )
     
     def has_function(self, permission_django: str) -> bool:
@@ -213,7 +213,7 @@ class User(AbstractUser, SoftDeleteMixin):
             function__permission_django para verificar asignación activa.
         
         Note:
-            - Sistema RBAC v6.0.0: User → UserFunctionAssignment → Function
+            - Sistema RBAC v6.0.0: User -> UserFunctionAssignment -> Function
             - permission_django es el identificador único de funciones
             - Filtro adicional por status='activo' para funciones planificadas
         """
@@ -222,7 +222,7 @@ class User(AbstractUser, SoftDeleteMixin):
         return UserFunctionAssignment.objects.filter(
             user=self,
             is_active=True,
-            function__permission_django=permission_django,  # ← Namespace Django
+            function__permission_django=permission_django,  # <- Namespace Django
             function__status='activo',
             function__is_active=True,
         ).exists()
@@ -241,7 +241,7 @@ class UserProfile(TimeStampedModel):
     
     Example:
         user = User.objects.get(id=1)
-        profile = user.profile  # ← Auto-creado
+        profile = user.profile  # <- Auto-creado
         profile.bio = 'Software Developer'
         profile.save()
     """
@@ -391,7 +391,7 @@ class UserSettings(TimeStampedModel):
     
     Example:
         user = User.objects.get(id=1)
-        settings = user.settings  # ← Auto-creado
+        settings = user.settings  # <- Auto-creado
         settings.language = 'en'
         settings.notifications_enabled = True
         settings.save()
@@ -461,10 +461,10 @@ class UserSettings(TimeStampedModel):
 #   - Auto-creado: Via signal
 # 
 # Uso de Arquitectura:
-#   ✅ AbstractUser (Django built-in)
-#   ✅ SoftDeleteMixin (apps.core.models)
-#   ✅ TimeStampedModel (apps.core.models)
-#   ✅ AccessService (apps.access.services)
+#   [SUCCESS] AbstractUser (Django built-in)
+#   [SUCCESS] SoftDeleteMixin (apps.core.models)
+#   [SUCCESS] TimeStampedModel (apps.core.models)
+#   [SUCCESS] AccessService (apps.access.services)
 # 
 # Líneas: ~400
 # ============================================================================

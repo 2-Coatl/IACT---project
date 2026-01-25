@@ -139,7 +139,7 @@ class MessageRecipient(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.message.subject} → {self.user.username}"
+        return f"{self.message.subject} -> {self.user.username}"
     
     @property
     def is_read(self):
@@ -222,7 +222,7 @@ class AlertConfiguration(SoftDeleteMixin, models.Model):
         ]
     
     def __str__(self):
-        status = "✓" if self.is_active else "✗"
+        status = "[OK]" if self.is_active else "[FAIL]"
         return f"{status} {self.name} ({self.priority})"
 
 
@@ -263,5 +263,5 @@ class AlertSubscription(SoftDeleteMixin, models.Model):
         ]
     
     def __str__(self):
-        status = "✓" if self.is_active else "✗"
-        return f"{status} {self.user.username} → {self.alert_configuration.name}"
+        status = "[OK]" if self.is_active else "[FAIL]"
+        return f"{status} {self.user.username} -> {self.alert_configuration.name}"

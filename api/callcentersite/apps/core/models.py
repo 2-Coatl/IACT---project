@@ -5,8 +5,8 @@ CLEAN_CODE v3.0.1: Nombres auto-documentados.
 CRÍTICO: SOLO modelos con abstract=True.
 
 Modelos concretos van en apps de negocio:
-- Center, Service, CallRecord → apps/pipeline/models.py
-- UserServiceAccess → apps/access/models.py (PARTE 7)
+- Center, Service, CallRecord -> apps/pipeline/models.py
+- UserServiceAccess -> apps/access/models.py (PARTE 7)
 """
 
 from django.db import models
@@ -47,7 +47,7 @@ class TimeStampedModel(models.Model):
     )
     
     class Meta:
-        abstract = True  # ✅ OBLIGATORIO
+        abstract = True  # [SUCCESS] OBLIGATORIO
 
 
 # ============================================================================
@@ -160,7 +160,7 @@ class SoftDeleteMixin(models.Model):
     
     is_deleted = models.BooleanField(
         default=False,
-        db_index=True,  # ✅ Índice para queries rápidas
+        db_index=True,  # [SUCCESS] Índice para queries rápidas
         verbose_name='Eliminado',
         help_text='Indica si el registro está eliminado (delete lógico)'
     )
@@ -173,7 +173,7 @@ class SoftDeleteMixin(models.Model):
     )
     
     class Meta:
-        abstract = True  # ✅ OBLIGATORIO
+        abstract = True  # [SUCCESS] OBLIGATORIO
     
     def delete(self, using=None, keep_parents=False):
         """
@@ -250,7 +250,7 @@ class AuditedModel(models.Model):
     )
     
     class Meta:
-        abstract = True  # ✅ OBLIGATORIO
+        abstract = True  # [SUCCESS] OBLIGATORIO
 
 
 # ============================================================================
@@ -283,7 +283,7 @@ class CompleteBaseModel(TimeStampedModel, SoftDeleteMixin, AuditedModel):
     """
     
     class Meta:
-        abstract = True  # ✅ OBLIGATORIO
+        abstract = True  # [SUCCESS] OBLIGATORIO
 
 
 # ============================================================================
@@ -292,17 +292,17 @@ class CompleteBaseModel(TimeStampedModel, SoftDeleteMixin, AuditedModel):
 # Total: 6 clases abstractas
 # 
 # Models:
-#   ✅ TimeStampedModel (created_at, updated_at)
-#   ✅ SoftDeleteMixin (is_deleted, deleted_at, delete, restore)
-#   ✅ AuditedModel (created_by, updated_by)
-#   ✅ CompleteBaseModel (combina los 3 anteriores)
+#   [SUCCESS] TimeStampedModel (created_at, updated_at)
+#   [SUCCESS] SoftDeleteMixin (is_deleted, deleted_at, delete, restore)
+#   [SUCCESS] AuditedModel (created_by, updated_by)
+#   [SUCCESS] CompleteBaseModel (combina los 3 anteriores)
 # 
 # Managers:
-#   ✅ SoftDeleteManager
-#   ✅ SoftDeleteQuerySet
+#   [SUCCESS] SoftDeleteManager
+#   [SUCCESS] SoftDeleteQuerySet
 # 
 # CRÍTICO:
-#   ❌ NO hay modelos concretos (db_table)
-#   ✅ TODOS tienen abstract=True
-#   ✅ SOLO clases base reutilizables
+#   [ERROR] NO hay modelos concretos (db_table)
+#   [SUCCESS] TODOS tienen abstract=True
+#   [SUCCESS] SOLO clases base reutilizables
 # ============================================================================

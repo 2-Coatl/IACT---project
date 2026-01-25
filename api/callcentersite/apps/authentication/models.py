@@ -9,10 +9,10 @@ CNST-005: PBKDF2 password hashing.
 CNST-031: Auditoría immutable.
 
 CORRECCIONES v1.0.0:
-✅ Heredar de TimeStampedModel (NO duplicar created_at, updated_at)
-✅ Heredar de SoftDeleteMixin donde aplique
-✅ Heredar de CompleteBaseModel para auditoría completa
-✅ Usar SoftDeleteManager
+[SUCCESS] Heredar de TimeStampedModel (NO duplicar created_at, updated_at)
+[SUCCESS] Heredar de SoftDeleteMixin donde aplique
+[SUCCESS] Heredar de CompleteBaseModel para auditoría completa
+[SUCCESS] Usar SoftDeleteManager
 """
 
 from django.db import models
@@ -95,13 +95,13 @@ class LoginAttempt(TimeStampedModel):
         help_text='User agent del navegador'
     )
     
-    # ✅ NO CREAR attempted_at - usar created_at de TimeStampedModel
+    # [SUCCESS] NO CREAR attempted_at - usar created_at de TimeStampedModel
     
     class Meta:
         db_table = 'tbl_intentos_login'
         verbose_name = 'Intento de Login'
         verbose_name_plural = 'Intentos de Login'
-        ordering = ['-created_at']  # ✅ Usar created_at
+        ordering = ['-created_at']  # [SUCCESS] Usar created_at
         indexes = [
             models.Index(fields=['username', '-created_at'], name='idx_login_username'),
             models.Index(fields=['ip_address', '-created_at'], name='idx_login_ip'),
@@ -159,10 +159,10 @@ class SecurityQuestion(TimeStampedModel, SoftDeleteMixin):
         help_text='Orden de presentación en UI'
     )
     
-    # ✅ NO CREAR created_at - heredado de TimeStampedModel
-    # ✅ NO CREAR is_deleted, deleted_at - heredado de SoftDeleteMixin
+    # [SUCCESS] NO CREAR created_at - heredado de TimeStampedModel
+    # [SUCCESS] NO CREAR is_deleted, deleted_at - heredado de SoftDeleteMixin
     
-    objects = SoftDeleteManager()  # ✅ Manager con active(), deleted()
+    objects = SoftDeleteManager()  # [SUCCESS] Manager con active(), deleted()
     
     class Meta:
         db_table = 'tbl_preguntas_seguridad'
@@ -225,11 +225,11 @@ class UserSecurityAnswer(CompleteBaseModel):
         help_text='Hash PBKDF2 de la respuesta normalizada'
     )
     
-    # ✅ NO CREAR created_at, updated_at - heredados de CompleteBaseModel
-    # ✅ NO CREAR created_by, updated_by - heredados de CompleteBaseModel
-    # ✅ NO CREAR is_deleted, deleted_at - heredados de CompleteBaseModel
+    # [SUCCESS] NO CREAR created_at, updated_at - heredados de CompleteBaseModel
+    # [SUCCESS] NO CREAR created_by, updated_by - heredados de CompleteBaseModel
+    # [SUCCESS] NO CREAR is_deleted, deleted_at - heredados de CompleteBaseModel
     
-    objects = SoftDeleteManager()  # ✅ Manager
+    objects = SoftDeleteManager()  # [SUCCESS] Manager
     
     class Meta:
         db_table = 'tbl_respuestas_seguridad'
@@ -343,8 +343,8 @@ class SessionLog(CompleteBaseModel):
         help_text='User agent del navegador'
     )
     
-    # ✅ login_at = created_at (heredado de TimeStampedModel)
-    # ✅ NO CREAR login_at - usar created_at
+    # [SUCCESS] login_at = created_at (heredado de TimeStampedModel)
+    # [SUCCESS] NO CREAR login_at - usar created_at
     
     logout_at = models.DateTimeField(
         'Logout',
@@ -361,17 +361,17 @@ class SessionLog(CompleteBaseModel):
         help_text='Si la sesión está activa'
     )
     
-    # ✅ NO CREAR created_at, updated_at - heredados
-    # ✅ NO CREAR created_by, updated_by - heredados
-    # ✅ NO CREAR is_deleted, deleted_at - heredados
+    # [SUCCESS] NO CREAR created_at, updated_at - heredados
+    # [SUCCESS] NO CREAR created_by, updated_by - heredados
+    # [SUCCESS] NO CREAR is_deleted, deleted_at - heredados
     
-    objects = SoftDeleteManager()  # ✅ Manager
+    objects = SoftDeleteManager()  # [SUCCESS] Manager
     
     class Meta:
         db_table = 'tbl_log_sesiones'
         verbose_name = 'Log de Sesión'
         verbose_name_plural = 'Logs de Sesiones'
-        ordering = ['-created_at']  # ✅ login_at = created_at
+        ordering = ['-created_at']  # [SUCCESS] login_at = created_at
         indexes = [
             models.Index(fields=['user', '-created_at'], name='idx_session_user'),
             models.Index(fields=['session_key'], name='idx_session_key'),
@@ -381,7 +381,7 @@ class SessionLog(CompleteBaseModel):
     
     def __str__(self):
         """String representation."""
-        return f"{self.user.username} - {self.created_at}"  # ✅ login_at = created_at
+        return f"{self.user.username} - {self.created_at}"  # [SUCCESS] login_at = created_at
     
     @property
     def duration(self):
@@ -394,9 +394,9 @@ class SessionLog(CompleteBaseModel):
             timedelta: Duración o None
         """
         if self.logout_at:
-            return self.logout_at - self.created_at  # ✅ login_at = created_at
+            return self.logout_at - self.created_at  # [SUCCESS] login_at = created_at
         elif self.is_active:
-            return timezone.now() - self.created_at  # ✅
+            return timezone.now() - self.created_at  # [SUCCESS]
         return None
 
 
@@ -566,34 +566,34 @@ class LoginLockout(TimeStampedModel):
 # Total: 5 modelos
 # 
 # Models:
-#   ✅ LoginAttempt (TimeStampedModel)
-#   ✅ SecurityQuestion (TimeStampedModel + SoftDeleteMixin)
-#   ✅ UserSecurityAnswer (CompleteBaseModel)
-#   ✅ SessionLog (CompleteBaseModel)
-#   ✅ LoginLockout (TimeStampedModel) - CNST-010 compliance
+#   [SUCCESS] LoginAttempt (TimeStampedModel)
+#   [SUCCESS] SecurityQuestion (TimeStampedModel + SoftDeleteMixin)
+#   [SUCCESS] UserSecurityAnswer (CompleteBaseModel)
+#   [SUCCESS] SessionLog (CompleteBaseModel)
+#   [SUCCESS] LoginLockout (TimeStampedModel) - CNST-010 compliance
 # 
 # SOLID Compliance:
-#   ✅ SRP: Cada modelo una responsabilidad
-#   ✅ OCP: Extensibles vía abstract models
-#   ✅ DIP: Dependen de abstract models (core)
+#   [SUCCESS] SRP: Cada modelo una responsabilidad
+#   [SUCCESS] OCP: Extensibles vía abstract models
+#   [SUCCESS] DIP: Dependen de abstract models (core)
 # 
 # Herencia de core:
-#   ✅ TimeStampedModel: created_at, updated_at
-#   ✅ SoftDeleteMixin: is_deleted, deleted_at, delete(), restore()
-#   ✅ CompleteBaseModel: Combina los 3
-#   ✅ SoftDeleteManager: active(), deleted()
+#   [SUCCESS] TimeStampedModel: created_at, updated_at
+#   [SUCCESS] SoftDeleteMixin: is_deleted, deleted_at, delete(), restore()
+#   [SUCCESS] CompleteBaseModel: Combina los 3
+#   [SUCCESS] SoftDeleteManager: active(), deleted()
 # 
 # CNST-010 Compliance:
-#   ✅ LoginLockout usa PostgreSQL (NO cache/Redis)
-#   ✅ Persistencia en BD (sobrevive restart)
-#   ✅ Compatible multi-server
+#   [SUCCESS] LoginLockout usa PostgreSQL (NO cache/Redis)
+#   [SUCCESS] Persistencia en BD (sobrevive restart)
+#   [SUCCESS] Compatible multi-server
 # 
 # Campos eliminados (heredados):
-#   ❌ attempted_at → created_at
-#   ❌ login_at → created_at
-#   ❌ created_at, updated_at (4 veces)
-#   ❌ created_by, updated_by (2 veces)
-#   ❌ is_deleted, deleted_at (2 veces)
+#   [ERROR] attempted_at -> created_at
+#   [ERROR] login_at -> created_at
+#   [ERROR] created_at, updated_at (4 veces)
+#   [ERROR] created_by, updated_by (2 veces)
+#   [ERROR] is_deleted, deleted_at (2 veces)
 # 
 # Total líneas eliminadas: ~40 líneas
 # ============================================================================

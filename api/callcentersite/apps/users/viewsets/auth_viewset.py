@@ -97,27 +97,27 @@ class AuthViewSet(viewsets.GenericViewSet):
 # ViewSet: AuthViewSet
 #
 # Endpoints:
-#   ✅ POST /api/auth/change-password/ - Cambiar password
+#   [SUCCESS] POST /api/auth/change-password/ - Cambiar password
 #
 # NO incluidos (apps/authentication):
-#   ❌ POST /api/auth/login/ → apps/authentication
-#   ❌ POST /api/auth/logout/ → apps/authentication
-#   ❌ POST /api/auth/password-reset/ → apps/authentication
+#   [ERROR] POST /api/auth/login/ -> apps/authentication
+#   [ERROR] POST /api/auth/logout/ -> apps/authentication
+#   [ERROR] POST /api/auth/password-reset/ -> apps/authentication
 #
 # Permissions:
-#   ✅ IsAuthenticated (sin RBAC)
-#   ❌ NO function_map (password propio)
+#   [SUCCESS] IsAuthenticated (sin RBAC)
+#   [ERROR] NO function_map (password propio)
 #
 # Features:
-#   ✅ Cambiar password propio
-#   ✅ Validaciones completas
+#   [SUCCESS] Cambiar password propio
+#   [SUCCESS] Validaciones completas
 #
 # Delegación:
-#   ✅ PasswordChangeSerializer → PasswordService.change_password()
+#   [SUCCESS] PasswordChangeSerializer -> PasswordService.change_password()
 #
 # Principios:
-#   ✅ SRP: Solo gestión de password
-#   ✅ DRY: Delegar a serializers/services
-#   ✅ Clean Code: Nombres auto-documentados
-#   ✅ Separation: Login/Logout en apps/authentication
+#   [SUCCESS] SRP: Solo gestión de password
+#   [SUCCESS] DRY: Delegar a serializers/services
+#   [SUCCESS] Clean Code: Nombres auto-documentados
+#   [SUCCESS] Separation: Login/Logout en apps/authentication
 # ============================================================================

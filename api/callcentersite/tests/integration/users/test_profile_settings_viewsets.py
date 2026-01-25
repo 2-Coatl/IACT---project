@@ -222,24 +222,24 @@ class TestSettingsViewSet:
 # Total Tests: 13
 # 
 # ProfileViewSet: 8 tests
-#   ✅ get profile authenticated
-#   ✅ get profile unauthenticated
-#   ✅ update profile success
-#   ✅ upload avatar success
-#   ✅ upload avatar invalid format
-#   ✅ upload avatar too large
-#   ✅ remove avatar success
+#   [SUCCESS] get profile authenticated
+#   [SUCCESS] get profile unauthenticated
+#   [SUCCESS] update profile success
+#   [SUCCESS] upload avatar success
+#   [SUCCESS] upload avatar invalid format
+#   [SUCCESS] upload avatar too large
+#   [SUCCESS] remove avatar success
 # 
 # SettingsViewSet: 5 tests
-#   ✅ get settings authenticated
-#   ✅ get settings unauthenticated
-#   ✅ update settings success
-#   ✅ update settings invalid timezone
+#   [SUCCESS] get settings authenticated
+#   [SUCCESS] get settings unauthenticated
+#   [SUCCESS] update settings success
+#   [SUCCESS] update settings invalid timezone
 # 
 # Coverage:
-#   ✅ Profile management
-#   ✅ Avatar upload/delete
-#   ✅ File validation (format, size)
-#   ✅ Settings management
-#   ✅ Timezone validation
+#   [SUCCESS] Profile management
+#   [SUCCESS] Avatar upload/delete
+#   [SUCCESS] File validation (format, size)
+#   [SUCCESS] Settings management
+#   [SUCCESS] Timezone validation
 # ============================================================================

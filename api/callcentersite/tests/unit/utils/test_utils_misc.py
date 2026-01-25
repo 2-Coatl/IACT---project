@@ -211,32 +211,32 @@ class TestNumberUtils:
 # Total: 22 tests
 # 
 # date_utils (8 tests):
-#   ✅ parse_date_string
-#   ✅ parse_datetime_string
-#   ✅ format_date
-#   ✅ get_date_range
-#   ✅ is_weekend
-#   ✅ add_business_days
-#   ✅ get_month_start_end
-#   ✅ days_between
+#   [SUCCESS] parse_date_string
+#   [SUCCESS] parse_datetime_string
+#   [SUCCESS] format_date
+#   [SUCCESS] get_date_range
+#   [SUCCESS] is_weekend
+#   [SUCCESS] add_business_days
+#   [SUCCESS] get_month_start_end
+#   [SUCCESS] days_between
 # 
 # string_utils (8 tests):
-#   ✅ slugify
-#   ✅ slugify_special_chars
-#   ✅ sanitize_string
-#   ✅ remove_accents
-#   ✅ capitalize_words
-#   ✅ is_empty_or_whitespace
-#   ✅ reverse_string
-#   ✅ word_count
+#   [SUCCESS] slugify
+#   [SUCCESS] slugify_special_chars
+#   [SUCCESS] sanitize_string
+#   [SUCCESS] remove_accents
+#   [SUCCESS] capitalize_words
+#   [SUCCESS] is_empty_or_whitespace
+#   [SUCCESS] reverse_string
+#   [SUCCESS] word_count
 # 
 # number_utils (6 tests):
-#   ✅ parse_number_int
-#   ✅ parse_number_float
-#   ✅ round_decimal
-#   ✅ is_number
-#   ✅ clamp_number
-#   ✅ percentage_change
+#   [SUCCESS] parse_number_int
+#   [SUCCESS] parse_number_float
+#   [SUCCESS] round_decimal
+#   [SUCCESS] is_number
+#   [SUCCESS] clamp_number
+#   [SUCCESS] percentage_change
 # 
 # Coverage: 95%+
 # ============================================================================

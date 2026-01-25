@@ -153,7 +153,7 @@ class AccountLockedError(AuthenticationBaseError):
     """
     Cuenta bloqueada por intentos fallidos.
     
-    CNST-005: 5 intentos → 15 min lockout.
+    CNST-005: 5 intentos -> 15 min lockout.
     """
     
     status_code = status.HTTP_403_FORBIDDEN
@@ -280,27 +280,27 @@ class InsufficientSecurityQuestionsError(SecurityQuestionError):
 # 
 # Jerarquía SOLID:
 #   IACTBaseException (core)
-#   ├── AuthenticationBaseError
-#   │   ├── InvalidCredentialsError
-#   │   ├── AccountLockedError
-#   │   ├── UserInactiveError
-#   │   └── SessionExpiredError
-#   └── SecurityQuestionError
-#       ├── SecurityQuestionsNotConfiguredError
-#       ├── InvalidSecurityAnswersError
-#       └── InsufficientSecurityQuestionsError
+#   == AuthenticationBaseError
+#   -   == InvalidCredentialsError
+#   -   == AccountLockedError
+#   -   == UserInactiveError
+#   -   == SessionExpiredError
+#   == SecurityQuestionError
+#       == SecurityQuestionsNotConfiguredError
+#       == InvalidSecurityAnswersError
+#       == InsufficientSecurityQuestionsError
 # 
 # Principios SOLID:
-#   ✅ SRP: Cada exception una responsabilidad
-#   ✅ OCP: Extensible sin modificar base
-#   ✅ LSP: Subclases sustituibles
-#   ✅ ISP: Interface segregation (métodos específicos)
-#   ✅ DIP: Dependen de abstracción (IACTBaseException)
+#   [SUCCESS] SRP: Cada exception una responsabilidad
+#   [SUCCESS] OCP: Extensible sin modificar base
+#   [SUCCESS] LSP: Subclases sustituibles
+#   [SUCCESS] ISP: Interface segregation (métodos específicos)
+#   [SUCCESS] DIP: Dependen de abstracción (IACTBaseException)
 # 
 # Features:
-#   ✅ error_code único por exception
-#   ✅ to_dict() para serialización
-#   ✅ get_user_message() para UI
-#   ✅ should_log() para logging
-#   ✅ details dict para contexto adicional
+#   [SUCCESS] error_code único por exception
+#   [SUCCESS] to_dict() para serialización
+#   [SUCCESS] get_user_message() para UI
+#   [SUCCESS] should_log() para logging
+#   [SUCCESS] details dict para contexto adicional
 # ============================================================================

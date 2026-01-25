@@ -4,7 +4,7 @@ Servicio de bloqueo de cuentas por intentos fallidos.
 CLEAN_CODE v3.0.1: Nombre que revela intención.
 SOLID SRP: Solo gestión de lockout.
 
-CNST-005: 5 intentos → 15 minutos de bloqueo.
+CNST-005: 5 intentos -> 15 minutos de bloqueo.
 CNST-010: Usa PostgreSQL (NO cache/Redis).
 """
 
@@ -36,7 +36,7 @@ class LockoutService(BaseService):
     - Desbloquear cuenta manualmente
     - Resetear contador de intentos
     
-    CNST-005: 5 intentos fallidos → 15 min lockout.
+    CNST-005: 5 intentos fallidos -> 15 min lockout.
     CNST-010: Persistencia en PostgreSQL (NO cache volátil).
     """
     

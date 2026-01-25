@@ -270,24 +270,24 @@ class TestUserUpdateSerializer:
 # Total Tests: 12
 # 
 # UserSerializer: 2 tests
-#   ✅ Incluye todos los campos
-#   ✅ Campos computados (full_name, functions, profile, settings)
+#   [SUCCESS] Incluye todos los campos
+#   [SUCCESS] Campos computados (full_name, functions, profile, settings)
 # 
 # UserListSerializer: 1 test
-#   ✅ Solo campos esenciales
+#   [SUCCESS] Solo campos esenciales
 # 
 # UserCreateSerializer: 5 tests
-#   ✅ Creación exitosa
-#   ✅ Password muy corto
-#   ✅ Password sin letra
-#   ✅ Password sin número
-#   ✅ Username duplicado
+#   [SUCCESS] Creación exitosa
+#   [SUCCESS] Password muy corto
+#   [SUCCESS] Password sin letra
+#   [SUCCESS] Password sin número
+#   [SUCCESS] Username duplicado
 # 
 # UserUpdateSerializer: 4 tests
-#   ✅ Actualización exitosa
-#   ✅ Actualizar email
-#   ✅ No permite cambiar username
-#   ✅ Actualizar campos opcionales
+#   [SUCCESS] Actualización exitosa
+#   [SUCCESS] Actualizar email
+#   [SUCCESS] No permite cambiar username
+#   [SUCCESS] Actualizar campos opcionales
 # 
 # Coverage: ~90% de user_serializers.py
 # ============================================================================

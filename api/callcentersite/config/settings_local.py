@@ -20,4 +20,4 @@ PASSWORD_HASHERS = [
 # Desactivar scheduler para tests
 SCHEDULER_ENABLED = False
 
-print("✅ Usando SQLite para desarrollo")
+print("[SUCCESS] Usando SQLite para desarrollo")

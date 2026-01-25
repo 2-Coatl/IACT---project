@@ -439,6 +439,6 @@ class SchedulerHistoryFactory:
 #   - CompleteETLRunFactory (static)
 #   - SchedulerHistoryFactory (static)
 # 
-# CNST-013: APScheduler (NO Celery) ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-013: APScheduler (NO Celery) [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

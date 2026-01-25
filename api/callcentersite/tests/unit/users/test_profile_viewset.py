@@ -235,24 +235,24 @@ class TestAvatar:
 # Total tests: 14
 # 
 # /me/ (5 tests):
-#   ✅ GET authenticated
-#   ✅ GET unauthenticated → 401
-#   ✅ PUT update completo
-#   ✅ PATCH update parcial
-#   ✅ Profile auto-creado
+#   [SUCCESS] GET authenticated
+#   [SUCCESS] GET unauthenticated -> 401
+#   [SUCCESS] PUT update completo
+#   [SUCCESS] PATCH update parcial
+#   [SUCCESS] Profile auto-creado
 # 
 # /me/settings/ (4 tests):
-#   ✅ GET settings
-#   ✅ UPDATE language
-#   ✅ UPDATE notifications
-#   ✅ Settings auto-creados
+#   [SUCCESS] GET settings
+#   [SUCCESS] UPDATE language
+#   [SUCCESS] UPDATE notifications
+#   [SUCCESS] Settings auto-creados
 # 
 # /me/avatar/ (5 tests):
-#   ✅ POST upload success
-#   ✅ POST formato inválido → 400
-#   ✅ POST archivo muy grande → 400
-#   ✅ DELETE avatar
-#   ✅ POST sin autenticación → 401
+#   [SUCCESS] POST upload success
+#   [SUCCESS] POST formato inválido -> 400
+#   [SUCCESS] POST archivo muy grande -> 400
+#   [SUCCESS] DELETE avatar
+#   [SUCCESS] POST sin autenticación -> 401
 # 
 # Coverage: ~90% de ProfileViewSet
 # ============================================================================

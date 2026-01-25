@@ -148,14 +148,14 @@ class TestPasswordChange:
 # Total tests: 8
 # 
 # change-password (8 tests):
-#   ✅ Success
-#   ✅ Wrong old password → 400
-#   ✅ Passwords mismatch → 400
-#   ✅ Same as old → 400
-#   ✅ Weak password → 400
-#   ✅ Unauthenticated → 401
-#   ✅ No old_password → 400
-#   ✅ No confirmation → 400
+#   [SUCCESS] Success
+#   [SUCCESS] Wrong old password -> 400
+#   [SUCCESS] Passwords mismatch -> 400
+#   [SUCCESS] Same as old -> 400
+#   [SUCCESS] Weak password -> 400
+#   [SUCCESS] Unauthenticated -> 401
+#   [SUCCESS] No old_password -> 400
+#   [SUCCESS] No confirmation -> 400
 # 
 # Coverage: ~95% de AuthViewSet
 # ============================================================================

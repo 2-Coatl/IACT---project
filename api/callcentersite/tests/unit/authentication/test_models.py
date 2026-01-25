@@ -49,7 +49,7 @@ class TestLoginAttempt:
         assert attempt.user == user
         assert attempt.username == user.username
         assert attempt.success is True
-        # ✅ Verifica que usa created_at (heredado de TimeStampedModel)
+        # [SUCCESS] Verifica que usa created_at (heredado de TimeStampedModel)
         assert attempt.created_at is not None
         assert attempt.updated_at is not None
     
@@ -73,7 +73,7 @@ class TestLoginAttempt:
         str_repr = str(attempt)
         assert user.username in str_repr
         assert 'SUCCESS' in str_repr
-        # ✅ Verifica que usa created_at en __str__
+        # [SUCCESS] Verifica que usa created_at en __str__
         assert str(attempt.created_at) in str_repr
 
 
@@ -98,10 +98,10 @@ class TestSecurityQuestion:
         
         assert question.question is not None
         assert question.is_active is True
-        # ✅ Verifica heredados de TimeStampedModel
+        # [SUCCESS] Verifica heredados de TimeStampedModel
         assert question.created_at is not None
         assert question.updated_at is not None
-        # ✅ Verifica heredados de SoftDeleteMixin
+        # [SUCCESS] Verifica heredados de SoftDeleteMixin
         assert question.is_deleted is False
         assert question.deleted_at is None
     
@@ -111,9 +111,9 @@ class TestSecurityQuestion:
         q2 = SecurityQuestionFactory()
         
         # Soft delete q2
-        q2.delete()  # ✅ delete() hace soft delete
+        q2.delete()  # [SUCCESS] delete() hace soft delete
         
-        # ✅ active() solo retorna no eliminadas
+        # [SUCCESS] active() solo retorna no eliminadas
         active = SecurityQuestion.objects.active()
         assert active.count() == 1
         assert q1 in active
@@ -126,7 +126,7 @@ class TestSecurityQuestion:
         
         q2.delete()
         
-        # ✅ deleted() solo retorna eliminadas
+        # [SUCCESS] deleted() solo retorna eliminadas
         deleted = SecurityQuestion.objects.deleted()
         assert deleted.count() == 1
         assert q2 in deleted
@@ -139,7 +139,7 @@ class TestSecurityQuestion:
         
         q2.delete()
         
-        # ✅ with_deleted() retorna todas
+        # [SUCCESS] with_deleted() retorna todas
         all_questions = SecurityQuestion.objects.with_deleted()
         assert all_questions.count() == 2
         assert q1 in all_questions
@@ -152,7 +152,7 @@ class TestSecurityQuestion:
         question.delete()
         assert question.is_deleted is True
         
-        # ✅ restore() restaura
+        # [SUCCESS] restore() restaura
         question.restore()
         assert question.is_deleted is False
         assert question.deleted_at is None
@@ -183,7 +183,7 @@ class TestUserSecurityAnswer:
             created_by=user
         )
         
-        # ✅ Verifica CompleteBaseModel inheritance
+        # [SUCCESS] Verifica CompleteBaseModel inheritance
         assert answer.created_at is not None  # TimeStampedModel
         assert answer.updated_at is not None  # TimeStampedModel
         assert answer.is_deleted is False  # SoftDeleteMixin
@@ -195,7 +195,7 @@ class TestUserSecurityAnswer:
         user = UserFactory()
         question = SecurityQuestionFactory()
         
-        # ✅ Usar factory con answer_text (hashea automáticamente)
+        # [SUCCESS] Usar factory con answer_text (hashea automáticamente)
         answer = UserSecurityAnswerFactory(
             user=user,
             question=question,
@@ -218,7 +218,7 @@ class TestUserSecurityAnswer:
             created_by=user
         )
         
-        # ✅ check_answer() verifica hash PBKDF2
+        # [SUCCESS] check_answer() verifica hash PBKDF2
         assert answer.check_answer('Mi Respuesta') is True
     
     def test_check_answer_normalization(self):
@@ -232,7 +232,7 @@ class TestUserSecurityAnswer:
             created_by=user
         )
         
-        # ✅ Normalización funciona
+        # [SUCCESS] Normalización funciona
         assert answer.check_answer('mi respuesta') is True
         assert answer.check_answer('  MI RESPUESTA  ') is True
     
@@ -246,7 +246,7 @@ class TestUserSecurityAnswer:
             created_by=user
         )
         
-        # ✅ Respuesta vacía debe lanzar ValidationError
+        # [SUCCESS] Respuesta vacía debe lanzar ValidationError
         with pytest.raises(ValidationError):
             answer.set_answer('')
 
@@ -273,7 +273,7 @@ class TestSessionLog:
         
         assert session.user == user
         assert session.is_active is True
-        # ✅ Verifica CompleteBaseModel inheritance
+        # [SUCCESS] Verifica CompleteBaseModel inheritance
         assert session.created_at is not None
         assert session.created_by == user
     
@@ -282,7 +282,7 @@ class TestSessionLog:
         user = UserFactory()
         session = SessionLogFactory(user=user, created_by=user)
         
-        # ✅ NO hay campo login_at, se usa created_at
+        # [SUCCESS] NO hay campo login_at, se usa created_at
         str_repr = str(session)
         assert user.username in str_repr
         assert str(session.created_at) in str_repr
@@ -296,7 +296,7 @@ class TestSessionLog:
             created_by=user
         )
         
-        # ✅ duration property calcula now() - created_at
+        # [SUCCESS] duration property calcula now() - created_at
         duration = session.duration
         assert duration is not None
         assert duration.total_seconds() >= 0
@@ -317,7 +317,7 @@ class TestSessionLog:
         session.logout_at = session.created_at + timedelta(hours=1)
         session.save()
         
-        # ✅ duration = logout_at - created_at
+        # [SUCCESS] duration = logout_at - created_at
         duration = session.duration
         assert duration is not None
         assert duration.total_seconds() == 3600

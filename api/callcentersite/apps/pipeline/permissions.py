@@ -50,12 +50,12 @@ class IsServiceManager(permissions.BasePermission):
 # LIMPIEZA DEUDA TÉCNICA (2026-01-22)
 # ====================================================================================
 # Permissions ELIMINADAS (UserServiceAccess deprecated):
-#   ❌ HasServiceAccess
-#   ❌ CanGrantAccess  
-#   ❌ CanRevokeAccess
+#   [ERROR] HasServiceAccess
+#   [ERROR] CanGrantAccess  
+#   [ERROR] CanRevokeAccess
 #
 # Sistema actual: RBAC puro (Function/UserFunctionAssignment)
-# Control de acceso: Si tiene permiso → ve TODO
+# Control de acceso: Si tiene permiso -> ve TODO
 # ====================================================================================
 
 

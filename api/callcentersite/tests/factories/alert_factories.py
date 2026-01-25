@@ -417,7 +417,7 @@ class AlertLifecycleFactory:
     @staticmethod
     def create_lifecycle(rule, user):
         """
-        Crea ciclo completo: triggered → acknowledged → resolved.
+        Crea ciclo completo: triggered -> acknowledged -> resolved.
         
         Args:
             rule: AlertRule
@@ -525,5 +525,5 @@ class UserWithAlertsFactory(UserFactory):
 # NOTA: Todas las factories están marcadas como abstract=True temporalmente.
 # Cambiar a model=X cuando se implementen los modelos en apps/alerts/.
 # 
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

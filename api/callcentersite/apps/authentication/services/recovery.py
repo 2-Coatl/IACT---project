@@ -11,7 +11,7 @@ from typing import List, Dict
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 
-from apps.core.services.base_service import BaseService  # ✅ BaseService
+from apps.core.services.base_service import BaseService  # [SUCCESS] BaseService
 from apps.authentication.models import SecurityQuestion, UserSecurityAnswer
 from apps.authentication.constants import (
     SECURITY_QUESTIONS_REQUIRED,
@@ -26,7 +26,7 @@ from apps.authentication.exceptions import (
 User = get_user_model()
 
 
-class RecoveryService(BaseService):  # ✅ Hereda de BaseService
+class RecoveryService(BaseService):  # [SUCCESS] Hereda de BaseService
     """
     Servicio de recuperación de contraseña.
     
@@ -43,7 +43,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
     
     def __init__(self):
         """Initialize service."""
-        super().__init__()  # ✅ Llamar super
+        super().__init__()  # [SUCCESS] Llamar super
         self.required_questions = SECURITY_QUESTIONS_REQUIRED
         
         self.log_info(f"RecoveryService initialized: {self.required_questions} questions required")
@@ -60,7 +60,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
         Raises:
             InsufficientSecurityQuestionsError: Si hay menos de 10 preguntas
         """
-        # ✅ Usar SoftDeleteManager.active()
+        # [SUCCESS] Usar SoftDeleteManager.active()
         questions = SecurityQuestion.objects.active().filter(
             is_active=True
         ).order_by('order', 'question')
@@ -117,7 +117,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
             )
         
         # Eliminar respuestas anteriores (soft delete)
-        # ✅ delete() hace soft delete automáticamente
+        # [SUCCESS] delete() hace soft delete automáticamente
         UserSecurityAnswer.objects.filter(user=user).delete()
         
         self.log_info(f"Deleted previous answers for user '{user.username}'")
@@ -141,10 +141,10 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
             user_answer = UserSecurityAnswer(
                 user=user,
                 question=question,
-                created_by=user  # ✅ Auditoría
+                created_by=user  # [SUCCESS] Auditoría
             )
             
-            # ✅ set_answer() hashea con PBKDF2
+            # [SUCCESS] set_answer() hashea con PBKDF2
             user_answer.set_answer(answer_text)
             user_answer.save()
             
@@ -185,7 +185,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
             )
         
         # Verificar que tenga preguntas configuradas
-        # ✅ Usar active() para excluir soft deleted
+        # [SUCCESS] Usar active() para excluir soft deleted
         user_answers = UserSecurityAnswer.objects.active().filter(
             user=user
         )
@@ -211,7 +211,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
             try:
                 user_answer = user_answers.get(question_id=question_id)
                 
-                # ✅ check_answer() verifica hash PBKDF2
+                # [SUCCESS] check_answer() verifica hash PBKDF2
                 if user_answer.check_answer(answer_text):
                     correct_count += 1
                 else:
@@ -267,7 +267,7 @@ class RecoveryService(BaseService):  # ✅ Hereda de BaseService
         user = User.objects.get(username=username)
         
         # Cambiar password
-        # ✅ set_password() usa PBKDF2
+        # [SUCCESS] set_password() usa PBKDF2
         user.set_password(new_password)
         user.save()
         

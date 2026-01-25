@@ -208,7 +208,7 @@ class TestRecoveryService:
         # Soft delete una
         questions[0].delete()
         
-        # ✅ active() debe excluir soft deleted
+        # [SUCCESS] active() debe excluir soft deleted
         available = self.service.get_available_questions()
         
         assert len(available) == 9
@@ -282,7 +282,7 @@ class TestSessionService:
         # Soft delete s1
         s1.delete()
         
-        # ✅ active() debe excluir soft deleted
+        # [SUCCESS] active() debe excluir soft deleted
         active = self.service.get_active_sessions(user)
         
         assert len(active) == 1

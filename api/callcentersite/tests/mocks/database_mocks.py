@@ -19,7 +19,7 @@ from datetime import date, datetime
 
 
 # ============================================================================
-# IVR DATABASE MOCKS (MariaDB → SQLite en tests)
+# IVR DATABASE MOCKS (MariaDB -> SQLite en tests)
 # ============================================================================
 
 @pytest.fixture
@@ -192,8 +192,8 @@ def mock_database_router(mocker):
     Mock del Database Router (IVRRouter).
     
     CNST-002: Router decide qué BD usar.
-    - IVR models → 'ivr_legacy' (readonly)
-    - Otros models → 'default' (PostgreSQL/SQLite)
+    - IVR models -> 'ivr_legacy' (readonly)
+    - Otros models -> 'default' (PostgreSQL/SQLite)
     
     Uso:
         def test_router(mock_database_router):
@@ -205,7 +205,7 @@ def mock_database_router(mocker):
     
     mock_router = MagicMock(spec=IVRRouter)
     
-    # db_for_read: IVR → 'ivr_legacy', otros → 'default'
+    # db_for_read: IVR -> 'ivr_legacy', otros -> 'default'
     def mock_db_for_read(model, **hints):
         if hasattr(model, '_meta') and model._meta.app_label == 'ivr_legacy':
             return 'ivr_legacy'
@@ -213,7 +213,7 @@ def mock_database_router(mocker):
     
     mock_router.db_for_read.side_effect = mock_db_for_read
     
-    # db_for_write: IVR → None (readonly), otros → 'default'
+    # db_for_write: IVR -> None (readonly), otros -> 'default'
     def mock_db_for_write(model, **hints):
         if hasattr(model, '_meta') and model._meta.app_label == 'ivr_legacy':
             return None  # IVR readonly
@@ -389,6 +389,6 @@ def mock_transaction_atomic(mocker):
 #   - mock_database_settings
 #   - mock_transaction_atomic
 # 
-# CNST-002: Dual DB (readonly IVR) ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-002: Dual DB (readonly IVR) [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

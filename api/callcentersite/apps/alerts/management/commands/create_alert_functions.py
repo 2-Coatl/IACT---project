@@ -86,7 +86,7 @@ class Command(BaseCommand):
             if created:
                 created_count += 1
                 self.stdout.write(
-                    self.style.SUCCESS(f'  ✓ Creada: {permission_django} ({func_data["code"]})')
+                    self.style.SUCCESS(f'  [OK] Creada: {permission_django} ({func_data["code"]})')
                 )
             else:
                 # Actualizar si ya existe
@@ -115,17 +115,17 @@ class Command(BaseCommand):
         # Mostrar tabla de funciones
         self.stdout.write(self.style.SUCCESS('  FUNCIONES RBAC DISPONIBLES:'))
         self.stdout.write('')
-        self.stdout.write('  ┌─────────────────────────────────┬──────────────┬──────────┐')
-        self.stdout.write('  │ Permission Django               │ Código       │ Status   │')
-        self.stdout.write('  ├─────────────────────────────────┼──────────────┼──────────┤')
+        self.stdout.write('  =========================================================')
+        self.stdout.write('  - Permission Django               - Código       - Status   -')
+        self.stdout.write('  =========================================================')
         
         for func_data in functions:
             perm = func_data['permission_django'].ljust(31)
             code = func_data['code'].ljust(12)
             status = func_data['status'].ljust(8)
-            self.stdout.write(f'  │ {perm} │ {code} │ {status} │')
+            self.stdout.write(f'  - {perm} - {code} - {status} -')
         
-        self.stdout.write('  └─────────────────────────────────┴──────────────┴──────────┘')
+        self.stdout.write('  =========================================================')
         self.stdout.write('')
         
         # Instrucciones de uso
@@ -143,11 +143,11 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('  VERIFICACIÓN EN CÓDIGO:'))
         self.stdout.write('')
         self.stdout.write('  Archivos donde se usan:')
-        self.stdout.write('    ✓ apps/alerts/permissions.py (MessagePermissions)')
-        self.stdout.write('    ✓ apps/alerts/permissions.py (AlertConfigurationPermissions)')
-        self.stdout.write('    ✓ apps/alerts/permissions.py (AlertSubscriptionPermissions)')
+        self.stdout.write('    [OK] apps/alerts/permissions.py (MessagePermissions)')
+        self.stdout.write('    [OK] apps/alerts/permissions.py (AlertConfigurationPermissions)')
+        self.stdout.write('    [OK] apps/alerts/permissions.py (AlertSubscriptionPermissions)')
         self.stdout.write('')
         self.stdout.write(self.style.SUCCESS('━' * 70))
-        self.stdout.write(self.style.SUCCESS('  ✓ FUNCIONES RBAC CREADAS EXITOSAMENTE'))
+        self.stdout.write(self.style.SUCCESS('  [OK] FUNCIONES RBAC CREADAS EXITOSAMENTE'))
         self.stdout.write(self.style.SUCCESS('━' * 70))
         self.stdout.write('')

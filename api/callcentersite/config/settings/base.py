@@ -71,13 +71,13 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.ivr',
     'apps.authentication',
-    'apps.users',  # ← Debe estar ANTES de apps.access (User model)
+    'apps.users',  # <- Debe estar ANTES de apps.access (User model)
     'apps.access',
     'apps.audit',
     'apps.pipeline',
     'apps.reports',
-    'apps.alerts',  # ← Sistema de alertas internas
-    'apps.dashboard',  # ← Sistema de dashboards personalizables
+    'apps.alerts',  # <- Sistema de alertas internas
+    'apps.dashboard',  # <- Sistema de dashboards personalizables
 ]
 
 
@@ -478,20 +478,20 @@ PASSWORD_HASHERS = [
 # CACHES configuración removida - CUMPLE CNST-010
 # Toda persistencia debe usar PostgreSQL directamente
 
-# ❌ PROHIBIDO por CNST-010:
+# [ERROR] PROHIBIDO por CNST-010:
 # - Redis (django-redis)
 # - Memcached
 # - LocMemCache (volátil, se pierde en restart)
 # - Cualquier cache backend
 
-# ✅ PERMITIDO por CNST-010:
+# [SUCCESS] PERMITIDO por CNST-010:
 # - PostgreSQL (único backend de persistencia)
 # - Base de datos para sessions (django.contrib.sessions.backends.db)
 
 # ANTES (VIOLABA CNST-010):
 # CACHES = {
 #     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # ❌ Prohibido
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # [ERROR] Prohibido
 #         'LOCATION': 'iact-cache',
 #     }
 # }

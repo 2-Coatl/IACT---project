@@ -36,7 +36,7 @@ class UserTimezoneMiddleware(MiddlewareMixin):
             'apps.core.middleware.timezone.UserTimezoneMiddleware',
         ]
         
-        TIME_ZONE = 'America/Mexico_City'  # ← Configuración global
+        TIME_ZONE = 'America/Mexico_City'  # <- Configuración global
     
     Uso:
         # El timezone se activa automáticamente
@@ -105,8 +105,8 @@ class UserTimezoneMiddleware(MiddlewareMixin):
 # Propósito: Activar timezone global del sistema automáticamente
 # 
 # Comportamiento:
-#   ✅ Todos los usuarios → America/Mexico_City (settings.TIME_ZONE)
-#   ✅ Timezone inválido → fallback a America/Mexico_City
+#   [SUCCESS] Todos los usuarios -> America/Mexico_City (settings.TIME_ZONE)
+#   [SUCCESS] Timezone inválido -> fallback a America/Mexico_City
 # 
 # CORRECCIÓN v5.1.1:
 #   - UserSettings NO tiene campo timezone (eliminado FASE 2 PARTE 2)

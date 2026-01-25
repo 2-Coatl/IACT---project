@@ -4,8 +4,8 @@ Database Router - IACT Call Center System.
 CNST-003: Enforce READ-ONLY access to IVR Legacy database.
 
 Routing rules:
-- Models de apps.core (CallRecord, etc) → 'default' (PostgreSQL)
-- Models de apps.ivr (legacy) → 'ivr_legacy' (MariaDB READ-ONLY)
+- Models de apps.core (CallRecord, etc) -> 'default' (PostgreSQL)
+- Models de apps.ivr (legacy) -> 'ivr_legacy' (MariaDB READ-ONLY)
 
 Compliance: CNST-003
 """

@@ -13,8 +13,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
-from apps.core.services.base_service import BaseService  # ✅ BaseService
-from apps.utils.helpers import get_client_ip, get_user_agent  # ✅ apps.utils
+from apps.core.services.base_service import BaseService  # [SUCCESS] BaseService
+from apps.utils.helpers import get_client_ip, get_user_agent  # [SUCCESS] apps.utils
 from apps.authentication.models import LoginAttempt, SessionLog
 from apps.authentication.exceptions import (
     InvalidCredentialsError,
@@ -26,7 +26,7 @@ from apps.authentication.services.lockout import LockoutService
 User = get_user_model()
 
 
-class AuthenticationService(BaseService):  # ✅ Hereda de BaseService
+class AuthenticationService(BaseService):  # [SUCCESS] Hereda de BaseService
     """
     Servicio de autenticación de usuarios.
     
@@ -46,7 +46,7 @@ class AuthenticationService(BaseService):  # ✅ Hereda de BaseService
     
     def __init__(self):
         """Initialize service."""
-        super().__init__()  # ✅ Llamar a super
+        super().__init__()  # [SUCCESS] Llamar a super
         self.lockout_service = LockoutService()
         
         self.log_info("AuthenticationService initialized")
@@ -87,11 +87,11 @@ class AuthenticationService(BaseService):  # ✅ Hereda de BaseService
             InvalidCredentialsError: Credenciales inválidas
             UserInactiveError: Usuario inactivo
         """
-        # ✅ Usar helpers de apps.utils
+        # [SUCCESS] Usar helpers de apps.utils
         ip_address = get_client_ip(request)
         user_agent = get_user_agent(request)
         
-        self.log_info(f"Login attempt for '{username}' from {ip_address}")  # ✅ Logging
+        self.log_info(f"Login attempt for '{username}' from {ip_address}")  # [SUCCESS] Logging
         
         # 1. Verificar lockout
         if self.lockout_service.is_locked(username):
@@ -302,7 +302,7 @@ class AuthenticationService(BaseService):  # ✅ Hereda de BaseService
             ip_address=ip_address,
             user_agent=user_agent,
             is_active=True,
-            created_by=user  # ✅ Auditoría
+            created_by=user  # [SUCCESS] Auditoría
         )
     
     def _update_session_log(self, session_key: str):

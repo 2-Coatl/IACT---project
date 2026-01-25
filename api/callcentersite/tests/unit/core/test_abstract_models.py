@@ -338,28 +338,28 @@ class TestSoftDeleteQuerySet:
 # Total: 18 tests
 # 
 # TimeStampedModel (5 tests):
-#   ✅ created_at_auto_set
-#   ✅ updated_at_auto_set
-#   ✅ updated_at_auto_updates_on_save
-#   ✅ created_at_immutable
-#   ✅ timestamps_are_datetime_fields
+#   [SUCCESS] created_at_auto_set
+#   [SUCCESS] updated_at_auto_set
+#   [SUCCESS] updated_at_auto_updates_on_save
+#   [SUCCESS] created_at_immutable
+#   [SUCCESS] timestamps_are_datetime_fields
 # 
 # SoftDeleteMixin (8 tests):
-#   ✅ delete_marks_is_deleted
-#   ✅ delete_sets_deleted_at
-#   ✅ hard_delete_removes_from_db
-#   ✅ restore_recovers_deleted
-#   ✅ is_deleted_default_false
-#   ✅ deleted_at_default_none
-#   ✅ manager_all_returns_only_active
-#   ✅ manager_deleted_returns_only_deleted
+#   [SUCCESS] delete_marks_is_deleted
+#   [SUCCESS] delete_sets_deleted_at
+#   [SUCCESS] hard_delete_removes_from_db
+#   [SUCCESS] restore_recovers_deleted
+#   [SUCCESS] is_deleted_default_false
+#   [SUCCESS] deleted_at_default_none
+#   [SUCCESS] manager_all_returns_only_active
+#   [SUCCESS] manager_deleted_returns_only_deleted
 # 
 # SoftDeleteQuerySet (5 tests):
-#   ✅ active_returns_only_not_deleted
-#   ✅ deleted_returns_only_deleted
-#   ✅ with_deleted_returns_all
-#   ✅ filters_are_combinable
-#   ✅ performance_optimized
+#   [SUCCESS] active_returns_only_not_deleted
+#   [SUCCESS] deleted_returns_only_deleted
+#   [SUCCESS] with_deleted_returns_all
+#   [SUCCESS] filters_are_combinable
+#   [SUCCESS] performance_optimized
 # 
 # Coverage: 95%+
 # IMPORTANTE: Estos models son usados por 10+ models en el sistema

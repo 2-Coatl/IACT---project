@@ -49,7 +49,7 @@ def start_scheduler():
     )
     
     scheduler.start()
-    logger.info("✓ APScheduler iniciado: Evaluación de alertas cada 5 minutos (CNST-013 compliant)")
+    logger.info("[OK] APScheduler iniciado: Evaluación de alertas cada 5 minutos (CNST-013 compliant)")
 
 
 def stop_scheduler():

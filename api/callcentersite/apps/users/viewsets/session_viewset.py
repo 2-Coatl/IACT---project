@@ -103,25 +103,25 @@ class SessionHistoryViewSet(viewsets.ReadOnlyModelViewSet):
 # ViewSet: SessionHistoryViewSet
 #
 # Endpoints:
-#   ✅ GET /api/sessions/ - Listar sesiones (sessions.view)
-#   ✅ GET /api/sessions/{id}/ - Detalle sesión (sessions.view)
+#   [SUCCESS] GET /api/sessions/ - Listar sesiones (sessions.view)
+#   [SUCCESS] GET /api/sessions/{id}/ - Detalle sesión (sessions.view)
 #
 # Permissions:
-#   ✅ RequiresFunctionPermission (apps/core)
-#   ✅ function_map con namespace 'sessions.view'
+#   [SUCCESS] RequiresFunctionPermission (apps/core)
+#   [SUCCESS] function_map con namespace 'sessions.view'
 #
 # Features:
-#   ✅ Read-only (no crear/modificar/eliminar)
-#   ✅ Creación automática vía signals
-#   ✅ Queryset por rol:
+#   [SUCCESS] Read-only (no crear/modificar/eliminar)
+#   [SUCCESS] Creación automática vía signals
+#   [SUCCESS] Queryset por rol:
 #      - Staff: Todas las sesiones
 #      - Usuario: Solo sus sesiones
-#   ✅ Filtros: is_active, user
-#   ✅ Optimizado: select_related('user')
+#   [SUCCESS] Filtros: is_active, user
+#   [SUCCESS] Optimizado: select_related('user')
 #
 # Principios:
-#   ✅ SRP: Solo auditoría de sesiones
-#   ✅ Clean Code: Nombres auto-documentados
-#   ✅ RBAC: Permission vía function_map
-#   ✅ Read-only: Protege integridad de auditoría
+#   [SUCCESS] SRP: Solo auditoría de sesiones
+#   [SUCCESS] Clean Code: Nombres auto-documentados
+#   [SUCCESS] RBAC: Permission vía function_map
+#   [SUCCESS] Read-only: Protege integridad de auditoría
 # ============================================================================

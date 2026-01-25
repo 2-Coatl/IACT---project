@@ -18,7 +18,7 @@ class HasFunction(BasePermission):
     Uso en APIView:
         class ReportListView(APIView):
             permission_classes = [IsAuthenticated, HasFunction]
-            required_function = 'reports.view'  # ← Namespace Django
+            required_function = 'reports.view'  # <- Namespace Django
             
             def get(self, request):
                 # Solo usuarios con función 'reports.view' pueden acceder
@@ -31,13 +31,13 @@ class HasFunction(BasePermission):
     
     Examples:
         # Usuario CON función 'reports.view':
-        GET /api/v1/reports/ → 200 OK ✅
+        GET /api/v1/reports/ -> 200 OK [SUCCESS]
         
         # Usuario SIN función 'reports.view':
-        GET /api/v1/reports/ → 403 Forbidden ❌
+        GET /api/v1/reports/ -> 403 Forbidden [ERROR]
         
         # Superuser (bypass):
-        GET /api/v1/reports/ → 200 OK ✅
+        GET /api/v1/reports/ -> 200 OK [SUCCESS]
     
     Nota:
         Para ViewSets con múltiples acciones, usar RequiresFunctionPermission
@@ -61,7 +61,7 @@ class HasFunction(BasePermission):
             1. Verifica autenticación
             2. Superuser bypass
             3. Obtiene required_function de la view
-            4. Si no hay required_function → permite (sin restricción)
+            4. Si no hay required_function -> permite (sin restricción)
             5. Verifica con User.has_function(namespace)
         """
         # 1. Usuario debe estar autenticado

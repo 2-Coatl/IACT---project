@@ -41,11 +41,11 @@ class SoftDeleteViewSetMixin:
     Examples:
         # Restaurar:
         POST /api/reports/1/restore/
-        → 200 OK {report_data}
+        -> 200 OK {report_data}
         
         # Hard delete:
         DELETE /api/reports/1/hard-delete/
-        → 204 No Content
+        -> 204 No Content
     """
     
     @action(detail=True, methods=['post'])
@@ -144,7 +144,7 @@ class AuditCreateMixin:
     
     Examples:
         POST /api/reports/ {name: "Q1 Report"}
-        → created_by se setea automáticamente a request.user
+        -> created_by se setea automáticamente a request.user
     """
     
     def perform_create(self, serializer):
@@ -172,7 +172,7 @@ class AuditUpdateMixin:
     
     Examples:
         PUT /api/reports/1/ {name: "Q1 Report Updated"}
-        → updated_by se setea automáticamente a request.user
+        -> updated_by se setea automáticamente a request.user
     """
     
     def perform_update(self, serializer):
@@ -222,11 +222,11 @@ class PaginationControlMixin:
         
         # Con paginación (default):
         GET /api/reports/
-        → {count: 100, next: ..., results: [...]}
+        -> {count: 100, next: ..., results: [...]}
         
         # Sin paginación:
         GET /api/reports/?paginate=false
-        → [...]
+        -> [...]
     
     Query Params:
         paginate (str): 'true' (default) o 'false'
@@ -234,7 +234,7 @@ class PaginationControlMixin:
     Examples:
         # Export sin paginación:
         GET /api/reports/?paginate=false&format=csv
-        → Todos los registros en CSV
+        -> Todos los registros en CSV
     """
     
     def paginate_queryset(self, queryset):
@@ -281,7 +281,7 @@ class ExportMixin:
     
     Examples:
         GET /api/reports/export/?format=csv
-        → CSV con todos los reports
+        -> CSV con todos los reports
     """
     
     export_fields = []  # Override en subclass
@@ -328,26 +328,26 @@ class ExportMixin:
 # Total: 8 mixins
 # 
 # Soft Delete:
-#   ✅ SoftDeleteViewSetMixin - Acciones restore/hard-delete
+#   [SUCCESS] SoftDeleteViewSetMixin - Acciones restore/hard-delete
 # 
 # Service Filter:
-#   ✅ ServiceFilterMixin - Filtra por servicios del usuario
+#   [SUCCESS] ServiceFilterMixin - Filtra por servicios del usuario
 # 
 # Audit:
-#   ✅ AuditCreateMixin - Setea created_by
-#   ✅ AuditUpdateMixin - Setea updated_by
-#   ✅ AuditMixin - Combinado (create + update)
+#   [SUCCESS] AuditCreateMixin - Setea created_by
+#   [SUCCESS] AuditUpdateMixin - Setea updated_by
+#   [SUCCESS] AuditMixin - Combinado (create + update)
 # 
 # Pagination:
-#   ✅ PaginationControlMixin - Control dinámico paginación
+#   [SUCCESS] PaginationControlMixin - Control dinámico paginación
 # 
 # Export:
-#   ✅ ExportMixin - Exportar a CSV
+#   [SUCCESS] ExportMixin - Exportar a CSV
 # 
 # Principios SOLID Aplicados:
-#   ✅ SRP: Cada mixin una responsabilidad
-#   ✅ DRY: _get_user_services() helper
-#   ✅ Clean Naming: Nombres auto-documentados
-#   ✅ Documentation: Docstrings + ejemplos
-#   ✅ Composable: Mixins combinables
+#   [SUCCESS] SRP: Cada mixin una responsabilidad
+#   [SUCCESS] DRY: _get_user_services() helper
+#   [SUCCESS] Clean Naming: Nombres auto-documentados
+#   [SUCCESS] Documentation: Docstrings + ejemplos
+#   [SUCCESS] Composable: Mixins combinables
 # ============================================================================

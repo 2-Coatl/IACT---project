@@ -105,7 +105,7 @@ class UserFunctionAssignment(SoftDeleteMixin, models.Model):
     """
     
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.CASCADE,
         related_name='function_assignments',
         verbose_name='Usuario',
@@ -120,7 +120,7 @@ class UserFunctionAssignment(SoftDeleteMixin, models.Model):
     # Asignacion
     assigned_at = models.DateTimeField(auto_now_add=True)
     assigned_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.SET_NULL,
         null=True,
         related_name='functions_assigned_by_me',
@@ -142,7 +142,7 @@ class UserFunctionAssignment(SoftDeleteMixin, models.Model):
         verbose_name='Revocada en',
     )
     revoked_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -357,7 +357,7 @@ class UserModuleAccess(SoftDeleteMixin, models.Model):
     """
     
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.CASCADE,
         related_name='module_accesses',
         verbose_name='Usuario',
@@ -377,7 +377,7 @@ class UserModuleAccess(SoftDeleteMixin, models.Model):
     )
     
     granted_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -404,7 +404,7 @@ class UserModuleAccess(SoftDeleteMixin, models.Model):
     )
     
     revoked_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # ← Usar string para evitar circular import
+        settings.AUTH_USER_MODEL,  # <- Usar string para evitar circular import
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

@@ -10,8 +10,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from apps.core.permissions import RequiresFunctionPermission  # ✅ De apps.core
-from apps.core.mixins import AuditMixin  # ✅ De apps.core
+from apps.core.permissions import RequiresFunctionPermission  # [SUCCESS] De apps.core
+from apps.core.mixins import AuditMixin  # [SUCCESS] De apps.core
 from apps.authentication.models import SessionLog
 from apps.authentication.serializers import (
     LoginSerializer,
@@ -53,16 +53,16 @@ class AuthViewSet(viewsets.ViewSet):
     - POST /auth/reset-password/ (AllowAny)
     """
     
-    # ✅ function_map con permission_django (NOT code)
+    # [SUCCESS] function_map con permission_django (NOT code)
     function_map = {
-        'change_password': 'authentication.change_password',  # ✅ permission_django
-        'set_security_answers': 'authentication.set_security_answers',  # ✅
+        'change_password': 'authentication.change_password',  # [SUCCESS] permission_django
+        'set_security_answers': 'authentication.set_security_answers',  # [SUCCESS]
     }
     
     def __init__(self, *args, **kwargs):
         """Initialize viewset with services."""
         super().__init__(*args, **kwargs)
-        # ✅ Services inyectados
+        # [SUCCESS] Services inyectados
         self.auth_service = AuthenticationService()
         self.lockout_service = LockoutService()
         self.recovery_service = RecoveryService()
@@ -145,7 +145,7 @@ class AuthViewSet(viewsets.ViewSet):
     @action(
         detail=False,
         methods=['post'],
-        permission_classes=[IsAuthenticated, RequiresFunctionPermission]  # ✅
+        permission_classes=[IsAuthenticated, RequiresFunctionPermission]  # [SUCCESS]
     )
     def change_password(self, request):
         """
@@ -203,7 +203,7 @@ class AuthViewSet(viewsets.ViewSet):
     @action(
         detail=False,
         methods=['post'],
-        permission_classes=[IsAuthenticated, RequiresFunctionPermission]  # ✅
+        permission_classes=[IsAuthenticated, RequiresFunctionPermission]  # [SUCCESS]
     )
     def set_security_answers(self, request):
         """
@@ -312,7 +312,7 @@ class AuthViewSet(viewsets.ViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SessionViewSet(AuditMixin, viewsets.ReadOnlyModelViewSet):  # ✅ AuditMixin
+class SessionViewSet(AuditMixin, viewsets.ReadOnlyModelViewSet):  # [SUCCESS] AuditMixin
     """
     ViewSet para gestión de sesiones.
     
@@ -327,20 +327,20 @@ class SessionViewSet(AuditMixin, viewsets.ReadOnlyModelViewSet):  # ✅ AuditMix
     
     queryset = SessionLog.objects.all()
     serializer_class = SessionLogSerializer
-    permission_classes = [IsAuthenticated, RequiresFunctionPermission]  # ✅
+    permission_classes = [IsAuthenticated, RequiresFunctionPermission]  # [SUCCESS]
     
-    # ✅ function_map con permission_django
+    # [SUCCESS] function_map con permission_django
     function_map = {
-        'list': 'authentication.view_sessions',  # ✅ permission_django
-        'retrieve': 'authentication.view_sessions',  # ✅
-        'invalidate': 'authentication.invalidate_session',  # ✅
-        'invalidate_all': 'authentication.invalidate_all_sessions',  # ✅
+        'list': 'authentication.view_sessions',  # [SUCCESS] permission_django
+        'retrieve': 'authentication.view_sessions',  # [SUCCESS]
+        'invalidate': 'authentication.invalidate_session',  # [SUCCESS]
+        'invalidate_all': 'authentication.invalidate_all_sessions',  # [SUCCESS]
     }
     
     def __init__(self, *args, **kwargs):
         """Initialize viewset with service."""
         super().__init__(*args, **kwargs)
-        # ✅ Service inyectado
+        # [SUCCESS] Service inyectado
         self.session_service = SessionService()
     
     def get_queryset(self):
@@ -349,10 +349,10 @@ class SessionViewSet(AuditMixin, viewsets.ReadOnlyModelViewSet):  # ✅ AuditMix
         
         SOLID SRP: Solo filtra por usuario.
         """
-        # ✅ Usar active() para excluir soft deleted
+        # [SUCCESS] Usar active() para excluir soft deleted
         return SessionLog.objects.active().filter(
             user=self.request.user
-        ).order_by('-created_at')  # ✅ login_at = created_at
+        ).order_by('-created_at')  # [SUCCESS] login_at = created_at
     
     def get_serializer_class(self):
         """

@@ -35,7 +35,7 @@ class TestHealthCheckMiddleware:
     """Tests para HealthCheckMiddleware."""
     
     def test_health_endpoint_returns_200(self):
-        """Test: GET /health/ → 200 OK."""
+        """Test: GET /health/ -> 200 OK."""
         factory = RequestFactory()
         request = factory.get('/health/')
         
@@ -273,26 +273,26 @@ class TestTimezoneMiddleware:
 # Total: 14 tests
 # 
 # HealthCheckMiddleware (3 tests):
-#   ✅ health_endpoint_returns_200
-#   ✅ health_endpoint_json_response
-#   ✅ other_endpoints_not_affected
+#   [SUCCESS] health_endpoint_returns_200
+#   [SUCCESS] health_endpoint_json_response
+#   [SUCCESS] other_endpoints_not_affected
 # 
 # LoggingMiddleware (4 tests):
-#   ✅ logs_request
-#   ✅ logs_response
-#   ✅ logs_execution_time
-#   ✅ logs_errors
+#   [SUCCESS] logs_request
+#   [SUCCESS] logs_response
+#   [SUCCESS] logs_execution_time
+#   [SUCCESS] logs_errors
 # 
 # SecurityMiddleware (4 tests):
-#   ✅ adds_security_headers
-#   ✅ xss_protection_header
-#   ✅ clickjacking_protection
-#   ✅ csrf_protection_enabled
+#   [SUCCESS] adds_security_headers
+#   [SUCCESS] xss_protection_header
+#   [SUCCESS] clickjacking_protection
+#   [SUCCESS] csrf_protection_enabled
 # 
 # TimezoneMiddleware (3 tests):
-#   ✅ activates_timezone
-#   ✅ uses_america_mexico_city_timezone
-#   ✅ does_not_affect_other_endpoints
+#   [SUCCESS] activates_timezone
+#   [SUCCESS] uses_america_mexico_city_timezone
+#   [SUCCESS] does_not_affect_other_endpoints
 # 
 # Coverage: 90%+
 # ============================================================================

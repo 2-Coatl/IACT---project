@@ -116,14 +116,14 @@ class UserViewSet(viewsets.ModelViewSet):
     
     # RBAC v6.0.0: Namespaces Django para cada acción
     function_map = {
-        'list': 'users.view',           # ← Namespace Django
-        'retrieve': 'users.view',       # ← Namespace Django
-        'create': 'users.create',       # ← Namespace Django
-        'update': 'users.edit',         # ← Namespace Django
-        'partial_update': 'users.edit', # ← Namespace Django
-        'destroy': 'users.delete',      # ← Namespace Django
-        'activate': 'users.edit',       # ← Namespace Django
-        'deactivate': 'users.edit',     # ← Namespace Django
+        'list': 'users.view',           # <- Namespace Django
+        'retrieve': 'users.view',       # <- Namespace Django
+        'create': 'users.create',       # <- Namespace Django
+        'update': 'users.edit',         # <- Namespace Django
+        'partial_update': 'users.edit', # <- Namespace Django
+        'destroy': 'users.delete',      # <- Namespace Django
+        'activate': 'users.edit',       # <- Namespace Django
+        'deactivate': 'users.edit',     # <- Namespace Django
     }
     
     def get_serializer_class(self):
@@ -703,44 +703,44 @@ class SessionHistoryViewSet(viewsets.ReadOnlyModelViewSet):
 # Total ViewSets: 5
 # 
 # UserViewSet (ModelViewSet):
-#   ✅ CRUD completo
-#   ✅ activate/deactivate actions
-#   ✅ me action (usuario actual)
-#   ✅ RBAC permissions
-#   ✅ Filtros: is_active, search
+#   [SUCCESS] CRUD completo
+#   [SUCCESS] activate/deactivate actions
+#   [SUCCESS] me action (usuario actual)
+#   [SUCCESS] RBAC permissions
+#   [SUCCESS] Filtros: is_active, search
 # 
 # AuthViewSet (ViewSet):
-#   ✅ login (AllowAny)
-#   ✅ logout (IsAuthenticated)
-#   ✅ change_password (IsAuthenticated)
-#   ✅ password_reset (AllowAny)
-#   ✅ password_reset_confirm (AllowAny)
+#   [SUCCESS] login (AllowAny)
+#   [SUCCESS] logout (IsAuthenticated)
+#   [SUCCESS] change_password (IsAuthenticated)
+#   [SUCCESS] password_reset (AllowAny)
+#   [SUCCESS] password_reset_confirm (AllowAny)
 # 
 # ProfileViewSet (ViewSet):
-#   ✅ profile (get/patch)
-#   ✅ upload_avatar
-#   ✅ remove_avatar
-#   ✅ ProfileService integration
+#   [SUCCESS] profile (get/patch)
+#   [SUCCESS] upload_avatar
+#   [SUCCESS] remove_avatar
+#   [SUCCESS] ProfileService integration
 # 
 # SettingsViewSet (ViewSet):
-#   ✅ settings (get/patch)
-#   ✅ Direct model update
+#   [SUCCESS] settings (get/patch)
+#   [SUCCESS] Direct model update
 # 
 # SessionHistoryViewSet (ReadOnlyModelViewSet):
-#   ✅ list/retrieve
-#   ✅ Usuario ve solo sus sesiones
-#   ✅ Admin ve todas
+#   [SUCCESS] list/retrieve
+#   [SUCCESS] Usuario ve solo sus sesiones
+#   [SUCCESS] Admin ve todas
 # 
 # Permisos:
-#   ✅ HasFunctionPermission (RBAC)
-#   ✅ IsAuthenticated
-#   ✅ AllowAny (login, password reset)
+#   [SUCCESS] HasFunctionPermission (RBAC)
+#   [SUCCESS] IsAuthenticated
+#   [SUCCESS] AllowAny (login, password reset)
 # 
 # Integración:
-#   ✅ Services (UserService, AuthenticationService, ProfileService)
-#   ✅ Serializers dinámicos (get_serializer_class)
-#   ✅ Queryset filters
-#   ✅ Context para request
+#   [SUCCESS] Services (UserService, AuthenticationService, ProfileService)
+#   [SUCCESS] Serializers dinámicos (get_serializer_class)
+#   [SUCCESS] Queryset filters
+#   [SUCCESS] Context para request
 # 
 # Líneas: ~500
 # ============================================================================

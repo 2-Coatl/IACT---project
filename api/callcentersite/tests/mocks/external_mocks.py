@@ -505,7 +505,7 @@ def mock_random(mocker):
 #   - mock_uuid
 #   - mock_random
 # 
-# CNST-001: NO email backend real (console) ✅
-# CNST-010: Cache locmem (NO Redis) ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-001: NO email backend real (console) [SUCCESS]
+# CNST-010: Cache locmem (NO Redis) [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

@@ -12,11 +12,11 @@ from typing import List, Optional
 from django.utils import timezone
 from django.contrib.sessions.models import Session as DjangoSession
 
-from apps.core.services.base_service import BaseService  # ✅ BaseService
+from apps.core.services.base_service import BaseService  # [SUCCESS] BaseService
 from apps.authentication.models import SessionLog
 
 
-class SessionService(BaseService):  # ✅ Hereda de BaseService
+class SessionService(BaseService):  # [SUCCESS] Hereda de BaseService
     """
     Servicio de gestión de sesiones.
     
@@ -34,7 +34,7 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
     
     def __init__(self):
         """Initialize service."""
-        super().__init__()  # ✅ Llamar super
+        super().__init__()  # [SUCCESS] Llamar super
         self.log_info("SessionService initialized")
     
     def get_active_sessions(self, user) -> List[SessionLog]:
@@ -47,11 +47,11 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
         Returns:
             List[SessionLog]: Sesiones activas
         """
-        # ✅ Usar active() para excluir soft deleted
+        # [SUCCESS] Usar active() para excluir soft deleted
         sessions = SessionLog.objects.active().filter(
             user=user,
             is_active=True
-        ).order_by('-created_at')  # ✅ login_at = created_at
+        ).order_by('-created_at')  # [SUCCESS] login_at = created_at
         
         count = sessions.count()
         self.log_info(f"Retrieved {count} active sessions for user '{user.username}'")
@@ -73,10 +73,10 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
         Returns:
             List[SessionLog]: Historial de sesiones
         """
-        # ✅ Usar active() (excluye soft deleted)
+        # [SUCCESS] Usar active() (excluye soft deleted)
         sessions = SessionLog.objects.active().filter(
             user=user
-        ).order_by('-created_at')[:limit]  # ✅ login_at = created_at
+        ).order_by('-created_at')[:limit]  # [SUCCESS] login_at = created_at
         
         count = sessions.count()
         self.log_info(f"Retrieved {count} session history records for user '{user.username}'")
@@ -106,7 +106,7 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
         if user:
             filters['user'] = user
         
-        # ✅ Usar active() para excluir soft deleted
+        # [SUCCESS] Usar active() para excluir soft deleted
         session_log = SessionLog.objects.active().filter(**filters).first()
         
         if session_log:
@@ -150,7 +150,7 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
             int: Número de sesiones invalidadas
         """
         # Obtener sesiones activas
-        # ✅ Usar active()
+        # [SUCCESS] Usar active()
         sessions = SessionLog.objects.active().filter(
             user=user,
             is_active=True
@@ -193,7 +193,7 @@ class SessionService(BaseService):  # ✅ Hereda de BaseService
         if user:
             filters['user'] = user
         
-        # ✅ Usar active()
+        # [SUCCESS] Usar active()
         session_log = SessionLog.objects.active().filter(**filters).first()
         
         if session_log:

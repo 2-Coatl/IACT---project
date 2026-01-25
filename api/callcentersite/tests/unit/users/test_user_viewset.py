@@ -242,29 +242,29 @@ class TestUserViewSetCustomActions:
 # Total tests: 14
 # 
 # List (5 tests):
-#   ✅ Con permission
-#   ✅ Sin permission → 403
-#   ✅ Sin autenticación → 401
-#   ✅ Filtro is_active
-#   ✅ Search
+#   [SUCCESS] Con permission
+#   [SUCCESS] Sin permission -> 403
+#   [SUCCESS] Sin autenticación -> 401
+#   [SUCCESS] Filtro is_active
+#   [SUCCESS] Search
 # 
 # Create (3 tests):
-#   ✅ Con permission
-#   ✅ Password mismatch → 400
-#   ✅ Sin permission → 403
+#   [SUCCESS] Con permission
+#   [SUCCESS] Password mismatch -> 400
+#   [SUCCESS] Sin permission -> 403
 # 
 # Retrieve (1 test):
-#   ✅ Con permission
+#   [SUCCESS] Con permission
 # 
 # Update (1 test):
-#   ✅ Con permission
+#   [SUCCESS] Con permission
 # 
 # Destroy (1 test):
-#   ✅ Soft delete
+#   [SUCCESS] Soft delete
 # 
 # Custom Actions (2 tests):
-#   ✅ Activate
-#   ✅ Deactivate
+#   [SUCCESS] Activate
+#   [SUCCESS] Deactivate
 # 
 # Coverage: ~80% de UserViewSet
 # ============================================================================

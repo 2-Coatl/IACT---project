@@ -102,13 +102,13 @@ class SessionHistorySerializer(serializers.ModelSerializer):
 # Total: 1 serializer
 #
 # Serializer:
-#   ✅ SessionHistorySerializer - Auditoría de sesiones
+#   [SUCCESS] SessionHistorySerializer - Auditoría de sesiones
 #
 # Características:
-#   ✅ Read-only (creación automática vía signals)
-#   ✅ Campos nested (username, full_name)
-#   ✅ Campos computed (duration)
-#   ✅ Información de auditoría completa
+#   [SUCCESS] Read-only (creación automática vía signals)
+#   [SUCCESS] Campos nested (username, full_name)
+#   [SUCCESS] Campos computed (duration)
+#   [SUCCESS] Información de auditoría completa
 #
 # Uso:
 #   - Ver sesiones del usuario
@@ -116,7 +116,7 @@ class SessionHistorySerializer(serializers.ModelSerializer):
 #   - Historial de logins
 #
 # Principios:
-#   ✅ SRP: Solo serialización de sesiones
-#   ✅ Read-only: No modificar historial
-#   ✅ Clean Code: Nombres auto-documentados
+#   [SUCCESS] SRP: Solo serialización de sesiones
+#   [SUCCESS] Read-only: No modificar historial
+#   [SUCCESS] Clean Code: Nombres auto-documentados
 # ============================================================================

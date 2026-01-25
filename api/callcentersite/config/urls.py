@@ -37,15 +37,15 @@ urlpatterns = [
     # API endpoints (se agregan en Sprints)
     # path('api/v1/', include('apps.core.urls')),  # ELIMINADO: Movido a apps.pipeline.urls
     path('api/v1/navigation/', include('apps.core.navigation.urls')),  # Sistema de navegacion
-    path('api/v1/auth/', include('apps.authentication.urls')),  # Sprint 2 - FASE 1 PARTE 5 ✅
+    path('api/v1/auth/', include('apps.authentication.urls')),  # Sprint 2 - FASE 1 PARTE 5 [SUCCESS]
     # path('api/v1/access/', include('apps.access.urls')),  # Sprint 2 - TODO: implementar FASE 2
     path('api/v1/audit/', include('apps.audit.urls')),  # Sprint 2
     path('api/v1/users/', include('apps.users.urls')),  # Sprint 3
-    path('api/v1/pipeline/', include('apps.pipeline.urls')),  # Sprint 3 - FASE 0.2 ✅
+    path('api/v1/pipeline/', include('apps.pipeline.urls')),  # Sprint 3 - FASE 0.2 [SUCCESS]
     path('api/v1/reports/', include('apps.reports.urls')),  # Sprint 4
-    path('api/v1/ivr/', include('apps.ivr.urls')),  # FASE 0.1 - IVR legacy READ-ONLY ✅
-    path('api/v1/alerts/', include('apps.alerts.urls')),  # Sistema de alertas internas ✅
-    path('api/v1/dashboard/', include('apps.dashboard.urls')),  # Sistema de dashboards ✅
+    path('api/v1/ivr/', include('apps.ivr.urls')),  # FASE 0.1 - IVR legacy READ-ONLY [SUCCESS]
+    path('api/v1/alerts/', include('apps.alerts.urls')),  # Sistema de alertas internas [SUCCESS]
+    path('api/v1/dashboard/', include('apps.dashboard.urls')),  # Sistema de dashboards [SUCCESS]
 ]
 
 # Static/Media files (development)

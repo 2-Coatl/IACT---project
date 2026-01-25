@@ -36,7 +36,7 @@ class Command(BaseCommand):
         clear = options.get('clear', False)
         
         if dry_run:
-            self.stdout.write(self.style.WARNING('🔍 Modo DRY-RUN: No se guardará nada'))
+            self.stdout.write(self.style.WARNING('[SEARCH] Modo DRY-RUN: No se guardará nada'))
         
         if clear and not dry_run:
             self._clear_functions()
@@ -417,12 +417,12 @@ class Command(BaseCommand):
                 
                 if exists:
                     self.stdout.write(
-                        self.style.WARNING(f'  🔄 Actualizaría: {permission_django}')
+                        self.style.WARNING(f'  [RUNNING] Actualizaría: {permission_django}')
                     )
                     updated_count += 1
                 else:
                     self.stdout.write(
-                        self.style.SUCCESS(f'  ✅ Crearía: {permission_django}')
+                        self.style.SUCCESS(f'  [SUCCESS] Crearía: {permission_django}')
                     )
                     created_count += 1
             else:
@@ -440,12 +440,12 @@ class Command(BaseCommand):
                 
                 if created:
                     self.stdout.write(
-                        self.style.SUCCESS(f'  ✅ Creada: {permission_django}')
+                        self.style.SUCCESS(f'  [SUCCESS] Creada: {permission_django}')
                     )
                     created_count += 1
                 else:
                     self.stdout.write(
-                        self.style.WARNING(f'  🔄 Actualizada: {permission_django}')
+                        self.style.WARNING(f'  [RUNNING] Actualizada: {permission_django}')
                     )
                     updated_count += 1
         
@@ -460,21 +460,21 @@ class Command(BaseCommand):
         
         if dry_run:
             self.stdout.write(
-                self.style.WARNING('🔍 RESUMEN (DRY-RUN - No guardado)')
+                self.style.WARNING('[SEARCH] RESUMEN (DRY-RUN - No guardado)')
             )
         else:
             self.stdout.write(
-                self.style.SUCCESS('✅ RESUMEN')
+                self.style.SUCCESS('[SUCCESS] RESUMEN')
             )
         
         self.stdout.write('=' * 70)
         
         self.stdout.write(f'Total procesadas: {total}')
         self.stdout.write(
-            self.style.SUCCESS(f'  ✅ Creadas: {created}')
+            self.style.SUCCESS(f'  [SUCCESS] Creadas: {created}')
         )
         self.stdout.write(
-            self.style.WARNING(f'  🔄 Actualizadas: {updated}')
+            self.style.WARNING(f'  [RUNNING] Actualizadas: {updated}')
         )
         
         if not dry_run:
@@ -484,7 +484,7 @@ class Command(BaseCommand):
             
             self.stdout.write('')
             self.stdout.write('Funciones por status:')
-            self.stdout.write(f'  ✅ Activas: {activas}')
+            self.stdout.write(f'  [SUCCESS] Activas: {activas}')
             self.stdout.write(f'  📋 Planificadas: {planificadas}')
             
             # Funciones por módulo
@@ -497,7 +497,7 @@ class Command(BaseCommand):
             self.stdout.write('Funciones por módulo:')
             for module in modules:
                 self.stdout.write(
-                    f"  📁 {module['module']}: {module['count']}"
+                    f"  [DIR] {module['module']}: {module['count']}"
                 )
         
         self.stdout.write('=' * 70)
@@ -505,5 +505,5 @@ class Command(BaseCommand):
         if not dry_run:
             self.stdout.write('')
             self.stdout.write(
-                self.style.SUCCESS('🎉 Funciones RBAC v6.0.0 creadas exitosamente')
+                self.style.SUCCESS('[DONE] Funciones RBAC v6.0.0 creadas exitosamente')
             )

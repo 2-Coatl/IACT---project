@@ -116,5 +116,5 @@ class TestDatabaseTransactions:
 # RESUMEN
 # 
 # Tests: 7
-# Objetivo: Verificar factories, queries y transacciones ✅
+# Objetivo: Verificar factories, queries y transacciones [SUCCESS]
 # ============================================================================

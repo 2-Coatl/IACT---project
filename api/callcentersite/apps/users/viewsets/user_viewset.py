@@ -20,7 +20,7 @@ from apps.users.serializers import (
 )
 from apps.users.filters import UserFilter
 
-# ✅ BEST PRACTICE: Use get_user_model() instead of direct import
+# [SUCCESS] BEST PRACTICE: Use get_user_model() instead of direct import
 # https://docs.djangoproject.com/en/stable/topics/auth/customizing/#referencing-the-user-model
 User = get_user_model()
 
@@ -58,14 +58,14 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering = ['-date_joined']
     
     function_map = {
-        'list': 'users.view',           # ← Namespace Django
-        'retrieve': 'users.view',       # ← Namespace Django
-        'create': 'users.create',       # ← Namespace Django
-        'update': 'users.edit',         # ← Namespace Django
-        'partial_update': 'users.edit', # ← Namespace Django
-        'destroy': 'users.delete',      # ← Namespace Django
-        'activate': 'users.edit',       # ← Namespace Django
-        'deactivate': 'users.edit',     # ← Namespace Django
+        'list': 'users.view',           # <- Namespace Django
+        'retrieve': 'users.view',       # <- Namespace Django
+        'create': 'users.create',       # <- Namespace Django
+        'update': 'users.edit',         # <- Namespace Django
+        'partial_update': 'users.edit', # <- Namespace Django
+        'destroy': 'users.delete',      # <- Namespace Django
+        'activate': 'users.edit',       # <- Namespace Django
+        'deactivate': 'users.edit',     # <- Namespace Django
     }
     
     def get_serializer_class(self):

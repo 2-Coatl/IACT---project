@@ -106,7 +106,7 @@ class SetSecurityAnswersSerializer(serializers.Serializer):
             )
         
         # Validar que las preguntas existan y estén activas
-        # ✅ Usar active() de SoftDeleteManager
+        # [SUCCESS] Usar active() de SoftDeleteManager
         existing_questions = SecurityQuestion.objects.active().filter(
             id__in=question_ids,
             is_active=True

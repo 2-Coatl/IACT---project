@@ -40,10 +40,10 @@ class PasswordService(BaseService):
     - Validación de passwords
     
     Flujo Password Reset:
-    1. Usuario solicita reset → request_password_reset()
+    1. Usuario solicita reset -> request_password_reset()
     2. Se genera token y se envía email
     3. Usuario recibe email con link + token
-    4. Usuario confirma con nuevo password → reset_password_confirm()
+    4. Usuario confirma con nuevo password -> reset_password_confirm()
     
     Example:
         service = PasswordService()
@@ -319,37 +319,37 @@ El equipo de Call Center
 # Hereda de: BaseService (apps.core.services)
 # 
 # Métodos Públicos: 3
-#   ✅ request_password_reset() - Solicita reset y envía email
-#   ✅ reset_password_confirm() - Confirma con token
-#   ✅ validate_reset_token() - Valida token sin cambiar password
+#   [SUCCESS] request_password_reset() - Solicita reset y envía email
+#   [SUCCESS] reset_password_confirm() - Confirma con token
+#   [SUCCESS] validate_reset_token() - Valida token sin cambiar password
 # 
 # Métodos Privados: 3
-#   ✅ _validate_password() - Valida requisitos
-#   ✅ _generate_reset_link() - Genera URL de reset
-#   ✅ _send_reset_email() - Envía email
+#   [SUCCESS] _validate_password() - Valida requisitos
+#   [SUCCESS] _generate_reset_link() - Genera URL de reset
+#   [SUCCESS] _send_reset_email() - Envía email
 # 
 # Dependencias:
-#   ✅ BaseService (apps.core.services) - Logging
-#   ✅ AuditService (apps.audit.services) - Audit logging
-#   ✅ Django default_token_generator - Tokens seguros
-#   ✅ Django send_mail - Envío de emails
-#   ✅ Exceptions de apps.users.exceptions
+#   [SUCCESS] BaseService (apps.core.services) - Logging
+#   [SUCCESS] AuditService (apps.audit.services) - Audit logging
+#   [SUCCESS] Django default_token_generator - Tokens seguros
+#   [SUCCESS] Django send_mail - Envío de emails
+#   [SUCCESS] Exceptions de apps.users.exceptions
 # 
 # Seguridad:
-#   ✅ No revela si email existe
-#   ✅ Tokens con expiración automática
-#   ✅ Validación de password
-#   ✅ Audit logging completo
+#   [SUCCESS] No revela si email existe
+#   [SUCCESS] Tokens con expiración automática
+#   [SUCCESS] Validación de password
+#   [SUCCESS] Audit logging completo
 # 
 # Flujo:
-#   1. request_password_reset(email) → Genera token + envía email
+#   1. request_password_reset(email) -> Genera token + envía email
 #   2. Usuario recibe email con link
-#   3. reset_password_confirm(uidb64, token, password) → Actualiza
+#   3. reset_password_confirm(uidb64, token, password) -> Actualiza
 # 
 # Principios SOLID:
-#   ✅ SRP: Solo gestión de password reset
-#   ✅ DIP: Depende de BaseService
-#   ✅ Clean Code: Métodos claros y cohesivos
+#   [SUCCESS] SRP: Solo gestión de password reset
+#   [SUCCESS] DIP: Depende de BaseService
+#   [SUCCESS] Clean Code: Métodos claros y cohesivos
 # 
 # Líneas: ~320
 # ============================================================================

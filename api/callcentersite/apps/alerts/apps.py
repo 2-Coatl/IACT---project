@@ -49,8 +49,8 @@ class AlertsConfig(AppConfig):
             from apps.alerts.scheduler import start_scheduler
             try:
                 start_scheduler()
-                logger.info("✓ Alerts app ready: APScheduler iniciado")
+                logger.info("[OK] Alerts app ready: APScheduler iniciado")
             except Exception as e:
-                logger.error(f"✗ Error iniciando APScheduler: {e}")
+                logger.error(f"[FAIL] Error iniciando APScheduler: {e}")
         else:
             logger.info(f"Alerts app ready: APScheduler NO iniciado (comando: {' '.join(argv)})")

@@ -224,31 +224,31 @@ class TestAuthViewSetPasswordReset:
 # Total Tests: 15
 # 
 # Login: 5 tests
-#   ✅ success
-#   ✅ invalid username
-#   ✅ invalid password
-#   ✅ inactive user
-#   ✅ missing fields
+#   [SUCCESS] success
+#   [SUCCESS] invalid username
+#   [SUCCESS] invalid password
+#   [SUCCESS] inactive user
+#   [SUCCESS] missing fields
 # 
 # Logout: 2 tests
-#   ✅ success
-#   ✅ unauthenticated
+#   [SUCCESS] success
+#   [SUCCESS] unauthenticated
 # 
 # Change Password: 5 tests
-#   ✅ success
-#   ✅ wrong old password
-#   ✅ invalid new password
-#   ✅ same as old
-#   ✅ unauthenticated
+#   [SUCCESS] success
+#   [SUCCESS] wrong old password
+#   [SUCCESS] invalid new password
+#   [SUCCESS] same as old
+#   [SUCCESS] unauthenticated
 # 
 # Password Reset: 3 tests
-#   ✅ request success
-#   ✅ nonexistent email (security)
-#   ✅ invalid email
+#   [SUCCESS] request success
+#   [SUCCESS] nonexistent email (security)
+#   [SUCCESS] invalid email
 # 
 # Coverage:
-#   ✅ Authentication flow
-#   ✅ Password validation
-#   ✅ Security (inactive users, wrong passwords)
-#   ✅ SessionHistory creation
+#   [SUCCESS] Authentication flow
+#   [SUCCESS] Password validation
+#   [SUCCESS] Security (inactive users, wrong passwords)
+#   [SUCCESS] SessionHistory creation
 # ============================================================================

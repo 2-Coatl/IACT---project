@@ -150,12 +150,12 @@ class TestDateRangeValidator:
 # Total: 6 clases, 23 tests
 # 
 # Clases:
-#   ✅ TestEmailValidator (2 tests)
-#   ✅ TestPhoneValidator (3 tests)
-#   ✅ TestRUTValidator (3 tests)
-#   ✅ TestService800Validator (2 tests)
-#   ✅ TestCodigoCenterValidator (2 tests)
-#   ✅ TestDateRangeValidator (4 tests)
+#   [SUCCESS] TestEmailValidator (2 tests)
+#   [SUCCESS] TestPhoneValidator (3 tests)
+#   [SUCCESS] TestRUTValidator (3 tests)
+#   [SUCCESS] TestService800Validator (2 tests)
+#   [SUCCESS] TestCodigoCenterValidator (2 tests)
+#   [SUCCESS] TestDateRangeValidator (4 tests)
 # 
 # Cobertura: ~95% validators.py
 # ============================================================================

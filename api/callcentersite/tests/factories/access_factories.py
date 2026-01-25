@@ -384,5 +384,5 @@ class CompleteUserFactory(UserFactory):
 #   - UserWithRoleFactory
 #   - CompleteUserFactory
 # 
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

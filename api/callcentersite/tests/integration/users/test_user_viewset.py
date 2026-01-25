@@ -1,7 +1,7 @@
 """
 Tests de integración para UserViewSet.
 
-Prueban el flujo completo: Request → ViewSet → Service → Database → Response
+Prueban el flujo completo: Request -> ViewSet -> Service -> Database -> Response
 """
 
 import pytest
@@ -309,45 +309,45 @@ class TestUserViewSetCustomActions:
 # Total Tests: 24
 # 
 # List (GET /users/): 6 tests
-#   ✅ unauthenticated
-#   ✅ as admin
-#   ✅ with RBAC permission
-#   ✅ without RBAC permission
-#   ✅ filter by search
-#   ✅ filter by is_active
+#   [SUCCESS] unauthenticated
+#   [SUCCESS] as admin
+#   [SUCCESS] with RBAC permission
+#   [SUCCESS] without RBAC permission
+#   [SUCCESS] filter by search
+#   [SUCCESS] filter by is_active
 # 
 # Create (POST /users/): 5 tests
-#   ✅ unauthenticated
-#   ✅ with RBAC permission
-#   ✅ without RBAC permission
-#   ✅ duplicate username
-#   ✅ invalid password
+#   [SUCCESS] unauthenticated
+#   [SUCCESS] with RBAC permission
+#   [SUCCESS] without RBAC permission
+#   [SUCCESS] duplicate username
+#   [SUCCESS] invalid password
 # 
 # Retrieve (GET /users/{id}/): 3 tests
-#   ✅ with RBAC permission
-#   ✅ without RBAC permission
-#   ✅ nonexistent user
+#   [SUCCESS] with RBAC permission
+#   [SUCCESS] without RBAC permission
+#   [SUCCESS] nonexistent user
 # 
 # Update (PATCH /users/{id}/): 2 tests
-#   ✅ with RBAC permission
-#   ✅ without RBAC permission
+#   [SUCCESS] with RBAC permission
+#   [SUCCESS] without RBAC permission
 # 
 # Delete (DELETE /users/{id}/): 2 tests
-#   ✅ as admin
-#   ✅ without permission
+#   [SUCCESS] as admin
+#   [SUCCESS] without permission
 # 
 # Custom Actions: 6 tests
-#   ✅ me authenticated
-#   ✅ me unauthenticated
-#   ✅ activate with permission
-#   ✅ deactivate with permission
-#   ✅ activate without permission
+#   [SUCCESS] me authenticated
+#   [SUCCESS] me unauthenticated
+#   [SUCCESS] activate with permission
+#   [SUCCESS] deactivate with permission
+#   [SUCCESS] activate without permission
 # 
 # Coverage:
-#   ✅ Authentication
-#   ✅ RBAC permissions
-#   ✅ CRUD operations
-#   ✅ Custom actions
-#   ✅ Filters
-#   ✅ Error cases
+#   [SUCCESS] Authentication
+#   [SUCCESS] RBAC permissions
+#   [SUCCESS] CRUD operations
+#   [SUCCESS] Custom actions
+#   [SUCCESS] Filters
+#   [SUCCESS] Error cases
 # ============================================================================

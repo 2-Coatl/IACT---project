@@ -293,56 +293,56 @@ class TestValidateExportRowLimit:
 # Total: 38 tests
 # 
 # validate_email (6 tests):
-#   ✅ valid_email
-#   ✅ invalid_email_no_at
-#   ✅ invalid_email_no_domain
-#   ✅ invalid_email_multiple_at
-#   ✅ empty_email
-#   ✅ email_case_insensitive
+#   [SUCCESS] valid_email
+#   [SUCCESS] invalid_email_no_at
+#   [SUCCESS] invalid_email_no_domain
+#   [SUCCESS] invalid_email_multiple_at
+#   [SUCCESS] empty_email
+#   [SUCCESS] email_case_insensitive
 # 
 # validate_phone_number (8 tests) - CRÍTICO:
-#   ✅ valid_mobile_9_digits
-#   ✅ valid_mobile_with_country_code
-#   ✅ valid_landline_8_digits
-#   ✅ valid_with_spaces_and_dashes
-#   ✅ invalid_too_short
-#   ✅ invalid_too_long
-#   ✅ invalid_characters
-#   ✅ empty_phone
+#   [SUCCESS] valid_mobile_9_digits
+#   [SUCCESS] valid_mobile_with_country_code
+#   [SUCCESS] valid_landline_8_digits
+#   [SUCCESS] valid_with_spaces_and_dashes
+#   [SUCCESS] invalid_too_short
+#   [SUCCESS] invalid_too_long
+#   [SUCCESS] invalid_characters
+#   [SUCCESS] empty_phone
 # 
 # validate_rut (8 tests):
-#   ✅ valid_rut_with_dash
-#   ✅ valid_rut_without_dash
-#   ✅ valid_rut_with_k
-#   ✅ invalid_rut_wrong_verifier
-#   ✅ invalid_rut_too_short
-#   ✅ invalid_rut_too_long
-#   ✅ invalid_rut_characters
-#   ✅ empty_rut
+#   [SUCCESS] valid_rut_with_dash
+#   [SUCCESS] valid_rut_without_dash
+#   [SUCCESS] valid_rut_with_k
+#   [SUCCESS] invalid_rut_wrong_verifier
+#   [SUCCESS] invalid_rut_too_short
+#   [SUCCESS] invalid_rut_too_long
+#   [SUCCESS] invalid_rut_characters
+#   [SUCCESS] empty_rut
 # 
 # validate_service_800 (5 tests):
-#   ✅ valid_service_800
-#   ✅ invalid_service_not_starting_with_800
-#   ✅ invalid_service_too_short
-#   ✅ invalid_service_characters
-#   ✅ empty_service
+#   [SUCCESS] valid_service_800
+#   [SUCCESS] invalid_service_not_starting_with_800
+#   [SUCCESS] invalid_service_too_short
+#   [SUCCESS] invalid_service_characters
+#   [SUCCESS] empty_service
 # 
 # validate_codigo_center (4 tests):
-#   ✅ valid_codigo_center
-#   ✅ invalid_codigo_too_short
-#   ✅ invalid_codigo_special_chars
-#   ✅ empty_codigo
+#   [SUCCESS] valid_codigo_center
+#   [SUCCESS] invalid_codigo_too_short
+#   [SUCCESS] invalid_codigo_special_chars
+#   [SUCCESS] empty_codigo
 # 
 # validate_date_range (4 tests):
-#   ✅ valid_date_range
-#   ✅ invalid_start_after_end
-#   ✅ valid_same_date
-#   ✅ invalid_future_dates (placeholder)
+#   [SUCCESS] valid_date_range
+#   [SUCCESS] invalid_start_after_end
+#   [SUCCESS] valid_same_date
+#   [SUCCESS] invalid_future_dates (placeholder)
 # 
 # validate_export_row_limit (3 tests):
-#   ✅ valid_row_count_under_limit
-#   ✅ invalid_row_count_over_limit
-#   ✅ valid_row_count_at_limit
+#   [SUCCESS] valid_row_count_under_limit
+#   [SUCCESS] invalid_row_count_over_limit
+#   [SUCCESS] valid_row_count_at_limit
 # 
 # Coverage: 95%+
 # CRÍTICO: validate_phone_number usado en User.phone

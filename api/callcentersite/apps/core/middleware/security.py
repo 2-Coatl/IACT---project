@@ -69,10 +69,10 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
 # Propósito: Agregar headers de seguridad HTTP
 # 
 # Headers:
-#   ✅ X-Content-Type-Options: nosniff
-#   ✅ X-Frame-Options: DENY
-#   ✅ X-XSS-Protection: 1; mode=block
-#   ✅ Referrer-Policy: same-origin
+#   [SUCCESS] X-Content-Type-Options: nosniff
+#   [SUCCESS] X-Frame-Options: DENY
+#   [SUCCESS] X-XSS-Protection: 1; mode=block
+#   [SUCCESS] Referrer-Policy: same-origin
 # 
 # Instalación: Agregar a MIDDLEWARE en settings
 # ============================================================================

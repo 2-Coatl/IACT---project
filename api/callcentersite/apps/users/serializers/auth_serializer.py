@@ -200,20 +200,20 @@ class UserActivationSerializer(serializers.Serializer):
 # Total: 2 serializers
 #
 # Serializers:
-#   ✅ PasswordChangeSerializer - Cambiar password
-#   ✅ UserActivationSerializer - Activar/desactivar usuario
+#   [SUCCESS] PasswordChangeSerializer - Cambiar password
+#   [SUCCESS] UserActivationSerializer - Activar/desactivar usuario
 #
 # Responsabilidades:
-#   ✅ Validación de passwords
-#   ✅ Delegación a services (Password, User)
+#   [SUCCESS] Validación de passwords
+#   [SUCCESS] Delegación a services (Password, User)
 #
 # NO incluye:
-#   ❌ Login/Logout (apps/authentication)
-#   ❌ Password reset (apps/authentication)
+#   [ERROR] Login/Logout (apps/authentication)
+#   [ERROR] Password reset (apps/authentication)
 #
 # Principios:
-#   ✅ SRP: Cada serializer un propósito
-#   ✅ DRY: Delegar a services
-#   ✅ Validation: Passwords fuertes
-#   ✅ Clean Code: Nombres auto-documentados
+#   [SUCCESS] SRP: Cada serializer un propósito
+#   [SUCCESS] DRY: Delegar a services
+#   [SUCCESS] Validation: Passwords fuertes
+#   [SUCCESS] Clean Code: Nombres auto-documentados
 # ============================================================================

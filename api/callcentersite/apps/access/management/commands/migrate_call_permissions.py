@@ -40,14 +40,14 @@ class Command(BaseCommand):
         
         self.stdout.write('=' * 70)
         self.stdout.write(
-            self.style.SUCCESS('🔄 MIGRACIÓN DE PERMISOS: CALL_* → PIPELINE_CALLREC_*')
+            self.style.SUCCESS('[RUNNING] MIGRACIÓN DE PERMISOS: CALL_* -> PIPELINE_CALLREC_*')
         )
         self.stdout.write('=' * 70)
         self.stdout.write('')
         
         if dry_run:
             self.stdout.write(
-                self.style.WARNING('🔍 MODO DRY-RUN: No se guardarán cambios')
+                self.style.WARNING('[SEARCH] MODO DRY-RUN: No se guardarán cambios')
             )
             self.stdout.write('')
         
@@ -58,7 +58,7 @@ class Command(BaseCommand):
         
         # Procesar cada función antigua
         for old_code, new_code in self.MIGRATION_MAP.items():
-            self.stdout.write(f'Procesando: {old_code} → {new_code}')
+            self.stdout.write(f'Procesando: {old_code} -> {new_code}')
             
             try:
                 # Obtener funciones
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                     old_function = Function.objects.get(code=old_code)
                 except Function.DoesNotExist:
                     self.stdout.write(
-                        self.style.WARNING(f'  ⚠️ Función {old_code} no existe')
+                        self.style.WARNING(f'  [WARN] Función {old_code} no existe')
                     )
                     continue
                 
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                 except Function.DoesNotExist:
                     self.stdout.write(
                         self.style.ERROR(
-                            f'  ❌ Función {new_code} no existe. '
+                            f'  [ERROR] Función {new_code} no existe. '
                             f'Ejecute create_functions.py primero.'
                         )
                     )
@@ -91,7 +91,7 @@ class Command(BaseCommand):
                 count = old_assignments.count()
                 if count == 0:
                     self.stdout.write(
-                        self.style.WARNING('  ⚠️ Sin asignaciones activas')
+                        self.style.WARNING('  [WARN] Sin asignaciones activas')
                     )
                     continue
                 
@@ -121,23 +121,23 @@ class Command(BaseCommand):
                     
                     if dry_run:
                         self.stdout.write(
-                            f'    🔍 {assignment.user.username}: '
-                            f'{old_code} → {new_code} (dry-run)'
+                            f'    [SEARCH] {assignment.user.username}: '
+                            f'{old_code} -> {new_code} (dry-run)'
                         )
                     else:
                         self.stdout.write(
-                            f'    ✅ {assignment.user.username}: '
-                            f'{old_code} → {new_code}'
+                            f'    [SUCCESS] {assignment.user.username}: '
+                            f'{old_code} -> {new_code}'
                         )
                 
                 total_migrated += migrated
                 self.stdout.write(
-                    self.style.SUCCESS(f'  ✅ {migrated} asignaciones migradas')
+                    self.style.SUCCESS(f'  [SUCCESS] {migrated} asignaciones migradas')
                 )
                 
             except Exception as e:
                 self.stdout.write(
-                    self.style.ERROR(f'  ❌ Error: {str(e)}')
+                    self.style.ERROR(f'  [ERROR] Error: {str(e)}')
                 )
                 total_errors += 1
             
@@ -147,11 +147,11 @@ class Command(BaseCommand):
         self.stdout.write('=' * 70)
         if dry_run:
             self.stdout.write(
-                self.style.WARNING('🔍 RESUMEN (DRY-RUN - No guardado)')
+                self.style.WARNING('[SEARCH] RESUMEN (DRY-RUN - No guardado)')
             )
         else:
             self.stdout.write(
-                self.style.SUCCESS('✅ RESUMEN')
+                self.style.SUCCESS('[SUCCESS] RESUMEN')
             )
         self.stdout.write('=' * 70)
         
@@ -169,13 +169,13 @@ class Command(BaseCommand):
             self.stdout.write('')
             self.stdout.write(
                 self.style.WARNING(
-                    '⚠️ Ejecute sin --dry-run para aplicar cambios'
+                    '[WARN] Ejecute sin --dry-run para aplicar cambios'
                 )
             )
         else:
             self.stdout.write('')
             self.stdout.write(
-                self.style.SUCCESS('✅ Migración completada exitosamente')
+                self.style.SUCCESS('[SUCCESS] Migración completada exitosamente')
             )
         
         self.stdout.write('')

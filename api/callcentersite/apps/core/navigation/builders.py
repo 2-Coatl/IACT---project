@@ -232,9 +232,9 @@ class MenuBuilder:
         RBAC v6.0.0: Soporta namespaces Django directamente.
         
         Formatos soportados:
-        - Namespace directo: 'users.view' → {'users.view'}
-        - Legacy con código: 'USR_VIEW: users.view' → {'users.view'}
-        - Lista vacía: [] → set()
+        - Namespace directo: 'users.view' -> {'users.view'}
+        - Legacy con código: 'USR_VIEW: users.view' -> {'users.view'}
+        - Lista vacía: [] -> set()
         
         Args:
             functions: Lista de namespaces o formato legacy

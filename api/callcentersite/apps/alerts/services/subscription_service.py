@@ -35,9 +35,9 @@ class SubscriptionService:
                 # Reactivar suscripción existente
                 subscription.is_active = True
                 subscription.save(update_fields=['is_active'])
-                logger.info(f"Suscripción reactivada: {user.username} → {alert_configuration.name}")
+                logger.info(f"Suscripción reactivada: {user.username} -> {alert_configuration.name}")
             elif created:
-                logger.info(f"Nueva suscripción: {user.username} → {alert_configuration.name}")
+                logger.info(f"Nueva suscripción: {user.username} -> {alert_configuration.name}")
             
             return subscription
             
@@ -66,7 +66,7 @@ class SubscriptionService:
             
             subscription.is_active = False
             subscription.save(update_fields=['is_active'])
-            logger.info(f"Desuscripción: {user.username} → {alert_configuration.name}")
+            logger.info(f"Desuscripción: {user.username} -> {alert_configuration.name}")
             return True
             
         except AlertSubscription.DoesNotExist:

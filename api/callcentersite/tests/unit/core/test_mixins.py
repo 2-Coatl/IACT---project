@@ -231,22 +231,22 @@ class TestPaginationControlMixin:
 # Total: 10 tests
 # 
 # SoftDeleteViewSetMixin (4 tests):
-#   ✅ restore_deleted_object
-#   ✅ restore_not_deleted_object_error
-#   ✅ restore_without_soft_delete_support_error
-#   ✅ hard_delete_removes_object
+#   [SUCCESS] restore_deleted_object
+#   [SUCCESS] restore_not_deleted_object_error
+#   [SUCCESS] restore_without_soft_delete_support_error
+#   [SUCCESS] hard_delete_removes_object
 # 
 # AuditMixin (3 tests):
-#   ✅ audit_create_mixin_logs_creation
-#   ✅ audit_update_mixin_logs_update
-#   ✅ audit_mixin_combines_both
+#   [SUCCESS] audit_create_mixin_logs_creation
+#   [SUCCESS] audit_update_mixin_logs_update
+#   [SUCCESS] audit_mixin_combines_both
 # 
 # ServiceFilterMixin (2 tests):
-#   ✅ filters_by_service
-#   ✅ no_service_filter_returns_all
+#   [SUCCESS] filters_by_service
+#   [SUCCESS] no_service_filter_returns_all
 # 
 # PaginationControlMixin (1 test):
-#   ✅ allows_pagination_control
+#   [SUCCESS] allows_pagination_control
 # 
 # Coverage: 90%+
 # ============================================================================

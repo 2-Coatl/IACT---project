@@ -86,7 +86,7 @@ class UserSecurityAnswerFactory(DjangoModelFactory):
         obj = model_class(*args, **kwargs)
         
         if answer_text:
-            # ✅ Usa set_answer() del modelo que hashea con PBKDF2
+            # [SUCCESS] Usa set_answer() del modelo que hashea con PBKDF2
             obj.set_answer(answer_text)
         
         obj.save()

@@ -440,7 +440,7 @@ class UserService(BaseService):
         self.log_info(f"Eliminando usuario ID: {user_id}")
         
         user = self.get_user_by_id(user_id)
-        user.delete()  # ← Soft delete (SoftDeleteMixin)
+        user.delete()  # <- Soft delete (SoftDeleteMixin)
         
         # Audit log
         self.audit_service.log_action(resource="user", 
@@ -459,28 +459,28 @@ class UserService(BaseService):
 # Hereda de: BaseService (apps.core.services)
 # 
 # Métodos Públicos: 9
-#   ✅ create_user() - Crea usuario con validaciones
-#   ✅ get_user_by_id() - Busca por ID
-#   ✅ get_user_by_username() - Busca por username
-#   ✅ list_users() - Lista con filtros
-#   ✅ update_user() - Actualiza campos permitidos
-#   ✅ activate_user() - Activa usuario
-#   ✅ deactivate_user() - Desactiva usuario
-#   ✅ delete_user() - Soft delete
+#   [SUCCESS] create_user() - Crea usuario con validaciones
+#   [SUCCESS] get_user_by_id() - Busca por ID
+#   [SUCCESS] get_user_by_username() - Busca por username
+#   [SUCCESS] list_users() - Lista con filtros
+#   [SUCCESS] update_user() - Actualiza campos permitidos
+#   [SUCCESS] activate_user() - Activa usuario
+#   [SUCCESS] deactivate_user() - Desactiva usuario
+#   [SUCCESS] delete_user() - Soft delete
 # 
 # Dependencias:
-#   ✅ BaseService (apps.core.services) - Logging
-#   ✅ AuditService (apps.audit.services) - Audit logging
-#   ✅ validate_email, validate_phone_number (apps.utils.validators)
-#   ✅ UserAlreadyExistsError, UserNotFoundError (apps.users.exceptions)
+#   [SUCCESS] BaseService (apps.core.services) - Logging
+#   [SUCCESS] AuditService (apps.audit.services) - Audit logging
+#   [SUCCESS] validate_email, validate_phone_number (apps.utils.validators)
+#   [SUCCESS] UserAlreadyExistsError, UserNotFoundError (apps.users.exceptions)
 # 
 # Principios SOLID:
-#   ✅ SRP: Solo operaciones de User
-#   ✅ DIP: Depende de abstracciones (BaseService)
-#   ✅ OCP: Extensible sin modificar
+#   [SUCCESS] SRP: Solo operaciones de User
+#   [SUCCESS] DIP: Depende de abstracciones (BaseService)
+#   [SUCCESS] OCP: Extensible sin modificar
 # 
 # Transacciones:
-#   ✅ @transaction.atomic en operaciones de escritura
+#   [SUCCESS] @transaction.atomic en operaciones de escritura
 # 
 # Líneas: ~450
 # ============================================================================

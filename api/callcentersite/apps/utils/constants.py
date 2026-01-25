@@ -302,8 +302,8 @@ SUCCESS_MSG_EXPORT_STARTED = 'Export iniciado. Recibirá notificación al comple
 #   - Scheduler (6 configs)
 #   - Mensajes (9)
 # 
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
-# CNST-007: MAX_EXPORT_ROWS ✅
-# CNST-010: SESSION_CLEANUP_DAYS ✅
-# CNST-013: Scheduler configs ✅
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
+# CNST-007: MAX_EXPORT_ROWS [SUCCESS]
+# CNST-010: SESSION_CLEANUP_DAYS [SUCCESS]
+# CNST-013: Scheduler configs [SUCCESS]
 # ============================================================================

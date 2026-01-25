@@ -35,10 +35,10 @@ def test_create_user_with_profile_and_settings():
     assert user.settings.language == 'es'
     assert user.settings.theme == 'light'
     
-    print("\n✅ Usuario creado correctamente")
-    print(f"✅ ID: {user.id}")
-    print(f"✅ Username: {user.username}")
-    print(f"✅ Full name: {user.full_name}")
-    print(f"✅ Profile ID: {user.profile.id}")
-    print(f"✅ Settings ID: {user.settings.id}")
-    print("\n🎉 FASE 1 COMPLETADA!")
+    print("\n[SUCCESS] Usuario creado correctamente")
+    print(f"[SUCCESS] ID: {user.id}")
+    print(f"[SUCCESS] Username: {user.username}")
+    print(f"[SUCCESS] Full name: {user.full_name}")
+    print(f"[SUCCESS] Profile ID: {user.profile.id}")
+    print(f"[SUCCESS] Settings ID: {user.settings.id}")
+    print("\n[DONE] FASE 1 COMPLETADA!")

@@ -329,24 +329,24 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 # Total: 5 serializers
 #
 # Serializers:
-#   ✅ UserSerializer - Básico para uso general
-#   ✅ UserListSerializer - Lightweight para listados
-#   ✅ UserDetailSerializer - Completo con relaciones
-#   ✅ UserCreateSerializer - Crear con validación password
-#   ✅ UserUpdateSerializer - Actualizar campos editables
+#   [SUCCESS] UserSerializer - Básico para uso general
+#   [SUCCESS] UserListSerializer - Lightweight para listados
+#   [SUCCESS] UserDetailSerializer - Completo con relaciones
+#   [SUCCESS] UserCreateSerializer - Crear con validación password
+#   [SUCCESS] UserUpdateSerializer - Actualizar campos editables
 #
 # Responsabilidades:
-#   ✅ Validación de datos
-#   ✅ Serialización/Deserialización
-#   ✅ Delegación a services
+#   [SUCCESS] Validación de datos
+#   [SUCCESS] Serialización/Deserialización
+#   [SUCCESS] Delegación a services
 #
 # NO incluye:
-#   ❌ Gestión de RBAC (apps/access)
-#   ❌ Cambio de password (auth_serializer.py)
-#   ❌ Gestión de avatar (profile_serializer.py)
+#   [ERROR] Gestión de RBAC (apps/access)
+#   [ERROR] Cambio de password (auth_serializer.py)
+#   [ERROR] Gestión de avatar (profile_serializer.py)
 #
 # Principios:
-#   ✅ SRP: Cada serializer un propósito
-#   ✅ DRY: Delegar a services
-#   ✅ Clean Code: Nombres auto-documentados
+#   [SUCCESS] SRP: Cada serializer un propósito
+#   [SUCCESS] DRY: Delegar a services
+#   [SUCCESS] Clean Code: Nombres auto-documentados
 # ============================================================================

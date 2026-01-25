@@ -198,7 +198,7 @@ class AuditTrailFactory:
     @staticmethod
     def create_trail(user, model_name, object_id):
         """
-        Crea trail completo: CREATE → UPDATE → DELETE.
+        Crea trail completo: CREATE -> UPDATE -> DELETE.
         
         Args:
             user: Usuario que ejecuta acciones
@@ -296,6 +296,6 @@ class SessionHistoryFactory:
 #   - AuditTrailFactory (static methods)
 #   - SessionHistoryFactory (static methods)
 # 
-# CNST-031: Auditoría completa ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-031: Auditoría completa [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

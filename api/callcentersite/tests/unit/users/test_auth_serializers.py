@@ -198,20 +198,20 @@ class TestPasswordResetSerializer:
 # Total Tests: 11
 # 
 # LoginSerializer: 3 tests
-#   ✅ Login exitoso
-#   ✅ Credenciales incorrectas
-#   ✅ Usuario inactivo
+#   [SUCCESS] Login exitoso
+#   [SUCCESS] Credenciales incorrectas
+#   [SUCCESS] Usuario inactivo
 # 
 # ChangePasswordSerializer: 4 tests
-#   ✅ Cambio exitoso
-#   ✅ old_password incorrecto
-#   ✅ new == old
-#   ✅ new_password muy corto
+#   [SUCCESS] Cambio exitoso
+#   [SUCCESS] old_password incorrecto
+#   [SUCCESS] new == old
+#   [SUCCESS] new_password muy corto
 # 
 # PasswordResetSerializer: 4 tests
-#   ✅ Request exitoso
-#   ✅ Email inexistente (no revela)
-#   ✅ Token inválido
+#   [SUCCESS] Request exitoso
+#   [SUCCESS] Email inexistente (no revela)
+#   [SUCCESS] Token inválido
 # 
 # Coverage: ~85% de auth_serializers.py
 # ============================================================================

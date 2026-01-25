@@ -19,19 +19,19 @@ class HealthCheckMiddleware(MiddlewareMixin):
     
     Endpoint:
         GET /health/
-        → 200 OK {"status": "healthy"}
+        -> 200 OK {"status": "healthy"}
     
     Instalación:
         # settings.py
         MIDDLEWARE = [
-            'apps.core.middleware.healthcheck.HealthCheckMiddleware',  # ← Primero
+            'apps.core.middleware.healthcheck.HealthCheckMiddleware',  # <- Primero
             ...
         ]
     
     Uso:
         # Load balancer health check:
         curl http://localhost:8000/health/
-        → {"status": "healthy"}
+        -> {"status": "healthy"}
         
         # Monitoring:
         if response.status_code == 200:
@@ -76,13 +76,13 @@ class HealthCheckMiddleware(MiddlewareMixin):
 # 
 # Endpoint:
 #   GET /health/
-#   → 200 OK {"status": "healthy", "service": "IACT Call Center"}
+#   -> 200 OK {"status": "healthy", "service": "IACT Call Center"}
 # 
 # Características:
-#   ✅ No requiere autenticación
-#   ✅ Response inmediata (no pasa por otros middlewares)
-#   ✅ Ideal para load balancers
-#   ✅ Ideal para monitoring (Prometheus, Datadog, etc)
+#   [SUCCESS] No requiere autenticación
+#   [SUCCESS] Response inmediata (no pasa por otros middlewares)
+#   [SUCCESS] Ideal para load balancers
+#   [SUCCESS] Ideal para monitoring (Prometheus, Datadog, etc)
 # 
 # Instalación: Agregar PRIMERO en MIDDLEWARE (settings)
 # ============================================================================

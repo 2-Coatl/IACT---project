@@ -11,7 +11,7 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth import get_user_model
 
 from apps.users.models import UserProfile, UserSettings, SessionHistory
-from apps.utils.helpers import get_client_ip  # ← USAR apps/utils/
+from apps.utils.helpers import get_client_ip  # <- USAR apps/utils/
 
 User = get_user_model()
 
@@ -49,7 +49,7 @@ def log_user_login(sender, request, user, **kwargs):
     CNST-039: Session auditing.
     USAR: apps.utils.helpers.get_client_ip()
     """
-    ip_address = get_client_ip(request)  # ← USAR helper de apps/utils/
+    ip_address = get_client_ip(request)  # <- USAR helper de apps/utils/
     user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
     
     SessionHistory.objects.create(

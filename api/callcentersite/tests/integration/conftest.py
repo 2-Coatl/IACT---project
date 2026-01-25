@@ -168,15 +168,15 @@ def permitted_client(api_client, user_with_permissions):
 # Total Fixtures: 7
 # 
 # Clients:
-#   ✅ api_client - Cliente base sin autenticación
-#   ✅ authenticated_client - Cliente con usuario regular
-#   ✅ admin_client - Cliente con usuario admin
-#   ✅ permitted_client - Cliente con permisos RBAC
+#   [SUCCESS] api_client - Cliente base sin autenticación
+#   [SUCCESS] authenticated_client - Cliente con usuario regular
+#   [SUCCESS] admin_client - Cliente con usuario admin
+#   [SUCCESS] permitted_client - Cliente con permisos RBAC
 # 
 # Users:
-#   ✅ admin_user - is_superuser=True
-#   ✅ regular_user - Usuario básico
-#   ✅ user_with_permissions - Con funciones USR_VIEW, USR_CREATE, USR_EDIT
+#   [SUCCESS] admin_user - is_superuser=True
+#   [SUCCESS] regular_user - Usuario básico
+#   [SUCCESS] user_with_permissions - Con funciones USR_VIEW, USR_CREATE, USR_EDIT
 # 
 # Uso:
 #   def test_something(admin_client):

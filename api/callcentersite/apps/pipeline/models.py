@@ -167,7 +167,7 @@ class Center(SoftDeleteMixin, models.Model):
     )
     
     class Meta:
-        db_table = 'core_centers'  # ✅ PRESERVADO - no cambiar
+        db_table = 'core_centers'  # [SUCCESS] PRESERVADO - no cambiar
         ordering = ['nombre']
         verbose_name = 'Centro'
         verbose_name_plural = 'Centros'
@@ -246,7 +246,7 @@ class Service(SoftDeleteMixin, models.Model):
     )
     
     center = models.ForeignKey(
-        'Center',  # ✅ Ahora en la misma app
+        'Center',  # [SUCCESS] Ahora en la misma app
         on_delete=models.PROTECT,
         related_name='services',
         help_text='Centro al que pertenece el servicio'
@@ -270,7 +270,7 @@ class Service(SoftDeleteMixin, models.Model):
     )
     
     class Meta:
-        db_table = 'core_services'  # ✅ PRESERVADO - no cambiar
+        db_table = 'core_services'  # [SUCCESS] PRESERVADO - no cambiar
         ordering = ['numero_800']
         verbose_name = 'Servicio'
         verbose_name_plural = 'Servicios'
@@ -419,7 +419,7 @@ class CallRecord(SoftDeleteMixin, models.Model):
     )
     
     class Meta:
-        db_table = 'core_call_records'  # ✅ PRESERVADO - no cambiar
+        db_table = 'core_call_records'  # [SUCCESS] PRESERVADO - no cambiar
         ordering = ['-fecha', '-created_at']
         unique_together = [['fecha', 'telefono', 'servicio_800']]
         indexes = [

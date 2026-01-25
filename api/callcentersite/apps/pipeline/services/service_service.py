@@ -30,15 +30,15 @@ class ServiceService:
     
     LIMPIEZA DEUDA TÉCNICA (2026-01-22):
     Métodos ELIMINADOS (UserServiceAccess deprecated):
-        ❌ grant_access
-        ❌ revoke_access
-        ❌ bulk_grant_access
-        ❌ get_service_users
-        ❌ get_user_services
-        ❌ _invalidate_user_caches
+        [ERROR] grant_access
+        [ERROR] revoke_access
+        [ERROR] bulk_grant_access
+        [ERROR] get_service_users
+        [ERROR] get_user_services
+        [ERROR] _invalidate_user_caches
     
     Control de acceso ahora: RBAC puro (Function/UserFunctionAssignment)
-    Usuario con permiso → ve TODOS los servicios
+    Usuario con permiso -> ve TODOS los servicios
     """
     
     @staticmethod
@@ -243,18 +243,18 @@ class ServiceService:
 #   - transfer_service_to_center(service, new_center)
 # 
 # ELIMINADO (UserServiceAccess deprecated):
-#   ❌ grant_access - Control ahora por RBAC
-#   ❌ revoke_access - Control ahora por RBAC
-#   ❌ bulk_grant_access - Control ahora por RBAC
-#   ❌ get_service_users - Sin segmentación por servicio
-#   ❌ get_user_services - Sin segmentación por servicio
-#   ❌ _invalidate_user_caches - Sin cache de accesos
+#   [ERROR] grant_access - Control ahora por RBAC
+#   [ERROR] revoke_access - Control ahora por RBAC
+#   [ERROR] bulk_grant_access - Control ahora por RBAC
+#   [ERROR] get_service_users - Sin segmentación por servicio
+#   [ERROR] get_user_services - Sin segmentación por servicio
+#   [ERROR] _invalidate_user_caches - Sin cache de accesos
 # 
 # Características:
-#   ✅ @transaction.atomic donde corresponde
-#   ✅ Validaciones de negocio complejas
-#   ✅ Type hints
-#   ✅ Docstrings completos
-#   ✅ CLEAN_CODE v3.0.1
-#   ✅ Sin dependencias deprecated
+#   [SUCCESS] @transaction.atomic donde corresponde
+#   [SUCCESS] Validaciones de negocio complejas
+#   [SUCCESS] Type hints
+#   [SUCCESS] Docstrings completos
+#   [SUCCESS] CLEAN_CODE v3.0.1
+#   [SUCCESS] Sin dependencias deprecated
 # ============================================================================

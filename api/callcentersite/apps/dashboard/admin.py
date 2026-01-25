@@ -329,10 +329,10 @@ class WidgetConfigAdmin(admin.ModelAdmin):
         """Badge para is_visible."""
         if obj.is_visible:
             return format_html(
-                '<span style="color: #28a745;">✓ Visible</span>'
+                '<span style="color: #28a745;">[OK] Visible</span>'
             )
         return format_html(
-            '<span style="color: #dc3545;">✗ Oculto</span>'
+            '<span style="color: #dc3545;">[FAIL] Oculto</span>'
         )
     is_visible_badge.short_description = 'Visible'
 
@@ -558,10 +558,10 @@ class UserDashboardPreferenceAdmin(admin.ModelAdmin):
         """Badge para refresh_enabled."""
         if obj.refresh_enabled:
             return format_html(
-                '<span style="color: #28a745;">✓ Activado</span>'
+                '<span style="color: #28a745;">[OK] Activado</span>'
             )
         return format_html(
-            '<span style="color: #dc3545;">✗ Desactivado</span>'
+            '<span style="color: #dc3545;">[FAIL] Desactivado</span>'
         )
     refresh_enabled_badge.short_description = 'Auto-refresh'
     
@@ -569,9 +569,9 @@ class UserDashboardPreferenceAdmin(admin.ModelAdmin):
         """Badge para show_notifications."""
         if obj.show_notifications:
             return format_html(
-                '<span style="color: #28a745;">✓ Mostrar</span>'
+                '<span style="color: #28a745;">[OK] Mostrar</span>'
             )
         return format_html(
-            '<span style="color: #dc3545;">✗ Ocultar</span>'
+            '<span style="color: #dc3545;">[FAIL] Ocultar</span>'
         )
     show_notifications_badge.short_description = 'Notificaciones'

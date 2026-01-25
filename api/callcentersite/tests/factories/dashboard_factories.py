@@ -378,5 +378,5 @@ class UserWithDashboardFactory(UserFactory):
 # NOTA: Todas las factories están marcadas como abstract=True temporalmente.
 # Cambiar a model=X cuando se implementen los modelos en apps/dashboard/.
 # 
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

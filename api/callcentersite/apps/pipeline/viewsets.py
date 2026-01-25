@@ -634,17 +634,17 @@ class CallNoteViewSet(viewsets.ModelViewSet):
 #   - CenterViewSet (ModelViewSet)
 #   - ServiceViewSet (ModelViewSet)
 #   - CallRecordViewSet (ModelViewSet)
-#   - CallNoteViewSet (ModelViewSet) ← FASE 0.2
+#   - CallNoteViewSet (ModelViewSet) <- FASE 0.2
 # 
 # ELIMINADO en limpieza deuda técnica:
-#   ❌ UserServiceAccessViewSet - DEPRECADO
-#   ❌ ServiceViewSet.grant_access - DEPRECADO
-#   ❌ ServiceViewSet.bulk_grant_access - DEPRECADO  
-#   ❌ ServiceViewSet.revoke_access - DEPRECADO
-#   ❌ ServiceViewSet.users - DEPRECADO
+#   [ERROR] UserServiceAccessViewSet - DEPRECADO
+#   [ERROR] ServiceViewSet.grant_access - DEPRECADO
+#   [ERROR] ServiceViewSet.bulk_grant_access - DEPRECADO  
+#   [ERROR] ServiceViewSet.revoke_access - DEPRECADO
+#   [ERROR] ServiceViewSet.users - DEPRECADO
 # 
 # Control de acceso:
-#   ✅ RBAC puro (Function/UserFunctionAssignment)
-#   ✅ Sin segmentación por servicio específico
-#   ✅ Usuario con permiso → ve TODOS los servicios
+#   [SUCCESS] RBAC puro (Function/UserFunctionAssignment)
+#   [SUCCESS] Sin segmentación por servicio específico
+#   [SUCCESS] Usuario con permiso -> ve TODOS los servicios
 # ============================================================================

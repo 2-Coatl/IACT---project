@@ -62,7 +62,7 @@ class PermissionDeniedError(IACTBaseException):
     Se lanza cuando usuario no tiene permisos suficientes.
     
     Usage:
-        # ✅ CORRECTO - RBAC v6.0.0
+        # [SUCCESS] CORRECTO - RBAC v6.0.0
         if not user.has_function('reports.delete'):
             raise PermissionDeniedError(
                 "No tiene permiso para eliminar reportes"
@@ -70,7 +70,7 @@ class PermissionDeniedError(IACTBaseException):
     
     Architecture Note:
         Uses user.has_function() (User model method) instead of
-        AccessService to avoid creating dependency core → access.
+        AccessService to avoid creating dependency core -> access.
         This respects the Dependency Inversion Principle (DIP).
     """
     pass
@@ -118,15 +118,15 @@ class ETLError(IACTBaseException):
 # Total: 6 excepciones
 # 
 # Excepciones:
-#   ✅ IACTBaseException (base)
-#   ✅ ValidationError (validación)
-#   ✅ BusinessRuleError (reglas negocio)
-#   ✅ PermissionDeniedError (permisos)
-#   ✅ ResourceNotFoundError (404)
-#   ✅ ETLError (proceso ETL)
+#   [SUCCESS] IACTBaseException (base)
+#   [SUCCESS] ValidationError (validación)
+#   [SUCCESS] BusinessRuleError (reglas negocio)
+#   [SUCCESS] PermissionDeniedError (permisos)
+#   [SUCCESS] ResourceNotFoundError (404)
+#   [SUCCESS] ETLError (proceso ETL)
 # 
 # CLEAN_CODE v3.0.1:
-#   ✅ Nombres auto-documentados
-#   ✅ Docstrings Google Style
-#   ✅ Ejemplos de uso
+#   [SUCCESS] Nombres auto-documentados
+#   [SUCCESS] Docstrings Google Style
+#   [SUCCESS] Ejemplos de uso
 # ============================================================================

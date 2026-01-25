@@ -54,7 +54,7 @@ class TestRequiresFunctionPermission:
     """
     
     def test_unauthenticated_user_denied(self):
-        """Test: Usuario no autenticado → 403."""
+        """Test: Usuario no autenticado -> 403."""
         permission = RequiresFunctionPermission()
         factory = APIRequestFactory()
         request = factory.get('/')
@@ -83,7 +83,7 @@ class TestRequiresFunctionPermission:
         assert result is True
     
     def test_user_with_permission_granted(self):
-        """Test: Usuario con permission → 200."""
+        """Test: Usuario con permission -> 200."""
         permission = RequiresFunctionPermission()
         factory = APIRequestFactory()
         request = factory.get('/')
@@ -102,7 +102,7 @@ class TestRequiresFunctionPermission:
         assert result is True
     
     def test_user_without_permission_denied(self):
-        """Test: Usuario sin permission → 403."""
+        """Test: Usuario sin permission -> 403."""
         permission = RequiresFunctionPermission()
         factory = APIRequestFactory()
         request = factory.get('/')
@@ -121,7 +121,7 @@ class TestRequiresFunctionPermission:
         assert result is False
     
     def test_action_not_in_function_map_denied(self):
-        """Test: Action no en function_map → 403."""
+        """Test: Action no en function_map -> 403."""
         permission = RequiresFunctionPermission()
         factory = APIRequestFactory()
         request = factory.get('/')
@@ -138,7 +138,7 @@ class TestRequiresFunctionPermission:
         assert result is False
     
     def test_no_function_map_denied(self):
-        """Test: Sin function_map → 403."""
+        """Test: Sin function_map -> 403."""
         permission = RequiresFunctionPermission()
         factory = APIRequestFactory()
         request = factory.get('/')
@@ -273,7 +273,7 @@ class TestIsOwnerOrReadOnly:
         assert result is False
     
     def test_no_created_by_field_denied(self):
-        """Test: Sin created_by → 403."""
+        """Test: Sin created_by -> 403."""
         permission = IsOwnerOrReadOnly()
         factory = APIRequestFactory()
         request = factory.put('/')
@@ -517,41 +517,41 @@ class TestAllowOptionsAuthentication:
 # Total: 25 tests
 # 
 # RequiresFunctionPermission (8 tests) - CRÍTICO:
-#   ✅ unauthenticated_user_denied
-#   ✅ superuser_always_granted
-#   ✅ user_with_permission_granted
-#   ✅ user_without_permission_denied
-#   ✅ action_not_in_function_map_denied
-#   ✅ no_function_map_denied
-#   ✅ has_function_called_with_correct_function_id
-#   ✅ integration_with_viewset
+#   [SUCCESS] unauthenticated_user_denied
+#   [SUCCESS] superuser_always_granted
+#   [SUCCESS] user_with_permission_granted
+#   [SUCCESS] user_without_permission_denied
+#   [SUCCESS] action_not_in_function_map_denied
+#   [SUCCESS] no_function_map_denied
+#   [SUCCESS] has_function_called_with_correct_function_id
+#   [SUCCESS] integration_with_viewset
 # 
 # IsOwnerOrReadOnly (4 tests):
-#   ✅ owner_can_edit
-#   ✅ non_owner_read_only
-#   ✅ non_owner_cannot_edit
-#   ✅ no_created_by_field_denied
+#   [SUCCESS] owner_can_edit
+#   [SUCCESS] non_owner_read_only
+#   [SUCCESS] non_owner_cannot_edit
+#   [SUCCESS] no_created_by_field_denied
 # 
 # IsSuperUserOrReadOnly (3 tests):
-#   ✅ superuser_can_edit
-#   ✅ normal_user_read_only
-#   ✅ normal_user_cannot_edit
+#   [SUCCESS] superuser_can_edit
+#   [SUCCESS] normal_user_read_only
+#   [SUCCESS] normal_user_cannot_edit
 # 
 # IsStaffOrReadOnly (3 tests):
-#   ✅ staff_can_edit
-#   ✅ superuser_can_edit
-#   ✅ normal_user_cannot_edit
+#   [SUCCESS] staff_can_edit
+#   [SUCCESS] superuser_can_edit
+#   [SUCCESS] normal_user_cannot_edit
 # 
 # HasServiceAccess (5 tests):
-#   ✅ superuser_always_has_access
-#   ✅ list_action_safe_method_allowed
-#   ✅ get_service_from_object_servicio_800
-#   ✅ get_service_from_object_numero_800
-#   ✅ get_service_from_object_service_relation
+#   [SUCCESS] superuser_always_has_access
+#   [SUCCESS] list_action_safe_method_allowed
+#   [SUCCESS] get_service_from_object_servicio_800
+#   [SUCCESS] get_service_from_object_numero_800
+#   [SUCCESS] get_service_from_object_service_relation
 # 
 # AllowOptionsAuthentication (2 tests):
-#   ✅ options_allowed_without_auth
-#   ✅ other_methods_delegate_to_next_permission
+#   [SUCCESS] options_allowed_without_auth
+#   [SUCCESS] other_methods_delegate_to_next_permission
 # 
 # Coverage: 95%+
 # CRÍTICO: RequiresFunctionPermission 100% testeado

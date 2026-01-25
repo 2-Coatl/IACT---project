@@ -522,6 +522,6 @@ def mock_all_scheduled_jobs(mocker, mock_apscheduler):
 #   - mock_scheduler_config
 #   - mock_all_scheduled_jobs
 # 
-# CNST-013: APScheduler (NO Celery) ✅
-# CLEAN_CODE v3.0.1: Nombres auto-documentados ✅
+# CNST-013: APScheduler (NO Celery) [SUCCESS]
+# CLEAN_CODE v3.0.1: Nombres auto-documentados [SUCCESS]
 # ============================================================================

@@ -34,8 +34,8 @@ def validate_username(value: str) -> None:
         ValidationError: Si username inválido
         
     Example:
-        validate_username('john_doe')  # ✅ OK
-        validate_username('123user')   # ❌ ValidationError
+        validate_username('john_doe')  # [SUCCESS] OK
+        validate_username('123user')   # [ERROR] ValidationError
     """
     if not value:
         raise ValidationError('Username es requerido')
@@ -111,8 +111,8 @@ def validate_password_strength(password: str) -> None:
         ValidationError: Si contraseña débil
         
     Example:
-        validate_password_strength('SecurePass123!')  # ✅ OK
-        validate_password_strength('weak')            # ❌ ValidationError
+        validate_password_strength('SecurePass123!')  # [SUCCESS] OK
+        validate_password_strength('weak')            # [ERROR] ValidationError
     """
     if not password:
         raise ValidationError('Contraseña es requerida')
@@ -141,12 +141,12 @@ def validate_password_strength(password: str) -> None:
 # Total: 3 validators específicos de users
 # 
 # Validators:
-#   ✅ validate_username() - Username alfanumérico
-#   ✅ validate_avatar_file() - Imágenes (jpg, png, gif, max 2MB)
-#   ✅ validate_password_strength() - Password fuerte
+#   [SUCCESS] validate_username() - Username alfanumérico
+#   [SUCCESS] validate_avatar_file() - Imágenes (jpg, png, gif, max 2MB)
+#   [SUCCESS] validate_password_strength() - Password fuerte
 # 
 # ELIMINADO en FASE 2 PARTE 2:
-#   ❌ validate_employee_id() - Campo removido del modelo User
+#   [ERROR] validate_employee_id() - Campo removido del modelo User
 # 
 # NOTA - Validators en otros módulos:
 #   📦 apps/utils/validators.py:
@@ -165,8 +165,8 @@ def validate_password_strength(password: str) -> None:
 #      - PositiveIntegerValidator (clase) - Enteros positivos
 # 
 # Principios aplicados:
-#   ✅ DRY: No duplicar código de core/utils
-#   ✅ SRP: Cada validator una responsabilidad
-#   ✅ CNST-014: Validaciones estrictas
-#   ✅ FASE 2 PARTE 2: Arquitectura limpia
+#   [SUCCESS] DRY: No duplicar código de core/utils
+#   [SUCCESS] SRP: Cada validator una responsabilidad
+#   [SUCCESS] CNST-014: Validaciones estrictas
+#   [SUCCESS] FASE 2 PARTE 2: Arquitectura limpia
 # ============================================================================
