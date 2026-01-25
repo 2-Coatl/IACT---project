@@ -70,13 +70,27 @@ case $option in
         
         if [ "$confirm" = "yes" ]; then
             write_info "Step 1/4: Deleting migrations..."
-            find apps -path "*/migrations/*.py" ! -name "__init__.py" -delete
+
+            # List files before deleting
+            migration_files=$(find apps -path "*/migrations/*.py" ! -name "__init__.py" 2>/dev/null)
+            if [ -n "$migration_files" ]; then
+                echo "$migration_files" | while read file; do
+                    echo -e "  ${BLUE}Deleting:${NC} $file"
+                done
+            fi
+
+            find apps -path "*/migrations/*.py" ! -name "__init__.py" -delete 2>/dev/null
             write_success "Migrations deleted"
-            
+
             write_info "Step 2/4: Deleting database..."
-            rm -f db.sqlite3
+            if [ -f "db.sqlite3" ]; then
+                size=$(ls -lh db.sqlite3 | awk '{print $5}')
+                echo -e "  ${BLUE}Deleting:${NC} $(pwd)/db.sqlite3"
+                echo -e "  ${BLUE}Size:${NC} $size"
+                rm -f db.sqlite3
+            fi
             write_success "Database deleted"
-            
+
             write_info "Step 3/4: Creating new migrations..."
             python manage.py makemigrations
             if [ $? -eq 0 ]; then
@@ -85,7 +99,7 @@ case $option in
                 write_error "Failed to create migrations"
                 exit 1
             fi
-            
+
             write_info "Step 4/4: Applying migrations..."
             python manage.py migrate
             if [ $? -eq 0 ]; then
@@ -94,7 +108,7 @@ case $option in
                 write_error "Failed to apply migrations"
                 exit 1
             fi
-            
+
             write_info "Verifying setup..."
             python manage.py check
             if [ $? -eq 0 ]; then
@@ -104,14 +118,14 @@ case $option in
             write_warning "Cancelled"
         fi
         ;;
-    
+
     2)
         write_header "MAKE MIGRATIONS"
         write_info "Creating migration files..."
         echo ""
-        
+
         python manage.py makemigrations
-        
+
         if [ $? -eq 0 ]; then
             write_success "Migrations created successfully"
         else
@@ -119,14 +133,14 @@ case $option in
             exit 1
         fi
         ;;
-    
+
     3)
         write_header "MIGRATE"
         write_info "Applying migrations to database..."
         echo ""
-        
+
         python manage.py migrate
-        
+
         if [ $? -eq 0 ]; then
             write_success "Migrations applied successfully"
         else
@@ -134,14 +148,14 @@ case $option in
             exit 1
         fi
         ;;
-    
+
     4)
         write_header "CHECK DJANGO SETUP"
         write_info "Verifying Django configuration..."
         echo ""
-        
+
         python manage.py check
-        
+
         if [ $? -eq 0 ]; then
             write_success "Django setup is correct"
         else
@@ -149,38 +163,61 @@ case $option in
             exit 1
         fi
         ;;
-    
+
     5)
         write_header "DELETE MIGRATIONS"
         write_warning "This will DELETE all migration files!"
         read -p "Type 'yes' to confirm: " confirm
-        
+
         if [ "$confirm" = "yes" ]; then
             write_info "Deleting migrations..."
+
+            # List files before deleting
+            migration_files=$(find apps -path "*/migrations/*.py" ! -name "__init__.py" 2>/dev/null)
+            if [ -n "$migration_files" ]; then
+                count=$(echo "$migration_files" | wc -l)
+                echo -e "  ${BLUE}Found $count migration file(s):${NC}"
+                echo "$migration_files" | while read file; do
+                    echo -e "    ${BLUE}-${NC} $file"
+                done
+            else
+                write_info "No migration files found to delete"
+                return
+            fi
+
             find apps -path "*/migrations/*.py" ! -name "__init__.py" -delete
             write_success "Migrations deleted"
         else
             write_warning "Cancelled"
         fi
         ;;
-    
+
     6)
         write_header "DELETE DATABASE"
         write_warning "This will DELETE the database file!"
         read -p "Type 'yes' to confirm: " confirm
-        
+
         if [ "$confirm" = "yes" ]; then
             write_info "Deleting database..."
-            rm -f db.sqlite3
-            write_success "Database deleted"
+
+            if [ -f "db.sqlite3" ]; then
+                size=$(ls -lh db.sqlite3 | awk '{print $5}')
+                path=$(pwd)/db.sqlite3
+                echo -e "  ${BLUE}Deleting:${NC} $path"
+                echo -e "  ${BLUE}Size:${NC} $size"
+                rm -f db.sqlite3
+                write_success "Database deleted"
+            else
+                write_info "Database file not found (already deleted or doesn't exist)"
+            fi
         else
             write_warning "Cancelled"
         fi
         ;;
-    
+
     7)
         write_header "MAKE MIGRATIONS + MIGRATE"
-        
+
         write_info "Step 1/2: Creating migration files..."
         python manage.py makemigrations
         if [ $? -eq 0 ]; then
@@ -189,7 +226,7 @@ case $option in
             write_error "Failed to create migrations"
             exit 1
         fi
-        
+
         echo ""
         write_info "Step 2/2: Applying migrations..."
         python manage.py migrate
@@ -200,23 +237,23 @@ case $option in
             exit 1
         fi
         ;;
-    
+
     8)
         write_header "VERIFY SETUP"
-        
+
         write_info "Checking Django configuration..."
         python manage.py check
         echo ""
-        
+
         write_info "Showing migrations status..."
         python manage.py showmigrations
         ;;
-    
+
     9)
         write_info "Exiting..."
         exit 0
         ;;
-    
+
     *)
         write_error "Invalid option"
         exit 1

@@ -224,54 +224,44 @@ class MenuBuilder:
         
         logger.info(f"Filtrados {len(filtered)} menus de {len(menus)} totales")
         return filtered
-    
+
     def _extract_function_names(self, functions: List[str]) -> Set[str]:
         """
         Extrae nombres de funciones (namespaces).
-        
+
         RBAC v6.0.0: Soporta namespaces Django directamente.
-        
+
         Formatos soportados:
         - Namespace directo: 'users.view' → {'users.view'}
         - Legacy con código: 'USR_VIEW: users.view' → {'users.view'}
         - Lista vacía: [] → set()
-        
+
         Args:
             functions: Lista de namespaces o formato legacy
-        
+
         Returns:
             Set de namespaces (e.g., {'users.view', 'calls.view'})
-        
+
         Examples:
             >>> _extract_function_names(['users.view', 'calls.view'])
             {'users.view', 'calls.view'}
-            
+
             >>> _extract_function_names(['USR_VIEW: users.view'])
             {'users.view'}
         """
         names = set()
-        
+
         for func in functions:
             if ':' in func:
                 # Formato legacy: 'USR_VIEW: users.view'
-                parts = func.split(':', 1)
-                if len(parts) == 2:
-                    namespace = parts[1].strip()
-                    names.add(namespace)
+                namespace = func.split(':', 1)[1].strip()
             else:
-                # Formato v6.0.0: 'users.view'
-                names.add(func.strip())
-        
-        return names
-                # Formato: 'RPT-001: view_reports'
-                name = func.split(':')[1].strip()
-            else:
-                # Formato directo: 'view_reports'
-                name = func.strip()
-            
-            if name and name != '(lectura)' and name != '(sistema)' and name != '(admin)':
-                names.add(name)
-        
+                # Formato directo: 'users.view'
+                namespace = func.strip()
+
+            if namespace:
+                names.add(namespace)
+
         return names
     
     def _validate_icons(self, menus: List[Dict]) -> List[Dict]:
