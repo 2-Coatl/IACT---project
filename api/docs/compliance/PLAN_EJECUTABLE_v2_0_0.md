@@ -729,7 +729,7 @@ Ver implementación completa en documentos de análisis ANALISIS_APP_ALERTS_v3_0
 ## 🧹 FASE 4: Limpiar apps/users/ (2 horas)
 
 ```python
-# 1. Eliminar de apps/users/viewsets.py
+# 1. Eliminar de apps/users/views.py
 # ❌ Eliminar class AuthViewSet completa (líneas 240-430)
 
 # 2. Eliminar de apps/users/serializers/auth_serializers.py

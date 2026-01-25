@@ -233,7 +233,7 @@ Código Refactorizado (10):
   - apps/core/models.py (614→220 líneas)
   - apps/core/filters.py
   - apps/core/serializers.py
-  - apps/core/viewsets.py
+  - apps/core/views.py
   - apps/core/permissions.py
   - apps/core/services/callrecord_service.py
   - apps/core/services/center_service.py

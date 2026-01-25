@@ -175,7 +175,7 @@ Refactorizar, testear y documentar la infraestructura base (apps/core y apps/uti
 1.4. Actualizar imports en todo el proyecto:
    - Buscar "from apps.core.services import"
    - Actualizar a "from apps.pipeline.services import"
-   - Verificar apps/pipeline/viewsets.py
+   - Verificar apps/pipeline/views.py
    - Verificar apps/reports/ (si usa estos services)
    Tiempo: 45 min
 

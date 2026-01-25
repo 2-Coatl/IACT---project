@@ -171,7 +171,7 @@ Decisión: ELIMINAR completamente ✅
 ```yaml
 ✅ Tarea 1: Identificar usos de UserServiceAccess (30 min)
   ✅ apps/access/models.py
-  ✅ apps/pipeline/viewsets.py
+  ✅ apps/pipeline/views.py
   ✅ apps/pipeline/permissions.py
   ✅ apps/core/permissions.py (HasServiceAccess)
   ✅ 9 archivos afectados identificados
@@ -187,7 +187,7 @@ Decisión: ELIMINAR completamente ✅
   ✅ CanGrantAccess y CanRevokeAccess eliminados
 
 ✅ Tarea 4: Actualizar viewsets/permissions (1h)
-  ✅ apps/pipeline/viewsets.py actualizado
+  ✅ apps/pipeline/views.py actualizado
   ✅ CallRecordViewSet con RequiresFunctionPermission
   ✅ function_map completo (9 actions)
   ✅ Solo RBAC puro
@@ -419,7 +419,7 @@ Permissions:
   - apps/core/permissions.py (HasServiceAccess permission)
 
 ViewSets:
-  - apps/pipeline/viewsets.py (usa UserServiceAccess)
+  - apps/pipeline/views.py (usa UserServiceAccess)
 
 Services:
   - apps/pipeline/services/service_service.py (refs a UserServiceAccess)

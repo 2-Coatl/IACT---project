@@ -45,7 +45,7 @@ Código Actual:
     ❌ serializers.py (20 serializers)
     ❌ filters.py (4 filters)
     ❌ permissions.py (6 custom permissions)
-    ❌ viewsets.py (pausado, no completado)
+    ❌ views.py (pausado, no completado)
   
   apps/ivr_legacy/:
     ⚠️  Nombre incorrecto (debe ser apps/ivr/)
@@ -87,7 +87,7 @@ apps/pipeline/:
   ✅ serializers.py (movido, filtrado)
   ✅ filters.py (movido, filtrado)
   ✅ permissions.py (movido, filtrado)
-  ✅ viewsets.py (completado)
+  ✅ views.py (completado)
 
 apps/access/models.py:
   ✅ UserServiceAccess (movido, db_table='core_user_service_access')

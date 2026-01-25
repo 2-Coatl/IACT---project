@@ -358,7 +358,7 @@ Modificado: 11 archivos
   - apps/core/mixins.py
   - apps/core/services.py
   - apps/pipeline/permissions.py
-  - apps/pipeline/viewsets.py
+  - apps/pipeline/views.py
   - apps/users/viewsets/user_viewset.py
   - apps/users/filters.py
   - apps/access/migrations/
@@ -725,7 +725,7 @@ Limpiados (7):
   ✅ apps/pipeline/permissions.py
 
 Actualizados (2):
-  ✅ apps/pipeline/viewsets.py (RBAC puro)
+  ✅ apps/pipeline/views.py (RBAC puro)
   ✅ apps/users/viewsets/user_viewset.py (imports)
 
 Creados (2):

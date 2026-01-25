@@ -166,7 +166,7 @@ SRP violado:
 Código afectado:
   - apps/access/models.py (UserServiceAccess)
   - apps/core/permissions.py (HasServiceAccess)
-  - apps/pipeline/viewsets.py (uso)
+  - apps/pipeline/views.py (uso)
   - tests/unit/core/test_permissions.py
 ```
 
@@ -229,7 +229,7 @@ Function.objects.get_or_create(
 #### A.3: Actualizar ViewSets (1h)
 
 ```python
-# apps/pipeline/viewsets.py
+# apps/pipeline/views.py
 
 # ANTES (con HasServiceAccess)
 class ServiceViewSet(viewsets.ModelViewSet):
@@ -800,7 +800,7 @@ Impacto:
   - SRP violado en apps/access/ (7/10)
 
 Usado en:
-  - apps/pipeline/viewsets.py
+  - apps/pipeline/views.py
   - apps/core/permissions.py (HasServiceAccess)
   - apps/access/models.py (UserServiceAccess model)
 ```
@@ -1056,7 +1056,7 @@ README apps/access/:
   grep -r "HasServiceAccess" apps/
 
 ☐ Listar ViewSets afectados:
-  - apps/pipeline/viewsets.py
+  - apps/pipeline/views.py
   - apps/core/permissions.py
 
 ☐ Verificar data en DB:
@@ -1147,7 +1147,7 @@ print(f'Migrados {count} registros')
 
 **Antes:**
 ```python
-# apps/pipeline/viewsets.py (ANTES)
+# apps/pipeline/views.py (ANTES)
 from apps.core.permissions import HasServiceAccess
 
 class ServiceViewSet(viewsets.ModelViewSet):
@@ -1157,7 +1157,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
 **Después:**
 ```python
-# apps/pipeline/viewsets.py (DESPUÉS)
+# apps/pipeline/views.py (DESPUÉS)
 from apps.core.permissions import RequiresFunctionPermission
 
 class ServiceViewSet(viewsets.ModelViewSet):

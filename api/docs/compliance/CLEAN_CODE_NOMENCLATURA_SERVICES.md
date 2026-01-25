@@ -306,7 +306,7 @@ __all__ = ['RBACService', 'GroupService']
 ```
 
 ```python
-# apps/dashboard/viewsets.py
+# apps/dashboard/views.py
 from apps.access.services import RBACService
 
 class DashboardViewSet(viewsets.ViewSet):
@@ -327,7 +327,7 @@ __all__ = ['PermissionService', 'GroupService']
 ```
 
 ```python
-# apps/dashboard/viewsets.py
+# apps/dashboard/views.py
 from apps.access.services import PermissionService
 
 class DashboardViewSet(viewsets.ViewSet):

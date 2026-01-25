@@ -364,7 +364,7 @@ UserFunctionAssignment.objects.create(
 **3. Usa en ViewSet:**
 
 ```python
-# apps/reports/viewsets.py
+# apps/reports/views.py
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -595,7 +595,7 @@ class UserProfile(TimeStampedModel):
 ### apps/authentication/ → apps/core/ → apps/access/
 
 ```python
-# apps/authentication/viewsets.py
+# apps/authentication/views.py
 from apps.core.permissions import RequiresFunctionPermission
 
 class AuthViewSet(viewsets.ViewSet):

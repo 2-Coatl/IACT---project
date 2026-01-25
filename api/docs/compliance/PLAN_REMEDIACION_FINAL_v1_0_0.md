@@ -588,7 +588,7 @@ auth_urls = [  # ❌ TODO va en apps/authentication/
 #### Paso 1.1: Eliminar AuthViewSet
 
 ```bash
-# apps/users/viewsets.py
+# apps/users/views.py
 
 ELIMINAR completo (líneas 240-430):
   - class AuthViewSet
@@ -677,7 +677,7 @@ apps/authentication/
 │   ├── auth.py
 │   ├── recovery.py
 │   └── session.py
-├── viewsets.py (AuthViewSet, SessionViewSet)
+├── views.py (AuthViewSet, SessionViewSet)
 ├── urls.py
 ├── admin.py
 ├── tasks.py (APScheduler)
@@ -717,7 +717,7 @@ apps/access/
 ├── decorators.py (@require_function)
 ├── middleware.py (RBACMiddleware)
 ├── serializers/
-├── viewsets.py (8 ViewSets)
+├── views.py (8 ViewSets)
 ├── urls.py
 ├── admin.py
 └── tests/
@@ -773,7 +773,7 @@ apps/alerts/
 │   ├── message.py (InternalMessageSerializer, MessageRecipientSerializer)
 │   ├── configuration.py
 │   └── subscription.py
-├── viewsets.py (3 ViewSets con RBAC)
+├── views.py (3 ViewSets con RBAC)
 │   - InternalMessageViewSet
 │   - AlertConfigurationViewSet
 │   - AlertSubscriptionViewSet
@@ -991,7 +991,7 @@ def send_security_questions_reminders():
 #### Actualizar apps/users/ para usar apps/access/
 
 ```python
-# apps/users/viewsets.py - UserViewSet
+# apps/users/views.py - UserViewSet
 
 from apps.access.permissions import DynamicFunctionPermission
 
@@ -1014,7 +1014,7 @@ class UserViewSet(viewsets.ModelViewSet):
 #### Actualizar login para first_login
 
 ```python
-# apps/authentication/viewsets.py - AuthViewSet.login()
+# apps/authentication/views.py - AuthViewSet.login()
 
 @action(detail=False, methods=['post'])
 def login(self, request):
@@ -1046,7 +1046,7 @@ def login(self, request):
 ### Fase 1: Limpieza (2h)
 
 ```yaml
-☐ 1.1 Eliminar AuthViewSet de apps/users/viewsets.py
+☐ 1.1 Eliminar AuthViewSet de apps/users/views.py
 ☐ 1.2 Eliminar LoginSerializer, PasswordResetSerializer
 ☐ 1.3 Actualizar apps/users/urls.py
 ☐ 1.4 Eliminar has_function() de User model

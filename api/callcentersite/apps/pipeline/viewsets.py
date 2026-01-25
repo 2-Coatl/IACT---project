@@ -351,12 +351,17 @@ class CallRecordViewSet(viewsets.ModelViewSet):
     Permissions:
         - IsAuthenticated
         - IsActiveUser
-        - RequiresFunctionPermission (RBAC con MOD_Calls)
+        - RequiresFunctionPermission (RBAC con MOD_Pipeline)
     
-    FASE A DT-002:
-        - Removido: HasServiceAccess (UserServiceAccess)
-        - Agregado: RequiresFunctionPermission (RBAC puro)
-        - Functions: CALL_VIEW, CALL_EDIT, CALL_DELETE, CALL_EXP_CSV, CALL_STATS
+    RBAC (Modelo Granular):
+        - Removido: MOD_Calls (módulo incorrecto)
+        - Agregado: MOD_Pipeline (módulo correcto)
+        - Functions:
+            * PIPELINE_CALLREC_VIEW (pipeline.callrecord.view)
+            * PIPELINE_CALLREC_CREATE (pipeline.callrecord.create)
+            * PIPELINE_CALLREC_EDIT (pipeline.callrecord.edit)
+            * PIPELINE_CALLREC_DELETE (pipeline.callrecord.delete)
+            * PIPELINE_CALLREC_STATS (pipeline.callrecord.stats)
     
     Filters:
         - fecha (exact, gte, lte, range)
@@ -368,7 +373,7 @@ class CallRecordViewSet(viewsets.ModelViewSet):
         - high_abandonment
     
     QuerySet Filtering:
-        Los usuarios solo ven registros de servicios a los que tienen acceso.
+        Los usuarios con permisos apropiados ven TODOS los registros.
         Superusers ven todos.
     """
     
@@ -384,18 +389,20 @@ class CallRecordViewSet(viewsets.ModelViewSet):
         RequiresFunctionPermission,  # FASE A DT-002: RBAC puro
     ]
     
-    # FASE A DT-002: Function map para RBAC v6.0.0
+    # RBAC v6.0.0: Function map con permisos correctos de PIPELINE
+    # CORREGIDO: Cambiado de 'calls.*' a 'pipeline.callrecord.*'
+    # para reflejar que CallRecord pertenece a la app Pipeline, no a una app "Calls"
     function_map = {
-        'list': 'calls.view',           # ← Namespace Django
-        'retrieve': 'calls.view',       # ← Namespace Django
-        'create': 'calls.create',       # ← Namespace Django
-        'update': 'calls.edit',         # ← Namespace Django
-        'partial_update': 'calls.edit', # ← Namespace Django
-        'destroy': 'calls.delete',      # ← Namespace Django
-        'bulk_create': 'calls.create',  # ← Namespace Django
-        'stats': 'calls.stats',         # ← Namespace Django
-        'daily_stats': 'calls.stats',   # ← Namespace Django
-        'top_callers': 'calls.stats',   # ← Namespace Django
+        'list': 'pipeline.callrecord.view',
+        'retrieve': 'pipeline.callrecord.view',
+        'create': 'pipeline.callrecord.create',
+        'update': 'pipeline.callrecord.edit',
+        'partial_update': 'pipeline.callrecord.edit',
+        'destroy': 'pipeline.callrecord.delete',
+        'bulk_create': 'pipeline.callrecord.create',
+        'stats': 'pipeline.callrecord.stats',
+        'daily_stats': 'pipeline.callrecord.stats',
+        'top_callers': 'pipeline.callrecord.stats',
     }
     
     def get_queryset(self):

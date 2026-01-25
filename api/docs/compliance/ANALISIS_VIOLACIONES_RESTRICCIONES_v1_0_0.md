@@ -369,7 +369,7 @@ Resultado: NO hay pre-commit configurado
 Aunque la mayoría de métodos tienen docstrings, algunos podrían ser más detallados:
 
 ```python
-# Ejemplo en viewsets.py
+# Ejemplo en views.py
 @action(detail=False, methods=['get'])
 def me(self, request):
     """

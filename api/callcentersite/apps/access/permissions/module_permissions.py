@@ -2,8 +2,7 @@
 Custom permissions para sistema de acceso.
 """
 from rest_framework import permissions
-
-from apps.access.services import ModuleAccessService
+from ..services import ModuleAccessService
 
 
 class HasModuleAccess(permissions.BasePermission):

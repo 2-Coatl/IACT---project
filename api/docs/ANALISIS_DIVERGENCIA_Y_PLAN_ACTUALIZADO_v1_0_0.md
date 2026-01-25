@@ -241,7 +241,7 @@ Beneficios:
     - ❌ ViewSets (pausado por análisis)
 
 SIGUIENTE PASO:
-  [ ] Completar viewsets.py (4 viewsets)
+  [ ] Completar views.py (4 viewsets)
   [ ] URLs + routing
   [ ] Tests de API (40+ tests)
 ```
@@ -303,7 +303,7 @@ Día 6-7: apps/core/ limpieza final
 ```yaml
 HOY (Día 13-14):
   [ ] Aceptar estructura actual apps/core/
-  [ ] Completar viewsets.py (4 viewsets)
+  [ ] Completar views.py (4 viewsets)
   [ ] Completar filters, permissions, serializers
   [ ] Documentar TODO en cada modelo
 
@@ -399,7 +399,7 @@ VENTAJAS:
   ✅ Refactoring planificado
 
 PRÓXIMOS PASOS:
-  [ ] Completar viewsets.py
+  [ ] Completar views.py
   [ ] Completar tests API
   [ ] FASE 3: Authentication
   [ ] FASE 4: Access (RBAC)

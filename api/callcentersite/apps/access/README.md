@@ -663,7 +663,7 @@ UserModuleAccess.objects.create(
 ### Workflow 3: Verificar Permisos en ViewSet
 
 ```python
-# apps/reports/viewsets.py
+# apps/reports/views.py
 
 from apps.core.permissions import RequiresFunctionPermission
 

@@ -47,7 +47,7 @@ Este documento explica la **separación arquitectónica** entre:
 ### Antes (v5.2.1) - MEZCLADO
 
 ```python
-# apps/reports/viewsets.py
+# apps/reports/views.py
 class ReportViewSet(viewsets.ModelViewSet):
     """Mezclaba reportes + dashboards."""
     
@@ -70,7 +70,7 @@ class ReportViewSet(viewsets.ModelViewSet):
 ### Después (v6.0.0) - SEPARADO
 
 ```python
-# apps/reports/viewsets.py
+# apps/reports/views.py
 class ReportViewSet(viewsets.ModelViewSet):
     """Solo reportes tabulares."""
     
@@ -84,7 +84,7 @@ class ReportViewSet(viewsets.ModelViewSet):
         """Exporta reporte a CSV/Excel/PDF."""
         pass
 
-# apps/dashboard/viewsets.py ⭐ NUEVO
+# apps/dashboard/views.py ⭐ NUEVO
 class DashboardViewSet(viewsets.ReadOnlyModelViewSet):
     """Solo dashboards visuales."""
     

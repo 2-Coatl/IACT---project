@@ -1,7 +1,4 @@
 """
-DE ACUERDO A CLEAN CODE, SE TIENE QUE CAMBIAR RBAC POR PERMISOS, O ALGO QUE NO SEA RBAC
-DE IGUAL ANALIZAR EL MODULO CALL, PORQUE NO DEBE DE SER UN MODULO COMO TAL,
-ES SOLO CONSUMIR DATOS
 Management command para crear funciones RBAC v6.0.0.
 
 Crea funciones con namespaces Django (permission_django).
@@ -39,7 +36,7 @@ class Command(BaseCommand):
         clear = options.get('clear', False)
         
         if dry_run:
-            self.stdout.write(self.style.WARNING('Modo DRY-RUN: No se guardará nada'))
+            self.stdout.write(self.style.WARNING('🔍 Modo DRY-RUN: No se guardará nada'))
         
         if clear and not dry_run:
             self._clear_functions()
@@ -57,7 +54,7 @@ class Command(BaseCommand):
         count = Function.objects.count()
         Function.objects.all().delete()
         self.stdout.write(
-            self.style.WARNING(f'Eliminadas {count} funciones existentes')
+            self.style.WARNING(f'🗑️  Eliminadas {count} funciones existentes')
         )
     
     def _get_functions_data(self):
@@ -160,54 +157,54 @@ class Command(BaseCommand):
             },
             
             # ============================================================
-            # CALLS - Gestión de Llamadas
+            # PIPELINE - CallRecord (Modelo Granular)
             # ============================================================
             {
-                'permission_django': 'calls.view',
-                'code': 'CALL_VIEW',
-                'module': 'MOD_Calls',
-                'name': 'Ver Llamadas',
-                'description': 'Permite ver registros y detalles de llamadas',
+                'permission_django': 'pipeline.callrecord.view',
+                'code': 'PIPELINE_CALLREC_VIEW',
+                'module': 'MOD_Pipeline',
+                'name': 'Ver Registros de Llamadas',
+                'description': 'Permite ver registros procesados de llamadas (CallRecord)',
                 'status': 'activo',
             },
             {
-                'permission_django': 'calls.create',
-                'code': 'CALL_CREATE',
-                'module': 'MOD_Calls',
-                'name': 'Crear Llamadas',
-                'description': 'Permite registrar nuevas llamadas en el sistema',
+                'permission_django': 'pipeline.callrecord.create',
+                'code': 'PIPELINE_CALLREC_CREATE',
+                'module': 'MOD_Pipeline',
+                'name': 'Crear Registros de Llamadas',
+                'description': 'Permite crear registros de llamadas',
                 'status': 'activo',
             },
             {
-                'permission_django': 'calls.edit',
-                'code': 'CALL_EDIT',
-                'module': 'MOD_Calls',
-                'name': 'Editar Llamadas',
+                'permission_django': 'pipeline.callrecord.edit',
+                'code': 'PIPELINE_CALLREC_EDIT',
+                'module': 'MOD_Pipeline',
+                'name': 'Editar Registros de Llamadas',
                 'description': 'Permite modificar registros de llamadas',
                 'status': 'activo',
             },
             {
-                'permission_django': 'calls.delete',
-                'code': 'CALL_DELETE',
-                'module': 'MOD_Calls',
-                'name': 'Eliminar Llamadas',
-                'description': 'Permite eliminar registros de llamadas',
+                'permission_django': 'pipeline.callrecord.delete',
+                'code': 'PIPELINE_CALLREC_DELETE',
+                'module': 'MOD_Pipeline',
+                'name': 'Eliminar Registros de Llamadas',
+                'description': 'Permite eliminar registros de llamadas (soft delete)',
                 'status': 'activo',
             },
             {
-                'permission_django': 'calls.stats',
-                'code': 'CALL_STATS',
-                'module': 'MOD_Calls',
+                'permission_django': 'pipeline.callrecord.stats',
+                'code': 'PIPELINE_CALLREC_STATS',
+                'module': 'MOD_Pipeline',
                 'name': 'Ver Estadísticas de Llamadas',
-                'description': 'Permite ver estadísticas y reportes de llamadas',
+                'description': 'Permite ver estadísticas de llamadas procesadas',
                 'status': 'activo',
             },
             {
-                'permission_django': 'calls.export.csv',
-                'code': 'CALL_EXP_CSV',
-                'module': 'MOD_Calls',
-                'name': 'Exportar Llamadas a CSV',
-                'description': 'Permite exportar datos de llamadas a formato CSV',
+                'permission_django': 'pipeline.callrecord.export',
+                'code': 'PIPELINE_CALLREC_EXPORT',
+                'module': 'MOD_Pipeline',
+                'name': 'Exportar Llamadas',
+                'description': 'Permite exportar datos de llamadas a CSV/Excel',
                 'status': 'activo',
             },
             
@@ -244,6 +241,26 @@ class Command(BaseCommand):
                 'module': 'MOD_Reports',
                 'name': 'Exportar Reportes a Excel',
                 'description': 'Permite exportar reportes a formato Excel',
+                'status': 'activo',
+            },
+            
+            # ============================================================
+            # DASHBOARD - Dashboards y Widgets (Modelo Granular)
+            # ============================================================
+            {
+                'permission_django': 'dashboard.create',
+                'code': 'DASH_CREATE',
+                'module': 'MOD_Dashboard',
+                'name': 'Crear Dashboards',
+                'description': 'Permite crear nuevos dashboards personalizados',
+                'status': 'activo',
+            },
+            {
+                'permission_django': 'dashboard.widget.create',
+                'code': 'DASH_WIDGET_CREATE',
+                'module': 'MOD_Dashboard',
+                'name': 'Crear Widgets',
+                'description': 'Permite crear widgets en dashboards',
                 'status': 'activo',
             },
             
@@ -362,6 +379,26 @@ class Command(BaseCommand):
                 'description': 'Permite configurar sistema de notificaciones',
                 'status': 'planificado',
             },
+            
+            # ============================================================
+            # IVR - Logs Legacy (Modelo Granular)
+            # ============================================================
+            {
+                'permission_django': 'ivr.calllog.view',
+                'code': 'IVR_CALLLOG_VIEW',
+                'module': 'MOD_IVR',
+                'name': 'Ver Logs de IVR',
+                'description': 'Permite ver logs legacy de llamadas (READ-ONLY)',
+                'status': 'activo',
+            },
+            {
+                'permission_django': 'ivr.calllog.stats',
+                'code': 'IVR_CALLLOG_STATS',
+                'module': 'MOD_IVR',
+                'name': 'Ver Estadísticas IVR',
+                'description': 'Permite ver estadísticas de logs legacy',
+                'status': 'activo',
+            },
         ]
     
     @transaction.atomic
@@ -380,12 +417,12 @@ class Command(BaseCommand):
                 
                 if exists:
                     self.stdout.write(
-                        self.style.WARNING(f'Actualizaría: {permission_django}')
+                        self.style.WARNING(f'  🔄 Actualizaría: {permission_django}')
                     )
                     updated_count += 1
                 else:
                     self.stdout.write(
-                        self.style.SUCCESS(f'Crearía: {permission_django}')
+                        self.style.SUCCESS(f'  ✅ Crearía: {permission_django}')
                     )
                     created_count += 1
             else:
@@ -403,12 +440,12 @@ class Command(BaseCommand):
                 
                 if created:
                     self.stdout.write(
-                        self.style.SUCCESS(f'Creada: {permission_django}')
+                        self.style.SUCCESS(f'  ✅ Creada: {permission_django}')
                     )
                     created_count += 1
                 else:
                     self.stdout.write(
-                        self.style.WARNING(f'Actualizada: {permission_django}')
+                        self.style.WARNING(f'  🔄 Actualizada: {permission_django}')
                     )
                     updated_count += 1
         
@@ -423,21 +460,21 @@ class Command(BaseCommand):
         
         if dry_run:
             self.stdout.write(
-                self.style.WARNING('RESUMEN (DRY-RUN - No guardado)')
+                self.style.WARNING('🔍 RESUMEN (DRY-RUN - No guardado)')
             )
         else:
             self.stdout.write(
-                self.style.SUCCESS('RESUMEN')
+                self.style.SUCCESS('✅ RESUMEN')
             )
         
         self.stdout.write('=' * 70)
         
         self.stdout.write(f'Total procesadas: {total}')
         self.stdout.write(
-            self.style.SUCCESS(f'Creadas: {created}')
+            self.style.SUCCESS(f'  ✅ Creadas: {created}')
         )
         self.stdout.write(
-            self.style.WARNING(f'Actualizadas: {updated}')
+            self.style.WARNING(f'  🔄 Actualizadas: {updated}')
         )
         
         if not dry_run:
@@ -447,8 +484,8 @@ class Command(BaseCommand):
             
             self.stdout.write('')
             self.stdout.write('Funciones por status:')
-            self.stdout.write(f'Activas: {activas}')
-            self.stdout.write(f'Planificadas: {planificadas}')
+            self.stdout.write(f'  ✅ Activas: {activas}')
+            self.stdout.write(f'  📋 Planificadas: {planificadas}')
             
             # Funciones por módulo
             from django.db.models import Count
@@ -460,7 +497,7 @@ class Command(BaseCommand):
             self.stdout.write('Funciones por módulo:')
             for module in modules:
                 self.stdout.write(
-                    f" {module['module']}: {module['count']}"
+                    f"  📁 {module['module']}: {module['count']}"
                 )
         
         self.stdout.write('=' * 70)
@@ -468,5 +505,5 @@ class Command(BaseCommand):
         if not dry_run:
             self.stdout.write('')
             self.stdout.write(
-                self.style.SUCCESS('Funciones RBAC v6.0.0 creadas exitosamente')
+                self.style.SUCCESS('🎉 Funciones RBAC v6.0.0 creadas exitosamente')
             )

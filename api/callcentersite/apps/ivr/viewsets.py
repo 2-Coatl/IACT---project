@@ -7,8 +7,11 @@ CNST-003: CallLog es READ-ONLY (MariaDB ivr_legacy)
 NO permite create, update, delete.
 """
 from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
+from apps.core.permissions import RequiresFunctionPermission
+from apps.pipeline.permissions import IsActiveUser
 from .models import CallLog
 from .serializers import CallLogSerializer, CallLogListSerializer
 
@@ -25,6 +28,16 @@ class CallLogViewSet(viewsets.ReadOnlyModelViewSet):
     - create: POST (prohibido)
     - update: PUT/PATCH (prohibido)
     - destroy: DELETE (prohibido)
+    
+    Permissions:
+    - IsAuthenticated
+    - IsActiveUser
+    - RequiresFunctionPermission (RBAC con MOD_IVR)
+    
+    RBAC (Modelo Granular):
+    - Functions:
+        * IVR_CALLLOG_VIEW (ivr.calllog.view)
+        * IVR_CALLLOG_STATS (ivr.calllog.stats)
     
     Filtros:
     - fecha: Filtrar por fecha exacta
@@ -59,6 +72,21 @@ class CallLogViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['fecha', 'servicio_800']
     ordering_fields = ['fecha', 'total_llamadas']
     ordering = ['-fecha']  # Por defecto: más recientes primero
+    
+    # Permisos RBAC
+    permission_classes = [
+        IsAuthenticated,
+        IsActiveUser,
+        RequiresFunctionPermission,
+    ]
+    
+    # RBAC v6.0.0: Function map para IVR
+    function_map = {
+        'list': 'ivr.calllog.view',
+        'retrieve': 'ivr.calllog.view',
+        # TODO: Agregar endpoint de stats
+        # 'stats': 'ivr.calllog.stats',
+    }
     
     def get_serializer_class(self):
         """

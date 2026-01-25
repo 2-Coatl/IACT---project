@@ -59,13 +59,13 @@ apps/core/views.py → views_old_MOVED_TO_PIPELINE.py
     - CenterViewSet (básico)
     - ServiceViewSet (básico)
   
-  Estado: TODO está en apps/pipeline/viewsets.py (versión completa)
+  Estado: TODO está en apps/pipeline/views.py (versión completa)
 
-apps/core/viewsets.py → viewsets_old_MOVED_TO_PIPELINE.py
+apps/core/views.py → viewsets_old_MOVED_TO_PIPELINE.py
   Contenía:
     - Versión completa de ViewSets
   
-  Estado: Duplicado de apps/pipeline/viewsets.py
+  Estado: Duplicado de apps/pipeline/views.py
 
 apps/core/urls.py → urls_old_REMOVED.py
   Contenía:
@@ -210,7 +210,7 @@ Responsabilidad: Center, Service, CallRecord, ETL
 Contenido:
   ✅ models.py - Center, Service, CallRecord, ETLExecution
   ✅ serializers.py - 12 serializers (Center, Service, CallRecord)
-  ✅ viewsets.py - 4 ViewSets completos (con custom actions)
+  ✅ views.py - 4 ViewSets completos (con custom actions)
   ✅ urls.py - DRF Router + custom views
   ✅ filters.py - DjangoFilterBackend filters
   ✅ services/ - Services de negocio
@@ -306,7 +306,7 @@ Modificados: 4
 Renombrados: 5
   ✅ apps/core/serializers.py → serializers_old_MOVED_TO_PIPELINE.py
   ✅ apps/core/views.py → views_old_MOVED_TO_PIPELINE.py
-  ✅ apps/core/viewsets.py → viewsets_old_MOVED_TO_PIPELINE.py
+  ✅ apps/core/views.py → viewsets_old_MOVED_TO_PIPELINE.py
   ✅ apps/core/urls.py → urls_old_REMOVED.py
   ✅ tests/unit/core/test_core_serializers.py → test_core_serializers_OLD.py
 
@@ -397,7 +397,7 @@ Reports:
 
 ```yaml
 3. Completar apps/access/ con viewsets y urls:
-   - Crear apps/access/viewsets.py (UserServiceAccessViewSet)
+   - Crear apps/access/views.py (UserServiceAccessViewSet)
    - Crear apps/access/filters.py (UserServiceAccessFilter)
    - Actualizar apps/access/urls.py
 

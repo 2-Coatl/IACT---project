@@ -100,7 +100,7 @@ tests/unit/core/test_permissions.py:
 ### ViewSets Afectados
 
 ```python
-# apps/pipeline/viewsets.py
+# apps/pipeline/views.py
 
 class CallRecordViewSet(viewsets.ModelViewSet):
     """
@@ -283,7 +283,7 @@ Archivos a modificar: 9
   - apps/core/mixins.py (eliminar)
   - apps/core/services.py (modificar)
   - apps/pipeline/permissions.py (eliminar)
-  - apps/pipeline/viewsets.py (modificar)
+  - apps/pipeline/views.py (modificar)
   - tests/unit/core/test_permissions.py (eliminar)
 
 ViewSets afectados: 1

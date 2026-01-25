@@ -1702,7 +1702,7 @@ urlpatterns = [
 
 ```bash
 # 1. Crear archivos
-callcentersite/apps/users/viewsets.py
+callcentersite/apps/users/views.py
 callcentersite/apps/users/urls.py
 
 # 2. Actualizar config/urls.py

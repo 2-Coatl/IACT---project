@@ -627,7 +627,7 @@ INMEDIATAS (HOY):
   2. Si Opción C:
      [ ] Agregar abstract models a apps/core/
      [ ] Documentar TODOs en código
-     [ ] Continuar con viewsets.py
+     [ ] Continuar con views.py
      [ ] TDD para nuevos modelos
 
 CORTO PLAZO (Semana actual):

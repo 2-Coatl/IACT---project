@@ -264,7 +264,7 @@ Código eliminado (7):
   ✅ apps/pipeline/permissions.py
 
 Código actualizado (1):
-  ✅ apps/pipeline/viewsets.py
+  ✅ apps/pipeline/views.py
 
 Código creado (3):
   ✅ apps/access/management/commands/create_mod_calls_functions.py

@@ -300,7 +300,7 @@ Mover services:
 Mover API:
   - Serializers → apps/pipeline/serializers.py
   - Filters → apps/pipeline/filters.py
-  - ViewSets → apps/pipeline/viewsets.py
+  - ViewSets → apps/pipeline/views.py
 
 Migrations:
   - SeparateDatabaseAndState

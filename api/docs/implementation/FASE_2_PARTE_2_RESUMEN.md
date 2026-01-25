@@ -84,7 +84,7 @@ Resultado:
 
 ```yaml
 Resultado:
-  ✅ viewsets.py copiado (762 líneas)
+  ✅ views.py copiado (762 líneas)
   ✅ permissions.py copiado (129 líneas)
   ✅ Imports actualizados
   ✅ 4 ViewSets (Center, Service, CallRecord, UserServiceAccess)
@@ -202,7 +202,7 @@ apps/pipeline/:
   ✅ serializers.py completo
   ✅ filters.py completo
   ✅ permissions.py completo
-  ✅ viewsets.py completo
+  ✅ views.py completo
   ✅ admin.py completo
   ✅ Total: 4,064 líneas
 
@@ -250,7 +250,7 @@ Archivos Creados: 7
   - serializers.py
   - filters.py
   - permissions.py
-  - viewsets.py
+  - views.py
   - admin.py (ampliado)
 
 Líneas Código: 4,064 líneas totales

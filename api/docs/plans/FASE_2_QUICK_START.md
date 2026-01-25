@@ -159,7 +159,7 @@ Total: 11 serializers
 ### PARTE 5: ViewSets + Permissions (2h)
 ```yaml
 Output:
-  - apps/users/viewsets.py (500+ líneas)
+  - apps/users/views.py (500+ líneas)
   - apps/users/permissions.py (150+ líneas)
   - apps/users/urls.py (50+ líneas)
 

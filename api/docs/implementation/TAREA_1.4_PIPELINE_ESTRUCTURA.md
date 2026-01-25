@@ -56,7 +56,7 @@ Estos archivos **NO existen** en apps/pipeline/:
 ❌ services/                 # Directorio
 ❌ serializers.py            # Archivo
 ❌ filters.py                # Archivo
-❌ viewsets.py               # Archivo
+❌ views.py               # Archivo
 ❌ permissions.py            # Archivo
 ```
 
@@ -189,7 +189,7 @@ apps/core/ TIENE (a mover):
   ✅ serializers.py (20 serializers)
   ✅ filters.py (4 filters)
   ✅ permissions.py (6 custom)
-  ✅ viewsets.py (4 viewsets)
+  ✅ views.py (4 viewsets)
 
 apps/pipeline/ TIENE (actual):
   ✅ models.py (ETLExecution)
@@ -198,7 +198,7 @@ apps/pipeline/ TIENE (actual):
   ❌ NO services/
   ❌ NO serializers.py
   ❌ NO filters.py
-  ❌ NO viewsets.py
+  ❌ NO views.py
   ❌ NO permissions.py
 
 apps/pipeline/ TENDRÁ (después):
@@ -206,7 +206,7 @@ apps/pipeline/ TENDRÁ (después):
   ✅ services/ (etl_service + center_service + service_service + callrecord_service)
   ✅ serializers.py (todos)
   ✅ filters.py (todos)
-  ✅ viewsets.py (todos)
+  ✅ views.py (todos)
   ✅ permissions.py (custom)
   ✅ scheduler.py (sin cambios)
   ✅ admin.py (ampliar con Center/Service/CallRecord)

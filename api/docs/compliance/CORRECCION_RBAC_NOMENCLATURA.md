@@ -327,7 +327,7 @@ def require_any_function(*permissions):
 ### 4. ViewSet Example
 
 ```python
-# apps/audit/viewsets.py
+# apps/audit/views.py
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet de auditoría con RBAC."""
@@ -354,7 +354,7 @@ class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
         ...
 
 
-# apps/dashboard/viewsets.py
+# apps/dashboard/views.py
 
 class DashboardViewSet(viewsets.ViewSet):
     """ViewSet de dashboards con RBAC."""
@@ -375,7 +375,7 @@ class DashboardViewSet(viewsets.ViewSet):
         ...
 
 
-# apps/users/viewsets.py
+# apps/users/views.py
 
 class UserViewSet(viewsets.ModelViewSet):
     """ViewSet de usuarios con RBAC."""

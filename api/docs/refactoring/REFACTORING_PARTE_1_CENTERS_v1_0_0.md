@@ -123,7 +123,7 @@ class Service(SoftDeleteMixin, models.Model):
    [ ] apps/core/serializers.py
    [ ] apps/core/filters.py
    [ ] apps/core/permissions.py
-   [ ] apps/core/viewsets.py (si existe)
+   [ ] apps/core/views.py (si existe)
    [ ] apps/core/services/center_service.py
    [ ] apps/core/services/service_service.py
    [ ] tests/factories/ (si existen factories)

@@ -339,7 +339,7 @@ return Response({
 
 ### Compilación Python ✅
 ```bash
-✅ viewsets.py OK
+✅ views.py OK
 ```
 
 ### Django Check ✅
@@ -417,7 +417,7 @@ python manage.py check
 
 ```yaml
 Archivos:
-  - Creados: 1 (viewsets.py)
+  - Creados: 1 (views.py)
   - Refactorizados: 1 (urls.py)
   - Actualizados: 1 (config/urls.py)
   - Total: 3 archivos

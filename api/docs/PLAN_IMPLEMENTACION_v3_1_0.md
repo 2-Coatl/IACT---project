@@ -68,7 +68,7 @@ RAZÓN apps/pipeline/:
     ✅ apps/core/serializers.py (20 serializers - TEMPORAL)
     ✅ apps/core/filters.py (4 filters - TEMPORAL)
     ✅ apps/core/permissions.py (6 permissions - TEMPORAL)
-    ❌ apps/core/viewsets.py (PAUSADO)
+    ❌ apps/core/views.py (PAUSADO)
 
 Apps Existentes en Código: 9
   ✅ apps/access/
@@ -277,7 +277,7 @@ apps/pipeline/
 ├── serializers.py            # Mover desde apps/core/
 ├── filters.py                # Mover desde apps/core/
 ├── permissions.py            # Mover desde apps/core/
-└── viewsets.py               # Mover desde apps/core/
+└── views.py               # Mover desde apps/core/
 ```
 
 **Tareas:**
@@ -451,7 +451,7 @@ find callcentersite/tests -name "*.py" -exec sed -i \
    [ ] Filtrar solo permissions específicas
 
 5. Crear/actualizar viewsets.py:
-   [ ] apps/pipeline/viewsets.py
+   [ ] apps/pipeline/views.py
    [ ] CenterViewSet, ServiceViewSet, CallRecordViewSet
    [ ] Integrar con ETL (custom actions)
 ```
@@ -509,7 +509,7 @@ class AuditedModel(models.Model):
    [ ] Eliminar apps/core/serializers.py
    [ ] Eliminar apps/core/filters.py
    [ ] Eliminar apps/core/permissions.py (custom)
-   [ ] Eliminar apps/core/viewsets.py
+   [ ] Eliminar apps/core/views.py
 
 2. Mantener en apps/core/:
    [ ] models.py (SOLO abstract)
@@ -694,7 +694,7 @@ apps/dashboard/
 ├── serializers.py
 ├── filters.py
 ├── permissions.py
-├── viewsets.py
+├── views.py
 └── migrations/
     └── __init__.py
 ```

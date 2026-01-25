@@ -150,7 +150,7 @@ Día 13-14 (EN PROGRESO):
   ✅ apps/core/serializers.py (20 serializers)
   ✅ apps/core/filters.py (4 filters)
   ✅ apps/core/permissions.py (6 permissions)
-  ⏳ apps/core/viewsets.py (PAUSADO)
+  ⏳ apps/core/views.py (PAUSADO)
 ```
 
 ---
@@ -278,7 +278,7 @@ Próximo paso según PLAN v2.0.0:
 ### OPCIÓN A: Continuar PLAN v2.0.0 (RECOMENDADO)
 ```yaml
 HOY (Día 13-14):
-  [ ] Completar apps/core/viewsets.py
+  [ ] Completar apps/core/views.py
   [ ] Completar apps/core/admin.py
   [ ] Completar apps/core/urls.py
   [ ] Tests API apps/core/
@@ -333,7 +333,7 @@ Razón:
   ✅ Momentum: No detener progreso
 
 Acciones Inmediatas:
-  [ ] Completar FASE 2 PARTE 3 (viewsets.py)
+  [ ] Completar FASE 2 PARTE 3 (views.py)
   [ ] Completar FASE 2 PARTE 4 (admin.py, urls.py)
   [ ] Completar FASE 2 PARTE 5 (tests)
   [ ] Continuar FASE 3-7

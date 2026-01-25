@@ -1,5 +1,4 @@
 """
-ANALIZAR ESTA FUNCION DE MODULOS
 Management command para inicializar módulos del sistema.
 
 Uso:
@@ -60,18 +59,7 @@ class Command(BaseCommand):
                 'url_path': '/dashboard',
             },
             
-            # Calls
-            {
-                'code': 'MOD_Calls',
-                'name': 'Llamadas',
-                'description': 'Gestion de registros de llamadas',
-                'parent_code': None,
-                'order': 2,
-                'icon': None,
-                'url_path': '/calls',
-            },
-            
-            # Centers NO DEBE DE EXITR COMO MODULO
+            # Centers
             {
                 'code': 'MOD_Centers',
                 'name': 'Centros',
@@ -82,7 +70,7 @@ class Command(BaseCommand):
                 'url_path': '/centers',
             },
             
-            # Services NO DEBE DE EXITR COMO MODULO
+            # Services
             {
                 'code': 'MOD_Services',
                 'name': 'Servicios',
@@ -108,7 +96,7 @@ class Command(BaseCommand):
             {
                 'code': 'MOD_Reports',
                 'name': 'Reportes',
-                'description': 'Generación y gestion de reportes',
+                'description': 'Generacion y gestion de reportes',
                 'parent_code': None,
                 'order': 6,
                 'icon': None,
@@ -159,36 +147,16 @@ class Command(BaseCommand):
                 'url_path': '/settings',
             },
             
-            # =================================================================
-            # SUBMODULOS CALLS (Nivel 2)
-            # =================================================================
-            
+            # IVR (NUEVO - Modelo Granular)
             {
-                'code': 'MOD_Calls_View',
-                'name': 'Ver Llamadas',
-                'description': 'Visualizar llamadas',
-                'parent_code': 'MOD_Calls',
-                'order': 1,
+                'code': 'MOD_IVR',
+                'name': 'IVR - Logs Legacy',
+                'description': 'Acceso a logs de llamadas legacy (READ-ONLY)',
+                'parent_code': None,
+                'status': 'activo',
+                'order': 11,
                 'icon': None,
-                'url_path': '/calls/view',
-            },
-            {
-                'code': 'MOD_Calls_Export',
-                'name': 'Exportar Llamadas',
-                'description': 'Exportar registros de llamadas',
-                'parent_code': 'MOD_Calls',
-                'order': 2,
-                'icon': None,
-                'url_path': '/calls/export',
-            },
-            {
-                'code': 'MOD_Calls_Stats',
-                'name': 'Estadisticas',
-                'description': 'Estadisticas de llamadas',
-                'parent_code': 'MOD_Calls',
-                'order': 3,
-                'icon': None,
-                'url_path': '/calls/stats',
+                'url_path': '/ivr',
             },
             
             # =================================================================

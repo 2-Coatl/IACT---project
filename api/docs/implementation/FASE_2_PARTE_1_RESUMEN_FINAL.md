@@ -79,7 +79,7 @@ Resultado:
       - services/
       - serializers.py
       - filters.py
-      - viewsets.py
+      - views.py
       - permissions.py
   ✅ Plan de integración creado
   ✅ Archivo creado: TAREA_1.4_PIPELINE_ESTRUCTURA.md
@@ -144,7 +144,7 @@ Tareas:
   [ ] Crear apps/pipeline/services/
   [ ] Crear apps/pipeline/serializers.py
   [ ] Crear apps/pipeline/filters.py
-  [ ] Crear apps/pipeline/viewsets.py
+  [ ] Crear apps/pipeline/views.py
   [ ] Actualizar apps/pipeline/admin.py
 
 Tiempo estimado: 3-4 horas

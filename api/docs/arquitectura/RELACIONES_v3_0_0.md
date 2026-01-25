@@ -315,7 +315,7 @@ Contenido CORRECTO:
   ❌ serializers.py (20 serializers) → apps/centers/ + apps/analytics/
   ❌ filters.py (4 filters)          → apps/centers/ + apps/analytics/
   ❌ permissions.py (6 custom)       → apps/centers/ + apps/analytics/
-  ❌ viewsets.py (4 viewsets)        → apps/centers/ + apps/analytics/
+  ❌ views.py (4 viewsets)        → apps/centers/ + apps/analytics/
 
 Relaciones INCORRECTAS:
   → apps/utils/ (validators) ❌ CIRCULAR
@@ -608,8 +608,8 @@ UserServiceAccess:
   - UserServiceAccessViewSet
   
   Deben ir a:
-    → apps/centers/viewsets.py
-    → apps/analytics/viewsets.py
+    → apps/centers/views.py
+    → apps/analytics/views.py
 ```
 
 ---

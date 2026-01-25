@@ -1,12 +1,24 @@
 """
-Serializers para apps/ivr - IACT Call Center System.
+Serializers para CallLog (Logs de llamadas IVR).
 
-Expone API REST READ-ONLY para datos legacy de CallLog.
+Responsabilidad: Serialización de logs de llamadas legacy (READ-ONLY).
 
-CNST-003: CallLog es READ-ONLY (MariaDB ivr_legacy)
+Serializers:
+- CallLogSerializer: Log completo con métricas calculadas
+- CallLogListSerializer: Listado simplificado para performance
+- CallLogStatsSerializer: Estadísticas agregadas
+
+Constraints:
+- CNST-003: CallLog es READ-ONLY (MariaDB ivr_legacy)
+
+Principios aplicados:
+- SRP: Responsabilidad única (logs de llamadas IVR)
+- Clean Code: Cálculos de métricas explícitos
+- READ-ONLY: No permite create/update/delete (datos legacy)
 """
+
 from rest_framework import serializers
-from .models import CallLog
+from apps.ivr.models import CallLog
 
 
 class CallLogSerializer(serializers.ModelSerializer):

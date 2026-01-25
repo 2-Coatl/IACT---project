@@ -100,9 +100,7 @@ class UserFunctionAssignmentAdmin(admin.ModelAdmin):
         'assigned_at',
         'assigned_by',
         'revoked_at',
-        'revoked_by',
-        'created_at',
-        'updated_at'
+        'revoked_by'
     )
     
     fieldsets = (
@@ -119,11 +117,7 @@ class UserFunctionAssignmentAdmin(admin.ModelAdmin):
         ('Auditoría Revocación', {
             'fields': ('revoked_at', 'revoked_by'),
             'classes': ('collapse',)
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        })
     )
     
     # Ordenar por usuario y función

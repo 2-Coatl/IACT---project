@@ -81,7 +81,7 @@ apps/alerts/:
 **Código Incorrecto Actual:**
 
 ```python
-# apps/users/viewsets.py - líneas 240-430
+# apps/users/views.py - líneas 240-430
 
 class AuthViewSet(viewsets.ViewSet):  # ❌ NO debería estar en apps/users/
     
@@ -121,7 +121,7 @@ auth_urls = [  # ❌ TODO ESTO va en apps/authentication/
 **Corrección:**
 
 ```yaml
-PASO 1: ELIMINAR de apps/users/viewsets.py
+PASO 1: ELIMINAR de apps/users/views.py
   ❌ class AuthViewSet completa (líneas 240-430)
   ❌ LoginSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 
@@ -177,7 +177,7 @@ MOVER a apps/authentication/models.py:
 #### PASO 1.1: Eliminar código de autenticación
 
 ```bash
-# apps/users/viewsets.py
+# apps/users/views.py
 
 ELIMINAR:
   - class AuthViewSet (líneas 240-430)
@@ -263,7 +263,7 @@ apps/authentication/
 │   ├── auth.py              # Login, etc
 │   ├── recovery.py          # Security questions
 │   └── session.py           # SessionLog
-├── viewsets.py         # AuthViewSet, SessionViewSet
+├── views.py         # AuthViewSet, SessionViewSet
 ├── urls.py
 ├── admin.py
 ├── migrations/
@@ -650,7 +650,7 @@ class User(AbstractUser, SoftDeleteMixin):
 #### PASO 4.2: Integration en login
 
 ```python
-# apps/authentication/viewsets.py - AuthViewSet.login()
+# apps/authentication/views.py - AuthViewSet.login()
 
 @action(detail=False, methods=['post'])
 def login(self, request):
@@ -684,7 +684,7 @@ def login(self, request):
 ### Fase 1: Limpieza apps/users/ (2h)
 
 ```yaml
-☐ 1.1 Eliminar AuthViewSet de apps/users/viewsets.py
+☐ 1.1 Eliminar AuthViewSet de apps/users/views.py
 ☐ 1.2 Eliminar LoginSerializer, PasswordResetSerializer
 ☐ 1.3 Actualizar apps/users/urls.py (quitar auth/)
 ☐ 1.4 Buscar y listar todos los imports a actualizar
@@ -700,7 +700,7 @@ def login(self, request):
 ☐ 2.5 Crear utils.py
 ☐ 2.6 Crear services/ (4 servicios)
 ☐ 2.7 Crear serializers/ (3 archivos)
-☐ 2.8 Crear viewsets.py (AuthViewSet, SessionViewSet)
+☐ 2.8 Crear views.py (AuthViewSet, SessionViewSet)
 ☐ 2.9 Crear urls.py
 ☐ 2.10 Registrar en INSTALLED_APPS
 ☐ 2.11 Crear migraciones: python manage.py makemigrations authentication

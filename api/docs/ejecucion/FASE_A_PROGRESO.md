@@ -202,7 +202,7 @@ Modificados:
   ✅ apps/core/mixins.py
   ✅ apps/core/services.py
   ✅ apps/pipeline/permissions.py
-  ✅ apps/pipeline/viewsets.py
+  ✅ apps/pipeline/views.py
 
 Creados:
   ✅ apps/access/management/commands/create_mod_calls_functions.py

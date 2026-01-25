@@ -31,13 +31,13 @@ class HasFunction(BasePermission):
     
     Examples:
         # Usuario CON función 'reports.view':
-        GET /api/v1/reports/ → 200 OK
+        GET /api/v1/reports/ → 200 OK ✅
         
         # Usuario SIN función 'reports.view':
-        GET /api/v1/reports/ → 403 Forbidden
+        GET /api/v1/reports/ → 403 Forbidden ❌
         
         # Superuser (bypass):
-        GET /api/v1/reports/ → 200 OK
+        GET /api/v1/reports/ → 200 OK ✅
     
     Nota:
         Para ViewSets con múltiples acciones, usar RequiresFunctionPermission

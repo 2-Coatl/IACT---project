@@ -440,7 +440,7 @@ Archivos a Crear:
       - CallRecordSerializer
       - UserServiceAccessSerializer
   
-  [ ] apps/core/viewsets.py
+  [ ] apps/core/views.py
       - CenterViewSet
       - ServiceViewSet
       - CallRecordViewSet
