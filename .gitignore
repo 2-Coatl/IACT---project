@@ -274,3 +274,6 @@ infrastructure/box/tests/**/verify_connections_*.txt
 infrastructure/cpython/.build_state/*docs_analysis_report/
 # Build artifacts
 infrastructure/cpython/.build_state/
+
+
+docs/
