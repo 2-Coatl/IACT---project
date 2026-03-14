@@ -1,0 +1,9 @@
+[submodule "api"]
+	path = api
+	url = https://github.com/jcg-admin/IACT-api.git
+[submodule "db"]
+	path = db
+	url = https://github.com/jcg-admin/IACT-db.git
+[submodule "ui"]
+	path = ui
+	url = https://github.com/jcg-admin/IACT-ui.git
