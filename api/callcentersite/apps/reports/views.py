@@ -70,9 +70,33 @@ class ReportViewSet(viewsets.ModelViewSet):
         return ReportSerializer
     
     def get_permissions(self):
-        """Permisos según acción."""
+        """
+        Permisos según acción y tipo de reporte.
+        
+        MODELO GRANULAR: Para reportes de datos sensibles, se requieren
+        permisos adicionales además del permiso genérico de reportes.
+        """
         if self.action == 'create':
-            return [IsAuthenticated(), CanCreateReports()]
+            # Verificar tipo de reporte solicitado
+            report_type = self.request.data.get('report_type')
+            
+            # Permisos base para crear reportes
+            permissions = [IsAuthenticated(), CanCreateReports()]
+            
+            # Permisos adicionales según tipo de datos
+            if report_type == 'calls':
+                # Reportes de llamadas requieren acceso a CallRecord
+                from .permissions import CanAccessCallRecordData
+                permissions.append(CanAccessCallRecordData())
+            
+            # TODO: Agregar validaciones para otros tipos
+            # elif report_type == 'users':
+            #     permissions.append(CanAccessUserData())
+            # elif report_type == 'audit':
+            #     permissions.append(CanAccessAuditData())
+            
+            return permissions
+            
         elif self.action in ['update', 'partial_update', 'destroy']:
             return [IsAuthenticated(), IsReportOwner()]
         elif self.action == 'export':

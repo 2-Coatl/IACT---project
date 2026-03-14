@@ -181,7 +181,7 @@ class ExportService:
         Returns:
             List[Dict]: Datos de llamadas
         """
-        from apps.core.models import CallRecord
+        from apps.pipeline.models import CallRecord
         
         queryset = CallRecord.objects.all()
         
@@ -320,7 +320,7 @@ class ReportService:
     @staticmethod
     def _count_calls(filters: Dict) -> int:
         """Contar llamadas según filtros."""
-        from apps.core.models import CallRecord
+        from apps.pipeline.models import CallRecord
         
         queryset = CallRecord.objects.all()
         

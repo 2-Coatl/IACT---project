@@ -1,208 +1,114 @@
 """
-Service para control de acceso a servicios 800.
+Base Service classes y Service Access para IACT.
 
-Gestiona qué servicios puede ver/gestionar cada usuario.
+CLEAN_CODE v3.0.1: Service Layer Pattern.
+SOLID: SRP - Cada service una responsabilidad.
 """
-from typing import Optional
+
+from typing import Optional, Any, Dict
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, Q
-from .models import Service, UserServiceAccess
+import logging
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
-class ServiceAccessService:
+# ============================================================================
+# BASE SERVICE
+# ============================================================================
+
+class BaseService:
     """
-    Service para gestión de accesos a servicios.
+    Service base para todos los services.
     
-    Proporciona métodos para:
-    - Obtener servicios de un usuario
-    - Verificar acceso a servicio
-    - Filtrar queries por servicios permitidos
-    - Otorgar/revocar accesos
+    CLEAN_CODE v3.0.1: Service Layer Pattern.
+    SOLID SRP: Solo provee funcionalidad base.
+    
+    Provee:
+    - Logging automático con nombre del service
+    - Exception handling helpers
+    - Métodos comunes reutilizables
+    
+    Uso:
+        class ReportService(BaseService):
+            @classmethod
+            def generate_report(cls, params):
+                cls.log_info("Generando reporte...")
+                # Lógica aquí
+                cls.log_info("Reporte generado")
+    
+    Examples:
+        >>> class MiService(BaseService):
+        ...     @classmethod
+        ...     def do_something(cls):
+        ...         cls.log_info("Doing something...")
+        ...         return True
     """
     
-    @staticmethod
-    def get_user_services(user: User) -> QuerySet:
+    @classmethod
+    def log_info(cls, message: str):
         """
-        Obtener servicios accesibles por usuario.
-        
-        Superusuarios ven todos los servicios activos.
-        Usuarios normales solo ven servicios asignados.
+        Log info level con nombre del service.
         
         Args:
-            user: Usuario
-            
-        Returns:
-            QuerySet de Service
-        """
-        return UserServiceAccess.get_user_services(user)
-    
-    @staticmethod
-    def has_service_access(user: User, service) -> bool:
-        """
-        Verificar si usuario tiene acceso a un servicio.
+            message: Mensaje a loggear
         
-        Args:
-            user: Usuario
-            service: Instancia de Service o ID
-            
-        Returns:
-            bool: True si tiene acceso
-        """
-        return UserServiceAccess.has_service_access(user, service)
-    
-    @staticmethod
-    def filter_by_user_services(queryset: QuerySet, user: User, service_field: str = 'servicio_800') -> QuerySet:
-        """
-        Filtrar QuerySet por servicios permitidos al usuario.
-        
-        Útil para filtrar CallRecord, Reports, etc por servicio.
-        
-        Args:
-            queryset: QuerySet a filtrar
-            user: Usuario
-            service_field: Nombre del campo que contiene el servicio
-                          Ej: 'servicio_800', 'service', 'service__numero_800'
-            
-        Returns:
-            QuerySet filtrado
-            
         Examples:
-            >>> # Filtrar CallRecords por servicios del usuario
-            >>> calls = CallRecord.objects.all()
-            >>> filtered = ServiceAccessService.filter_by_user_services(
-            ...     calls, request.user, 'servicio_800'
-            ... )
-            
-            >>> # Con relación FK
-            >>> reports = Report.objects.all()
-            >>> filtered = ServiceAccessService.filter_by_user_services(
-            ...     reports, request.user, 'service__numero_800'
-            ... )
+            >>> ReportService.log_info("Generando reporte trimestral")
+            # [ReportService] Generando reporte trimestral
         """
-        if user.is_superuser:
-            # Superusuarios ven todo
-            return queryset
-        
-        # Obtener servicios permitidos
-        user_services = ServiceAccessService.get_user_services(user)
-        
-        if not user_services.exists():
-            # Sin servicios asignados = sin datos
-            return queryset.none()
-        
-        # Extraer números de servicio
-        service_numbers = user_services.values_list('numero_800', flat=True)
-        
-        # Filtrar por servicio
-        filter_kwargs = {f'{service_field}__in': service_numbers}
-        return queryset.filter(**filter_kwargs)
+        logger.info(f"[{cls.__name__}] {message}")
     
-    @staticmethod
-    def grant_service_access(
-        user: User,
-        service,
-        granted_by: User,
-        reason: str = ""
-    ) -> UserServiceAccess:
+    @classmethod
+    def log_error(cls, message: str):
         """
-        Otorgar acceso a servicio.
+        Log error level con nombre del service.
         
         Args:
-            user: Usuario a quien se otorga acceso
-            service: Instancia de Service o ID
-            granted_by: Usuario que otorga el acceso
-            reason: Razón del otorgamiento
-            
-        Returns:
-            UserServiceAccess creado o reactivado
+            message: Mensaje de error
+        
+        Examples:
+            >>> ReportService.log_error("Fallo al generar PDF")
+            # [ReportService] Fallo al generar PDF
         """
-        if isinstance(service, int):
-            service = Service.objects.get(id=service)
-        
-        # Crear o reactivar
-        access, created = UserServiceAccess.objects.get_or_create(
-            user=user,
-            service=service,
-            defaults={
-                'granted_by': granted_by,
-                'reason': reason,
-                'is_active': True,
-            }
-        )
-        
-        if not created and not access.is_active:
-            # Reactivar si estaba revocado
-            access.is_active = True
-            access.granted_by = granted_by
-            access.reason = reason
-            access.revoked_at = None
-            access.revoked_by = None
-            access.save()
-        
-        return access
+        logger.error(f"[{cls.__name__}] {message}")
     
-    @staticmethod
-    def revoke_service_access(
-        user: User,
-        service,
-        revoked_by: User
-    ) -> Optional[UserServiceAccess]:
+    @classmethod
+    def log_warning(cls, message: str):
         """
-        Revocar acceso a servicio.
+        Log warning level con nombre del service.
         
         Args:
-            user: Usuario a quien se revoca acceso
-            service: Instancia de Service o ID
-            revoked_by: Usuario que revoca el acceso
-            
-        Returns:
-            UserServiceAccess revocado o None si no existía
+            message: Mensaje de warning
         """
-        from django.utils import timezone
-        
-        service_id = service.id if hasattr(service, 'id') else service
-        
-        try:
-            access = UserServiceAccess.objects.get(
-                user=user,
-                service_id=service_id,
-                is_active=True,
-            )
-            
-            access.is_active = False
-            access.revoked_at = timezone.now()
-            access.revoked_by = revoked_by
-            access.save()
-            
-            return access
-        except UserServiceAccess.DoesNotExist:
-            return None
+        logger.warning(f"[{cls.__name__}] {message}")
     
-    @staticmethod
-    def get_services_summary(user: User) -> dict:
+    @classmethod
+    def log_debug(cls, message: str):
         """
-        Obtener resumen de servicios del usuario.
+        Log debug level con nombre del service.
         
         Args:
-            user: Usuario
-            
-        Returns:
-            Dict con estadísticas
+            message: Mensaje de debug
         """
-        services = ServiceAccessService.get_user_services(user)
-        
-        return {
-            'total_services': services.count(),
-            'services': [
-                {
-                    'id': s.id,
-                    'numero_800': s.numero_800,
-                    'nombre': s.nombre,
-                    'center': s.center.nombre,
-                }
-                for s in services
-            ],
-            'is_superuser': user.is_superuser,
-        }
+        logger.debug(f"[{cls.__name__}] {message}")
+
+
+# ============================================================================
+
+# ====================================================================================
+# REMOVED - FASE A DT-002 (2026-01-21)
+# ====================================================================================
+#
+# ServiceAccessService (eliminado):
+#   - get_user_services(): Obtener servicios de usuario
+#   - has_service_access(): Verificar acceso
+#   - filter_by_user_services(): Filtrar QuerySet
+#   - grant_service_access(): Otorgar accesos
+#   - revoke_service_access(): Revocar accesos
+#   - get_services_summary(): Resumen de servicios
+#
+# Razón: UserServiceAccess eliminado, reemplazado por RBAC puro
+# Reemplazo: Usar RBAC con Functions (CALL_VIEW, SVC_VIEW, etc.)
+# ====================================================================================

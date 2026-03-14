@@ -1,72 +1,56 @@
+"""
+Django Admin para apps/users/.
+
+NOTA: Admin completo se implementará en fases posteriores.
+"""
+
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth import get_user_model
 
+from apps.users.models import UserProfile, SessionHistory, UserSettings
+
 User = get_user_model()
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from apps.access.models import UserFunctionAssignment
 
 
-class FunctionAssignmentInline(admin.TabularInline):
-    """
-    Inline para mostrar funciones asignadas.
-    
-    Permite ver y editar funciones desde admin de usuarios.
-    """
-    model = UserFunctionAssignment
-    fk_name = 'user'  # Especificar FK porque hay 2 a User
-    extra = 0
-    readonly_fields = ('assigned_at', 'assigned_by')
-    fields = (
-        'function',
-        'is_active',
-        'assigned_at',
-        'assigned_by',
-        'reason'
-    )
-    
-    def has_delete_permission(self, request, obj=None):
-        """Permitir eliminar asignaciones."""
-        return True
-
-
+@admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """
-    Admin extendido para User.
+    """Admin para User."""
     
-    Incluye:
-    - Funciones asignadas (inline)
-    - Filtros mejorados
-    - Busqueda por username/email
-    """
+    list_display = ['username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff']
+    search_fields = ['username', 'email', 'first_name', 'last_name']
+    list_filter = ['is_active', 'is_staff', 'is_superuser']
     
-    inlines = [FunctionAssignmentInline]
-    
-    list_display = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-        'is_staff',
-        'is_active',
-        'date_joined',
+    fieldsets = BaseUserAdmin.fieldsets + (
+        ('Información Adicional', {
+            'fields': ('phone', 'position', 'avatar')
+        }),
     )
-    
-    list_filter = (
-        'is_staff',
-        'is_active',
-        'is_superuser',
-        'date_joined',
-    )
-    
-    search_fields = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-    )
-    
-    ordering = ('-date_joined',)
 
 
-# Registrar User con admin personalizado
-admin.site.register(User, UserAdmin)
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    """Admin para UserProfile."""
+    
+    list_display = ['user', 'department', 'created_at']
+    search_fields = ['user__username', 'department']
+    readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(SessionHistory)
+class SessionHistoryAdmin(admin.ModelAdmin):
+    """Admin para SessionHistory."""
+    
+    list_display = ['user', 'ip_address', 'login_at', 'logout_at', 'is_active']
+    list_filter = ['is_active', 'login_at']
+    search_fields = ['user__username', 'ip_address']
+    readonly_fields = ['login_at', 'created_at', 'updated_at']
+
+
+@admin.register(UserSettings)
+class UserSettingsAdmin(admin.ModelAdmin):
+    """Admin para UserSettings."""
+    
+    list_display = ['user', 'language', 'notifications_enabled']
+    search_fields = ['user__username']
+    list_filter = ['language', 'notifications_enabled']

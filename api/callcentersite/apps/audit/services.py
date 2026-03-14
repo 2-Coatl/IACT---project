@@ -290,3 +290,24 @@ class AuditLogService:
             request=request,
             details=details,
         )
+
+
+    def log_action(self, action: str, user=None, details: dict = None, resource: str = 'unknown'):
+        """
+        Wrapper genérico para log().
+        
+        Mapea action a los métodos específicos de AuditLogService.
+        
+        Args:
+            action: Tipo de acción (USER_CREATED, USER_UPDATED, etc)
+            user: Usuario que realiza la acción
+            details: Dict con detalles adicionales
+            resource: Recurso afectado
+        """
+        # Por ahora, usar log() genérico
+        self.log(
+            user=user,
+            action=action,
+            resource=resource,
+            details=details or {},
+        )

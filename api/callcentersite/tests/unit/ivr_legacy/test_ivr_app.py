@@ -12,5 +12,5 @@ def test_ivr_legacy_app_importable():
 
 def test_ivr_models_importable():
     """Modelos ivr_legacy deben ser importables."""
-    from apps.ivr_legacy import models
+    from apps.ivr import models
     assert hasattr(models, '__file__')

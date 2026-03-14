@@ -76,7 +76,7 @@ class ETLScheduler:
         4. Actualizar ETLExecution (status=SUCCESS/FAILED)
         """
         from apps.pipeline.models import ETLExecution
-        from apps.core.services import ETLService
+        from apps.pipeline.services import ETLService
         
         logger.info("=== Iniciando ejecucion ETL programada ===")
         

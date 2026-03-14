@@ -5,7 +5,7 @@ CNST-003: Validar acceso READ-ONLY.
 """
 import pytest
 from datetime import date
-from apps.ivr_legacy.adapters import IVRAdapter
+from apps.ivr.adapters import IVRAdapter
 
 
 class TestIVRAdapter:
