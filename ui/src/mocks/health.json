@@ -1,8 +1,0 @@
-{
-  "status": "degraded",
-  "checkedAt": "2025-11-14T00:00:00Z",
-  "services": [
-    { "name": "callcentersite", "status": "down" }
-  ],
-  "details": "Backend no disponible, mostrando mocks locales"
-}
