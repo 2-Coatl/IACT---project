@@ -7,3 +7,6 @@
 [submodule "ui"]
 	path = ui
 	url = https://github.com/jcg-admin/IACT-ui.git
+[submodule "docs"]
+	path = docs
+	url = https://github.com/jcg-admin/IACT-docs.git
